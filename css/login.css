@@ -1,0 +1,115 @@
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+body { 
+    font-family: 'Tahoma', sans-serif; 
+    background: #0f314f; 
+    min-height: 100vh; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+.login-container { 
+    background: white; 
+    border-radius: 20px; 
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+    width: 450px; 
+    max-width: 90%; 
+    padding: 40px; 
+}
+.logo { 
+    text-align: center; 
+    font-size: 28px; 
+    font-weight: bold; 
+    color: #0a2a44; 
+    margin-bottom: 30px; 
+}
+.logo span { 
+    color: #ffaa00; 
+}
+.logo small { 
+    display: block; 
+    font-size: 14px; 
+    color: #666; 
+    margin-top: 5px; 
+}
+
+h2 { 
+    text-align: center; 
+    color: #0a2a44; 
+    margin-bottom: 25px; 
+}
+
+.input-group {
+     margin-bottom: 20px; 
+    }
+.input-group label { 
+    display: block; 
+    margin-bottom: 8px; 
+    color: #333; 
+    font-weight: bold; 
+}
+.input-group input { 
+    width: 100%; 
+    padding: 12px 15px; 
+    border: 1px solid #ddd; 
+    border-radius: 10px; 
+    font-size: 16px; 
+    transition: 0.3s; 
+}
+.input-group input:focus { 
+    outline: none; 
+    border-color: #ffaa00; 
+    box-shadow: 0 0 5px rgba(255,170,0,0.3); 
+}
+
+.login-btn { width: 100%; 
+    background: #0a2a44; 
+    color: white; 
+    padding: 12px; 
+    border: none; 
+    border-radius: 10px; 
+    font-size: 18px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: 0.3s; 
+}
+.login-btn:hover { 
+    background: #ffaa00; 
+    color: #0a2a44; 
+}
+
+.links { 
+    text-align: center; 
+    margin-top: 20px; 
+}
+.links a { 
+    color: #ffaa00; 
+    text-decoration: none; 
+}
+.links a:hover { 
+    text-decoration: underline;
+ }
+
+.error { 
+    background: #ffebee; 
+    color: #c62828; 
+    padding: 10px; 
+    border-radius: 8px; 
+    margin-bottom: 20px; 
+    text-align: center; 
+    display: none; 
+}
+
+.demo-info {
+    background: #f0f4f8; 
+    margin-top: 25px; 
+    padding: 15px; 
+    border-radius: 10px; 
+    font-size: 12px; 
+    color: #666; 
+    text-align: center; 
+}

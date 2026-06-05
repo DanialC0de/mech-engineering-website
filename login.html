@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/login.css">
+    <title>ورود به حساب کاربری | انجمن علمی مکانیک</title>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            ⚙️ انجمن <span>مکانیک</span>
+            <small>ورود به پنل کاربری</small>
+        </div>
+        
+        <h2>ورود</h2>
+        
+        <div class="error" id="errorMsg">نام کاربری یا رمز عبور اشتباه است</div>
+        
+        <form id="loginForm">
+            <div class="input-group">
+                <label>📧 ایمیل یا شماره دانشجویی</label>
+                <input type="text" id="username" placeholder="example@university.ac.ir" required>
+            </div>
+            
+            <div class="input-group">
+                <label>🔒 رمز عبور</label>
+                <input type="password" id="password" placeholder="********" required>
+            </div>
+            
+            <button type="submit" class="login-btn">ورود به حساب کاربری →</button>
+        </form>
+        
+        <div class="links">
+            <a href="#">رمز عبور خود را فراموش کرده‌اید؟</a> | 
+            <a href="register.html">ثبت‌نام جدید</a>
+        </div>
+        
+        <div class="demo-info">
+            📌 برای تست:<br>
+            دانشجو: student@mech.ac.ir / 123456<br>
+            استاد: professor@mech.ac.ir / 123456<br>
+            ادمین: admin@mech.ac.ir / 123456
+        </div>
+    </div>
+    
+    <script src="js/login.js"></script>
+</body>
+</html>
