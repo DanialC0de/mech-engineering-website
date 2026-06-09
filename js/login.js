@@ -24,13 +24,13 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
         // هدایت به پنل مناسب بر اساس نقش
         switch (user.role) {
             case "admin":
-                window.location.href = "admin/index.html";
+                window.location.href = "admin.html";
                 break;
             case "professor":
-                window.location.href = "professor/index.html";
+                window.location.href = "professor.html";
                 break;
             default:
-                window.location.href = "student/index.html";
+                window.location.href = "student.html";
         }
     } else {
         document.getElementById("errorMsg").style.display = "block";
