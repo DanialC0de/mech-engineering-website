@@ -9,7 +9,7 @@ html{
 }
 body {
     font-family: 'Tahoma', sans-serif;
-    background: url('../assets/images/bc-index.jpg') center center/cover  ;
+    background: url('../../assets/images/bc-index.jpg') center center/cover  ;
 }
 
 /* هدر و نویگیشن */
@@ -62,7 +62,7 @@ header {
 
 /* بخش Hero */
 .hero {
-    background: url('../assets/images/fani.jpg') no-repeat center center/cover;
+    background: url('../../assets/images/fani.jpg') no-repeat center center/cover;
     color: white;
     height: 1000px;
     text-align: center;
@@ -152,7 +152,7 @@ header {
 .about {
     background: white;
     padding: 50px 0;
-    margin: 30px 0;
+    margin-top: 30px;
 }
 
 .about-content {
@@ -245,14 +245,10 @@ table tbody tr td {
     text-align: center;
 }
 
-
-
-
 /* فوتر */
 footer {
     background: #0a2a44;
     color: white;
     text-align: center;
     padding: 30px;
-    margin-top: 50px;
 }
