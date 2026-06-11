@@ -1,38 +1,72 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/index.css">
-    <title>انجمن علمی مکانیک | خانه</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/index/index.css">
+    <title>خانه | انجمن علمی مکانیک</title>
 </head>
+
 <body>
     <header>
-        <div class="container nav-bar">
-            <div class="logo">⚙️ انجمن علمی <span>مکانیک</span></div>
+        <div id="logo">
+            <img src="../assets/images/shahid-bahonar-university-of-kerman-logo.png">
+        </div>
+        <div class="header-top">
+            <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
+            <a href="../login.html" target="_blank" class="login-btn">ورود / ثبت‌نام</a>
+        </div>
+        <div class="nav-bar">
+            <div class="logo">⚙️انجمن علمی مهندسی <span>مکانیک</span></div>
             <div class="nav-links">
-                <a href="#">خانه</a>
+                <a href="#">صفحه اصلی</a>
+                <a href="#"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
+                <a href="#"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
                 <a href="#events">رویدادها</a>
                 <a href="#sources">منابع علمی</a>
-                <a href="#about">درباره ما</a>
-                <a href="#honors">افتخارات</a>
-                <a href="login.html" class="login-btn">ورود / ثبت‌نام</a>
+                <a href="#honors">افتخارات انجمن</a>
+                <a href="call-us.html">تماس با ما</a>
             </div>
         </div>
     </header>
+    <ul id="ul-about">
+        <li><a href="about.html">معرفی دانشکده</a></li>
+        <li><a href="honors.html">دستاورد ها و افتخارات</a></li>
+    </ul>
+    <ul id="ul-relation">
+        <li><a href="industry.html">خدمات دانشکده به صنعت</a></li>
+    </ul>
 
     <section class="hero">
         <div id="seudo">
-            <div class="container">
-                <h1>پیشرو در علوم مهندسی مکانیک</h1>
-                <p>انجمن علمی مکانیک | همراه شما در مسیر یادگیری، پژوهش و نوآوری</p>
-                <button onclick="alert('برای ثبت‌نام وارد حساب کاربری شوید')">عضویت در انجمن →</button>
+            <div id="hero-items">
+                <div class="hero-item">
+                    <a href="https://uk.ac.ir/"><span>معرفی دانشکده </span></a>
+                </div>
+                <div class="hero-item">
+
+                    <a href="https://uk.ac.ir/"><span>کارگاه ها و رویدادها</span></a>
+                </div>
+                <div class="hero-item">
+
+                    <a href="https://uk.ac.ir/"><span>منابع علمی</span></a>
+                </div>
+                <div class="hero-item">
+
+                    <a href="https://uk.ac.ir/"><span>دستاوردها</span></a>
+                </div>
             </div>
         </div>
     </section>
+    <div id="after-hero">
+        <p>انجمن علمی مکانیک | همراه شما در مسیر یادگیری، پژوهش و نوآوری</p>
+    </div>
 
-    <div class="container"  >
-        <h2 class="section-title">📅 رویدادهای پیش‌رو</h2>
+
+    <div class="container">
+        <h2 class="section-title">اخبار و تازه ها</h2>
         <div class="events-grid" id="events">
             <div class="event-card">
                 <h3>وبینار سیستم‌های تعلیق خودرو</h3>
@@ -54,7 +88,35 @@
             </div>
         </div>
 
-        <br><br><br><br><br><br><br><hr><br><br><br><br><br>
+
+        <br><br><br><br><br><br>
+        <hr><br><br><br><br><br>
+
+
+        <h2 class="section-title">📅 رویدادها و کارگاه ها</h2>
+        <div class="events-grid" id="events">
+            <div class="event-card">
+                <h3>وبینار سیستم‌های تعلیق خودرو</h3>
+                <div class="event-date">📆 20 فروردین 1404 | 🕒 15:00</div>
+                <p>بررسی آخرین دستاوردها در طراحی سیستم تعلیق فعال </p>
+                <button onclick="alert('لطفاً ابتدا وارد حساب کاربری شوید')">ثبت‌نام →</button>
+            </div>
+            <div class="event-card">
+                <h3>بازدید علمی از ایران خودرو</h3>
+                <div class="event-date">📆 5 اردیبهشت 1404 | 🕒 08:00</div>
+                <p>آشنایی با خط تولید و فرآیندهای مونتاژ</p>
+                <button onclick="alert('لطفاً ابتدا وارد حساب کاربری شوید')">ثبت‌نام →</button>
+            </div>
+            <div class="event-card">
+                <h3>مسابقه ملی طراحی با سالیدورک</h3>
+                <div class="event-date">📆 15 اردیبهشت 1404 | 🕒 10:00</div>
+                <p>رقابت بین تیم‌های برتر دانشگاه‌های کشور</p>
+                <button onclick="alert('لطفاً ابتدا وارد حساب کاربری شوید')">ثبت‌نام →</button>
+            </div>
+        </div>
+
+        <br><br><br><br><br><br>
+        <hr><br><br><br><br><br>
 
         <h2 class="section-title">📚 جدیدترین منابع علمی</h2>
         <div class="events-grid" id="sources">
@@ -76,7 +138,8 @@
         </div>
     </div>
 
-    <br><hr><br><br>
+    <br>
+    <hr><br><br>
     <section class="honors" id="honors">
         <h2>افتخارات</h2>
         <table width="1400">
@@ -128,7 +191,8 @@
                     یک دهه از فعالیت خود; گام های تاثیرگذار و مفیدی را جهت ارتقاء کیفی و کمی سطح علمی دانشجویان این رشته
                     بردارد; که میتوان به برگزاری کارگاه های آموزشی متعدد پیرامون نرم افزار های کاربردی این رشته که جزء
                     لاینفک عوامل لازم برای موفقیت مهندسان و دانشجویان مکانیک است اشاره کرد.</p>
-                <p style="margin-top: 15px; font-weight:bold; color:rgb(255, 64, 0)">همین حالا به خانواده بزرگ انجمن علمی مکانیک بپیوندید و از امکانات اختصاصی
+                <p style="margin-top: 15px; font-weight:bold; color:rgb(255, 64, 0)">همین حالا به خانواده بزرگ انجمن
+                    علمی مکانیک بپیوندید و از امکانات اختصاصی
                     ما بهره‌مند شوید.</p>
             </div>
             <div class="about-stats">
@@ -149,9 +213,39 @@
     </section>
 
     <footer>
-        <p>📍 کرمان - دانشگاه شهید باهنر - دانشکده مکانیک | 📧 info@mech-association.ir</p>
-        <p style="margin-top: 15px;">&copy; ۲۰۲۵ انجمن علمی مکانیک - تمامی حقوق محفوظ است</p>
+        <div class="footer-up">
+            <div class="content">
+                <p><i class="fa-solid fa-location-dot"></i>&nbsp;&nbsp;&nbsp;&nbsp; کرمان - بلوار جمهوری - پل امیرکبیر - دانشکده فنی مهندسی &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;دانشگاه شهید باهنر - دانشکده مکانیک</p>
+                <p><i class="fa-solid fa-phone"></i>  </p>
+                <p><i class="fa-solid fa-envelope"></i> </p>
+                <p><i class="fa-brands fa-telegram"></i> &nbsp;&nbsp;&nbsp;&nbsp; ukmechanics@</p>
+                <p><i class="fa-brands fa-instagram"></i> &nbsp;&nbsp;&nbsp;&nbsp; ukmechanics@</p>
+            </div>
+
+            <div class="map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3445.4741871022507!2d57.012748796789545!3d30.28055960000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f0218b67107c6dd%3A0x398906da69669661!2sFaculty%20of%20Engineering%20Campus%20-Shahid%20Bahonar%20University%20of%20Kerman!5e0!3m2!1sen!2s!4v1781183631960!5m2!1sen!2s"
+                    width="550" height="320" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+
+        <div class="footer-down">
+            <p>&copy; ۲۰۲۵ انجمن علمی مکانیک - تمامی حقوق محفوظ است</p>
+        </div>
     </footer>
+    <div id="icons">
+        <a href="https://t.me/ukmechanics" target="_blank">
+            <img src="../assets/icons/15.png">
+        </a>
+
+        <a href="https://instagram.com/ukmechanics?igshid=14gmuy96orpnd" target="_blank">
+            <img src="../assets/icons/2.png">
+        </a>
+    </div>
+    
+
+    <script src="../js/index.js"></script>
 </body>
 
 </html>
