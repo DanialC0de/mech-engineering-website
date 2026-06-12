@@ -1,0 +1,137 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS صحیح -->
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+
+    <title>تکمیل ثبت‌نام | انجمن علمی مکانیک</title>
+</head>
+<body>
+
+<div class="register-container">
+    <div class="register-header">
+        <div class="logo">⚙️ انجمن <span>مکانیک</span></div>
+        <p>عضویت در انجمن علمی مهندسی مکانیک</p>
+    </div>
+
+    <div class="register-body">
+        <div class="register-title">تکمیل ثبت‌نام</div>
+        <div class="register-subtitle">
+            لطفاً اطلاعات خود را کامل کنید تا عضویت شما در انجمن ثبت شود
+        </div>
+
+        <div class="error-message" id="errorMsg"></div>
+        <div class="success-message" id="successMsg"></div>
+
+        <!-- اطلاعات صفحه قبل -->
+        <div class="info-card">
+            <div class="info-label">شماره موبایل:</div>
+            <div class="info-value" id="infoValue"></div>
+            <a href="/accounts/login/" class="edit-link">ویرایش ←</a>
+        </div>
+
+        <form id="registerForm">
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>نام *</label>
+                    <input type="text" id="firstName" required>
+                </div>
+
+                <div class="input-group">
+                    <label>نام خانوادگی *</label>
+                    <input type="text" id="lastName" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>شماره دانشجویی *</label>
+                    <input type="text" id="studentId" required>
+                </div>
+
+                <div class="input-group">
+                    <label>مقطع تحصیلی *</label>
+                    <select id="degree" required>
+                        <option value="">انتخاب کنید</option>
+                        <option>کارشناسی</option>
+                        <option>کارشناسی ارشد</option>
+                        <option>دکتری</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>رشته تحصیلی *</label>
+                    <input type="text" id="major" required>
+                </div>
+
+                <div class="input-group">
+                    <label>ترم تحصیلی</label>
+                    <select id="term">
+                        <option value="">انتخاب کنید</option>
+                        <option>ترم 1</option>
+                        <option>ترم 2</option>
+                        <option>ترم 3</option>
+                        <option>ترم 4</option>
+                        <option>ترم 5</option>
+                        <option>ترم 6</option>
+                        <option>ترم 7</option>
+                        <option>ترم 8</option>
+                        <option>فارغ التحصیل</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>کمیته مورد نظر</label>
+                    <select id="committee">
+                        <option value="">انتخاب کنید</option>
+                        <option>آموزش</option>
+                        <option>پژوهشی</option>
+                        <option>صنعتی</option>
+                        <option>اجرایی</option>
+                        <option>فناوری و نوآوری</option>
+                        <option>بین‌الملل</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>علاقه‌مندی</label>
+                    <input type="text" id="interest">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>درباره خود</label>
+                <textarea id="bio" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="register-btn">
+                ✓ ثبت‌نام و عضویت در انجمن
+            </button>
+
+        </form>
+
+        <div class="back-link">
+            <a href="/accounts/login/">← بازگشت به صفحه ورود</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>انجمن علمی مکانیک - همراه با دانشجویان از اولین ترم</p>
+    </footer>
+</div>
+
+<!-- JS صحیح -->
+<script src="{% static 'js/register.js' %}"></script>
+
+</body>
+</html>

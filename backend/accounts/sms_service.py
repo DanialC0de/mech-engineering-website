@@ -1,11 +1,10 @@
 import requests
 from django.conf import settings
 
-BASE_URL = "https://edge.ippanel.com/v1"
+BASE_URL = "https://edge.ippanel.com/v1/api/send"
 
 
 def send_otp_sms(phone, code_value):
-    url = f"{BASE_URL}/api/send"
 
     payload = {
         "sending_type": "pattern",
@@ -22,9 +21,19 @@ def send_otp_sms(phone, code_value):
         "Content-Type": "application/json"
     }
 
-    response = requests.post(url, json=payload, headers=headers)
+    try:
+        response = requests.post(
+            BASE_URL,
+            json=payload,
+            headers=headers,
+            timeout=10
+        )
 
-    print("STATUS:", response.status_code)
-    print("TEXT:", response.text)
+        print("SMS STATUS:", response.status_code)
+        print("SMS RESPONSE:", response.text)
 
-    return response
+        return response.json()
+
+    except Exception as e:
+        print("SMS ERROR:", e)
+        return None
