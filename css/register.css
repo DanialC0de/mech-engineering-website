@@ -1,3 +1,19 @@
+@font-face {
+    font-family: 'A Hamase';
+    src: url('../assets/fonts/transfonter.org-Hemase/AHamase.eot');
+    src: url('../assets/fonts/transfonter.org-Hemase/AHamase.eot?#iefix') format('embedded-opentype'),
+        url('../assets/fonts/transfonter.org-Hemase/AHamase.woff2') format('woff2'),
+        url('../assets/fonts/transfonter.org-Hemase/AHamase.woff') format('woff'),
+        url('../assets/fonts/transfonter.org-Hemase/AHamase.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+*{
+    font-family: "A Hamase";
+    scroll-padding-top: 300px;
+    box-sizing: border-box;
+}
 * {
     margin: 0;
     padding: 0;

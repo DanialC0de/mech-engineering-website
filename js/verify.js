@@ -231,9 +231,9 @@ document.getElementById("verifyBtn").addEventListener("click", () => {
 
             let redirectUrl = "";
             switch (foundUser.role) {
-                case "admin": redirectUrl = "admin/index.html"; break;
-                case "professor": redirectUrl = "professor/index.html"; break;
-                default: redirectUrl = "student/index.html";
+                case "admin": redirectUrl = "admin.html"; break;
+                case "professor": redirectUrl = "professor.html"; break;
+                default: redirectUrl = "student.html";
             }
 
             const btn = document.getElementById("verifyBtn");
