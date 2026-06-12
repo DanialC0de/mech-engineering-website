@@ -62,6 +62,165 @@
     <div id="after-hero">
         <p>انجمن علمی مکانیک | همراه شما در مسیر یادگیری، پژوهش و نوآوری</p>
     </div>
+//گالری تصاویر و ویدیو ها
+<section class="gallery-slider">
+    <div class="container">
+        <h2 class="section-title">🎬 گالری تصاویر و ویدیوها</h2>
+        <div class="slider-container">
+            <div class="css-slider">
+                
+                <!-- اسلاید ۱ - تصویر -->
+                <input type="radio" name="slider" id="slide1" checked>
+                <div class="slide">
+                    <img src="../assets/images/gallery/photo1.jpg" alt="گالری ۱">
+                    <div class="slide-caption">
+                       <h3>گزارش مسابقه سازه های ماکارونی</h3>
+                        <p>#fun</p>
+                    </div>
+                </div>
+
+                <!-- اسلاید ۲ - ویدیو -->
+                <input type="radio" name="slider" id="slide2">
+                <div class="slide video-slide">
+                    <video controls preload="auto" playsinline muted>
+                        <source src="../assets/videos/gallery/video1.mp4" type="video/mp4">
+                        مرورگر شما ویدیو را پشتیبانی نمی‌کند.
+                    </video>
+                    <div class="slide-caption">
+                        <h3>ویدیو آموزشی</h3>
+                        <p>محصول انجمن علمی مکانیک</p>
+                    </div>
+                </div>
+
+                <!-- اسلاید ۳ - تصویر -->
+                <input type="radio" name="slider" id="slide3">
+                <div class="slide">
+                    <img src="../assets/images/gallery/photo2.jpg" alt="گالری ۲">
+                    <div class="slide-caption">
+                        <h3>گزارش کارگاه نگارش صحیح پروژه تخصصی پایان نامه</h3>
+                        <p>اردیبهشت ۱۴۰۴</p>
+                    </div>
+                </div>
+
+                <input type="radio" name="slider" id="slide4">
+                <div class="slide">
+                    <img src="../assets/images/gallery/photo3.jpg" alt="گالری ۲">
+                    <div class="slide-caption">
+                        <h3>آموزشی</h3>
+                        <p>#آموزشی</p>
+                    </div>
+                </div>
+
+                <input type="radio" name="slider" id="slide5">
+                <div class="slide">
+                    <img src="../assets/images/gallery/photo4.jpg" alt="گالری ۳">
+                    <div class="slide-caption">
+                        <h3>آموزشی</h3>
+                        <p>#آموزشی</p>
+                    </div>
+                </div>
+
+                <!-- نقاط ناوبری -->
+                <div class="slider-nav">
+                    <label for="slide1" class="nav-btn"></label>
+                    <label for="slide2" class="nav-btn"></label>
+                    <label for="slide3" class="nav-btn"></label>
+                    <label for="slide4" class="nav-btn"></label>
+                    <label for="slide5" class="nav-btn"></label>
+                </div>
+
+                //دکمه های قبلی و بعدی
+                <div class="slider-controls">
+                    <label class="control prev">❮</label>
+                    <label class="control next">❯</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let currentSlide = 1;
+    const totalSlides = 5;
+    
+    // تابع پیدا کردن شماره اسلاید فعلی بر اساس رادیوباکس تیک‌خورده
+    function updateCurrentSlide() {
+        for(let i = 1; i <= totalSlides; i++) {
+            if(document.getElementById('slide' + i).checked) {
+                currentSlide = i;
+                break;
+            }
+        }
+    }
+    
+    // تابع اصلی رفتن به اسلاید مشخص و کنترل ویدیوها
+    function goToSlide(n) {
+        if(n < 1) n = totalSlides;
+        if(n > totalSlides) n = 1;
+        
+        // تغییر وضعیت رادیو باکس اسلاید
+        const targetRadio = document.getElementById('slide' + n);
+        if (targetRadio) {
+            targetRadio.checked = true;
+            currentSlide = n;
+        }
+        
+        // ۱. ابتدا تمام ویدیوها را متوقف و صفر می‌کنیم
+        document.querySelectorAll('video').forEach(video => {
+            video.pause();
+            video.currentTime = 0;
+        });
+
+        // ۲. حالا ویدیو اسلاید فعال را پیدا کرده و پخش می‌کنیم (کوتیشن‌ها اصلاح شد)
+        const activeSlide = document.querySelector('input[name="slider"]#slide' + n + ' + .slide');
+        
+        if (activeSlide) {
+            const video = activeSlide.querySelector('video');
+            if (video) {
+                video.muted = true; 
+                
+                let playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("پخش خودکار توسط مرورگر مسدود شد:", error);
+                    });
+                }
+            }
+        }
+    }
+    
+    // گوش دادن به تغییر وضعیت رادیوباکس‌ها (کلیک روی نقاط ناوبری پایین)
+    for(let i = 1; i <= totalSlides; i++) {
+        const radioBtn = document.getElementById('slide' + i);
+        if(radioBtn) {
+            radioBtn.addEventListener('change', function() {
+                updateCurrentSlide();
+                goToSlide(currentSlide);
+            });
+        }
+    }
+    
+    // فعال‌سازی دقیق دکمه‌های قبلی و بعدی بر اساس کلاس‌های اختصاصی شما
+    const prevBtn = document.querySelector('.slider-controls .prev');
+    const nextBtn = document.querySelector('.slider-controls .next');
+    
+    if(prevBtn) {
+        prevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            goToSlide(currentSlide - 1);
+        });
+    }
+    
+    if(nextBtn) {
+        nextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            goToSlide(currentSlide + 1);
+        });
+    }
+    
+    // اجرای اولیه برای هماهنگی مقادیر
+    updateCurrentSlide();
+</script>
 
 
     <div class="container">
