@@ -116,3 +116,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+#sms-api
+
+IPPANEL_API_KEY = "YTIwMTQ5YTctNGQxZi00YTZmLTgzMDUtMzIxMmMwYjQ4ZjI3YWI4ZGQ1M2M0YThjZWQyZjk4YWNjOWEzM2YwNTE2Y2M="
+IPPANEL_PATTERN_CODE = "dj3v6rdzpofzk73"
+IPPANEL_SENDER = "+983000505"
