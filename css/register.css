@@ -1,3 +1,19 @@
+@font-face {
+    font-family: 'A Hamase';
+    src: url('../assets/fonts/transfonter.org-Hemase/AHamase.eot');
+    src: url('../assets/fonts/transfonter.org-Hemase/AHamase.eot?#iefix') format('embedded-opentype'),
+        url('../assets/fonts/transfonter.org-Hemase/AHamase.woff2') format('woff2'),
+        url('../assets/fonts/transfonter.org-Hemase/AHamase.woff') format('woff'),
+        url('../assets/fonts/transfonter.org-Hemase/AHamase.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+*{
+    font-family: "A Hamase";
+    scroll-padding-top: 300px;
+    box-sizing: border-box;
+}
 * {
     margin: 0;
     padding: 0;
@@ -11,39 +27,112 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 20px;
 }
 
 .register-container {
+    max-width: 600px;
+    width: 100%;
     background: white;
-    border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    width: 550px;
-    max-width: 90%;
-    padding: 40px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease;
 }
 
-.logo {
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.register-header {
+    background: linear-gradient(135deg, #0a2a44 0%, #1e4a76 100%);
+    padding: 30px;
     text-align: center;
-    font-size: 28px;
-    font-weight: bold;
-    color: #0a2a44;
-    margin-bottom: 20px;
+    color: white;
 }
 
-.logo span {
+.register-header .logo {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.register-header .logo span {
     color: #ffaa00;
 }
 
-h2 {
-    text-align: center;
-    color: #0a2a44;
-    margin-bottom: 25px;
+.register-header p {
+    font-size: 13px;
+    opacity: 0.8;
 }
 
+.register-body {
+    padding: 35px 30px;
+    background: white;
+}
+
+.register-title {
+    font-size: 22px;
+    color: #0a2a44;
+    margin-bottom: 8px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.register-subtitle {
+    color: #7f8c8d;
+    font-size: 13px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* اطلاعات ورودی (شماره/ایمیل) */
+.info-card {
+    background: #f0f4f8;
+    border-radius: 16px;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border-right: 4px solid #ffaa00;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.info-label {
+    font-size: 13px;
+    color: #666;
+}
+
+.info-value {
+    font-size: 16px;
+    font-weight: bold;
+    color: #0a2a44;
+    direction: ltr;
+    font-family: monospace;
+}
+
+.edit-link {
+    color: #ffaa00;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+/* فرم */
 .form-row {
     display: flex;
     gap: 15px;
     margin-bottom: 15px;
+    flex-wrap: wrap;
 }
 
 .input-group {
@@ -54,67 +143,144 @@ h2 {
 .input-group label {
     display: block;
     margin-bottom: 8px;
-    color: #333;
-    font-weight: bold;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.input-group label .required {
+    color: #e74c3c;
 }
 
 .input-group input,
-.input-group select {
+.input-group select,
+.input-group textarea {
     width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-size: 16px;
+    padding: 12px 14px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 14px;
+    transition: all 0.3s;
+    background: #fafbfc;
+    font-family: inherit;
 }
 
-.input-group input:focus {
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
     outline: none;
     border-color: #ffaa00;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(255, 170, 0, 0.1);
+}
+
+.input-group input::placeholder {
+    color: #bdc3c7;
+    font-size: 13px;
 }
 
 .register-btn {
     width: 100%;
-    background: #0a2a44;
-    color: white;
-    padding: 12px;
+    background: #ffaa00;
+    color: #0a2a44;
     border: none;
-    border-radius: 10px;
-    font-size: 18px;
+    padding: 15px;
+    border-radius: 60px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.3s;
-    margin-top: 10px;
+    transition: all 0.3s;
+    margin-top: 15px;
 }
 
 .register-btn:hover {
-    background: #ffaa00;
-    color: #0a2a44;
+    background: #ffcc44;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(255, 170, 0, 0.3);
 }
 
-.links {
+.register-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.terms {
     text-align: center;
     margin-top: 20px;
+    font-size: 11px;
+    color: #95a5a6;
 }
 
-.links a {
+.terms a {
     color: #ffaa00;
     text-decoration: none;
 }
 
-.error {
-    background: #ffebee;
-    color: #c62828;
-    padding: 10px;
-    border-radius: 8px;
+.back-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.back-link a {
+    color: #7f8c8d;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.error-message {
+    background: #fee2e2;
+    color: #c0392b;
+    padding: 12px 16px;
+    border-radius: 12px;
     margin-bottom: 20px;
+    text-align: center;
+    font-size: 13px;
     display: none;
 }
 
-.success {
+.success-message {
     background: #e8f5e9;
     color: #2e7d32;
-    padding: 10px;
-    border-radius: 8px;
+    padding: 12px 16px;
+    border-radius: 12px;
     margin-bottom: 20px;
+    text-align: center;
+    font-size: 13px;
     display: none;
+}
+
+.loading {
+    display: none;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.loading-spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid #e0e0e0;
+    border-top: 3px solid #ffaa00;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+footer {
+    background: #f8f9fa;
+    padding: 15px;
+    text-align: center;
+    font-size: 11px;
+    color: #95a5a6;
+    border-top: 1px solid #ecf0f1;
 }
