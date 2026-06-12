@@ -497,3 +497,269 @@ table tbody tr td {
     border-radius: 100%;
     width:100%;
 }
+
+
+
+//از اینجا تا جایی که دوباره کامنت گذاشتم مربوط میشه به گالری تصاویر Benyamin
+.gallery-slider {
+    background: linear-gradient(135deg, #0a2a44 0%, #1e3a5f 100%);
+    padding: 60px 0 80px;
+    margin: 50px 0;
+}
+
+.gallery-slider .section-title {
+    color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    font-size: 38px;
+}
+
+.slider-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3);
+}
+
+.css-slider {
+    position: relative;
+    width: 100%;
+    height: 600px;
+}
+
+.css-slider input[type="radio"] {
+    display: none;
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden; /* اضافه شد: اسلاید غیرفعال کلیک‌ها را بلاک نکند */
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+}
+
+/* وقتی اسلایدی انتخاب می‌شود هم لایه بالا بیاید و هم مرئی شود */
+#slide1:checked ~ .slide:nth-of-type(1),
+#slide2:checked ~ .slide:nth-of-type(2),
+#slide3:checked ~ .slide:nth-of-type(3),
+#slide4:checked ~ .slide:nth-of-type(4),
+#slide5:checked ~ .slide:nth-of-type(5) {
+    opacity: 1;
+    visibility: visible; /* اضافه شد */
+    z-index: 10;        /* اضافه شد: اسلاید فعال روی بقیه قرار بگیرد */
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #1a1a2e;
+}
+
+.slide video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+.slide-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    color: white;
+    padding: 50px 40px 30px;
+    text-align: right;
+    direction: rtl;
+    z-index: 12; /* اضافه شد */
+    pointer-events: none; /* اضافه شد: کلیک از روی متن عبور کند و به ویدیو برسد */
+}
+.slide-caption h3 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #ffaa00;
+    font-weight: bold;
+}
+
+.slide-caption p {
+    font-size: 18px;
+    opacity: 0.95;
+}
+
+/* نقاط ناوبری بزرگتر */
+.slider-nav {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 20;
+}
+
+.nav-btn {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.nav-btn:hover {
+    background: #ffaa00;
+    transform: scale(1.3);
+}
+
+#slide1:checked ~ .slider-nav label:nth-of-type(1),
+#slide2:checked ~ .slider-nav label:nth-of-type(2),
+#slide3:checked ~ .slider-nav label:nth-of-type(3),
+#slide4:checked ~ .slider-nav label:nth-of-type(4),
+#slide5:checked ~ .slider-nav label:nth-of-type(5) {
+    background: #ffaa00;
+    width: 35px;
+    border-radius: 10px;
+    border: none;
+}
+
+/* دکمه‌های قبلی و بعدی بزرگتر */
+.slider-controls {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 25px;
+    z-index: 30; /* مقدار از ۲۰ به ۳۰ تغییر کرد تا حتما روی اسلاید قرار بگیرد */
+    pointer-events: none; /* اجازه عبور کلیک از فضاهای خالی بین دکمه‌ها */
+}
+
+.control {
+    background: rgba(10, 42, 68, 0.8);
+    color: white;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.2);
+    pointer-events: auto; /* فعال کردن مجدد کلیک دقیقاً روی خود دکمه‌ها */
+}
+
+.control:hover {
+    background: #ffaa00;
+    color: #0a2a44;
+    transform: scale(1.15);
+}
+
+/* ریسپانسیو برای موبایل */
+@media (max-width: 992px) {
+    .css-slider {
+        height: 500px;
+    }
+    
+    .slide-caption h3 {
+        font-size: 22px;
+    }
+    
+    .slide-caption p {
+        font-size: 15px;
+    }
+    
+    .slide-caption {
+        padding: 35px 25px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .css-slider {
+        height: 400px;
+    }
+    
+    .control {
+        width: 45px;
+        height: 45px;
+        font-size: 22px;
+    }
+    
+    .slide-caption h3 {
+        font-size: 18px;
+    }
+    
+    .slide-caption p {
+        font-size: 13px;
+    }
+    
+    .slide-caption {
+        padding: 25px 20px 15px;
+    }
+    
+    .nav-btn {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .css-slider {
+        height: 300px;
+    }
+    
+    .control {
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
+        padding: 0 15px;
+    }
+    
+    .slider-controls {
+        padding: 0 12px;
+    }
+    
+    .slide-caption h3 {
+        font-size: 15px;
+    }
+    
+    .slide-caption p {
+        font-size: 11px;
+    }
+}
+/* رفع مشکل ویدیو در گالری */
+.video-slide {
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-slide video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+video::-webkit-media-controls {
+    z-index: 20;
+}
+//تا اینجا مربوط میشه به گالری تصاویر Benyamin
