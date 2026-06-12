@@ -1,4 +1,16 @@
-* {
+@font-face {
+    font-family: 'A Hamase';
+    src: url('../../assets/fonts/transfonter.org-Hemase/AHamase.eot');
+    src: url('../../assets/fonts/transfonter.org-Hemase/AHamase.eot?#iefix') format('embedded-opentype'),
+        url('../../assets/fonts/transfonter.org-Hemase/AHamase.woff2') format('woff2'),
+        url('../../assets/fonts/transfonter.org-Hemase/AHamase.woff') format('woff'),
+        url('../../assets/fonts/transfonter.org-Hemase/AHamase.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+*{
+    font-family: "A Hamase";
     scroll-padding-top: 300px;
     box-sizing: border-box;
 }
@@ -30,8 +42,8 @@ header {
 }
 header #logo{
     background-color: #002051;
-    width:200px;
-    height:155px;
+    width:100px;
+    height:90px;
     float: right;
 
 }
@@ -61,20 +73,20 @@ header #logo img{
 .nav-bar {
     height: 65px;
     font-size: 16px;
-    padding: 10px;
     display: flex;
     justify-content: right; 
     flex-wrap: wrap;
 }
 .nav-bar .logo{
-    padding: 5px 0;
+    padding: 10px 0;
     padding-left: 10px;
-    font-size: 20px;
+    font-size: 23px;
 }
 .logo span {
     color: #ffaa00;
 }
 .nav-links{
+    height:60px;
     margin-right: 50px; 
     border-bottom: 3px solid #938c8c3f;
 }
@@ -82,7 +94,7 @@ header #logo img{
     display: inline-block;
     height: 100%;
     position: relative;    /*after */
-    padding: 12px 0;
+    padding: 12px 0 0 0;
     color: rgb(201, 196, 196);
     text-decoration: none;
     margin-right: 25px;
@@ -120,16 +132,14 @@ header #logo img{
     padding: 8px 20px;
     border-radius: 25px;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 16px;
     position: absolute;
     left: 120px;
     top: 25px;
-
 }
 .login-btn:hover {
     background: #ffcc44;
 }
-
 
  /* Multi level lists */
 #ul-about{
@@ -137,7 +147,7 @@ header #logo img{
     background-color: #f3ebeb;
     width:250px;
     position: fixed;
-    right:660px;
+    right:510px;
     top:155px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
@@ -178,7 +188,7 @@ header #logo img{
     background-color: #f3ebeb;
     width:250px;
     position: fixed;
-    right:790px;
+    right:670px;
     top:155px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
@@ -480,7 +490,7 @@ table tbody tr td {
 
 #icons a:last-child{
     width:55px;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 #icons a img{

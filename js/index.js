@@ -33,3 +33,10 @@ relationUl.addEventListener('mouseover', function() {
 relationUl.addEventListener('mouseout', function() {
     relationUl.classList.remove("show");
 });
+
+
+
+// document.querySelectorAll('*').forEach(el => {
+//     const size = parseFloat(getComputedStyle(el).fontSize);
+//     el.style.fontSize = (size + 3) + 'px';
+// });
