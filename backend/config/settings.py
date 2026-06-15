@@ -14,7 +14,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'website',
     'accounts',
+    
 ]
 
 MIDDLEWARE = [
@@ -72,7 +74,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static'] # اضافه شد برای شناسایی فایل‌های CSS و JS
 
 # تنظیمات SMS
-IPPANEL_API_KEY = "YTIwMTQ5YTctNGQxZi00YTZmLTgzMDUtMzIxMmMwYjQ4ZjI3YWI4ZGQ1M2M0YThjZWQyZjk4YWNjOWEzM2YwNTE2Y2M="
+IPPANEL_API_KEY = "your-new-key"
 IPPANEL_PATTERN_CODE = "dj3v6rdzpofzk73"
 IPPANEL_SENDER = "+983000505"
 
@@ -81,8 +83,11 @@ PROFESSOR_PHONES = [
     "09121234567",
     "09123334455",
 ]
-STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
