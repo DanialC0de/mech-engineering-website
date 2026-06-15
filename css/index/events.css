@@ -296,7 +296,49 @@ header #logo img {
     margin: auto;
     background-color: #fff;
 }
-/* _____________________________________________________________________________________ */
+/*-------------------------------------------------------------------------------*/
+.container-grid{
+    padding:100px 50px;
+    display:grid;
+    grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+    gap:50px 25px;
+}
+.event-card{
+    font-size: 18px;
+    /* height: 300px; */
+    background: white;
+    border-radius: 15px;
+    padding: 30px 17px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.event-card:hover {
+    box-shadow: 5px 5px 20px 5px #0a2a44;
+    transform: translateY(-10px);
+}
+.event-date {
+    color: #ffaa00;
+    font-weight: bold;
+    margin: 10px 0;
+}
+.event-card button {
+    background: #0a2a44;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.5s;
+    max-width: 200px;
+}
+.event-card button:hover{
+    transform: scale(1.1);
+}
 
 
 

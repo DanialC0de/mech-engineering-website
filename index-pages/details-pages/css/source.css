@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'A Hamase';
-    src: url('../../assets/fonts/transfonter.org-Hemase/AHamase.eot');
-    src: url('../../assets/fonts/transfonter.org-Hemase/AHamase.eot?#iefix') format('embedded-opentype'),
-        url('../../assets/fonts/transfonter.org-Hemase/AHamase.woff2') format('woff2'),
-        url('../../assets/fonts/transfonter.org-Hemase/AHamase.woff') format('woff'),
-        url('../../assets/fonts/transfonter.org-Hemase/AHamase.ttf') format('truetype');
+    src: url('../../../assets/fonts/transfonter.org-Hemase/AHamase.eot');
+    src: url('../../../assets/fonts/transfonter.org-Hemase/AHamase.eot?#iefix') format('embedded-opentype'),
+        url('../../../assets/fonts/transfonter.org-Hemase/AHamase.woff2') format('woff2'),
+        url('../../../assets/fonts/transfonter.org-Hemase/AHamase.woff') format('woff'),
+        url('../../../assets/fonts/transfonter.org-Hemase/AHamase.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -46,7 +46,6 @@ header {
     top: 0;
     z-index: 100;
 }
-
 header #logo {
     background-color: #002051;
     width: 100px;
@@ -54,32 +53,27 @@ header #logo {
     float: right;
 
 }
-
 header #logo img {
     width: 100%;
     height: 100%;
 }
-
 .header-top {
     width: 100%;
     height: 90px;
     background-color: #002051;
     padding: 25px;
 }
-
 .header-top a:first-child {
     font-weight: bold;
     font-size: 30px;
     color: white;
     margin-right: 25px;
 }
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
-
 .nav-bar {
     height: 65px;
     font-size: 16px;
@@ -87,23 +81,19 @@ header #logo img {
     justify-content: right;
     flex-wrap: wrap;
 }
-
 .nav-bar .logo {
     padding: 10px 0;
     padding-left: 10px;
     font-size: 23px;
 }
-
 .logo span {
     color: #ffaa00;
 }
-
 .nav-links {
     height: 60px;
     margin-right: 50px;
     border-bottom: 3px solid #938c8c3f;
 }
-
 .nav-links a {
     display: inline-block;
     height: 100%;
@@ -257,83 +247,7 @@ header #logo img {
     ;
     background-color: #09357d2e;
 }
-
-/* ______________________________________________________________________________ */
-/* ساختار اصلی */
-
-.hero {
-    height: 300px;
-    overflow: hidden;
-    position: relative;
-}
-.hero img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.page-title {
-    width: fit-content;
-    min-width: 300px;
-    margin: -50px auto;
-    background: white;
-    border-radius: 25px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, .1);
-    position: relative;
-    z-index: 10;
-    height:80px;
-    
-}
-.page-title h1{
-    margin:0;
-    width:100%;
-    height:100%;
-    padding:10px;
-    text-align: center;
-}
-.content-container {
-    /* height: 700px; */
-    width: min(1200px, 90%);
-    margin: auto;
-    background-color: #fff;
-}
-/* ------------------------------------------------------------------------------------------ */
-.container-grid{
-    padding:100px 50px;
-    display:grid;
-    grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
-    gap:50px 25px;
-}
-.source-card {
-    font-size: 18px;
-    /* height: 300px; */
-    background: white;
-    border-radius: 15px;
-    padding: 30px 17px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-}
-.source-card:hover {
-    box-shadow: 5px 5px 20px 5px #0a2a44;
-    transform: translateY(-10px);
-}
-.source-card button {
-    background: #0a2a44;
-    color: white;
-    border: none;
-    padding: 10px 30px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 20px;
-    transition: 0.5s;
-    max-width: 200px;
-}
-.source-card button:hover{
-    transform: scale(1.1);
-}
+/* ____________________________________________________________________ */
 
 
 
@@ -350,17 +264,17 @@ header #logo img {
 
 
 
-/* ______________________________________________________ */
-/* فوتر */
+
+/* _________________________________________________________________________________________ */
 .footer-up {
-    background: url('../../assets/images/bc-footer1-c.jpg') center center/cover;
+    background: url('../../../assets/images/bc-footer1-c.jpg') center center/cover;
     height: 400px;
     color: white;
     text-align: center;
     padding: 50px 200px;
     display: flex;
     justify-content: space-around;
-    /* margin-top: 100px; */
+    margin-top:100px;
 }
 
 .footer-down {

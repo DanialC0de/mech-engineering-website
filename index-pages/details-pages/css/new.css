@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'A Hamase';
-    src: url('../../assets/fonts/transfonter.org-Hemase/AHamase.eot');
-    src: url('../../assets/fonts/transfonter.org-Hemase/AHamase.eot?#iefix') format('embedded-opentype'),
-        url('../../assets/fonts/transfonter.org-Hemase/AHamase.woff2') format('woff2'),
-        url('../../assets/fonts/transfonter.org-Hemase/AHamase.woff') format('woff'),
-        url('../../assets/fonts/transfonter.org-Hemase/AHamase.ttf') format('truetype');
+    src: url('../../../assets/fonts/transfonter.org-Hemase/AHamase.eot');
+    src: url('../../../assets/fonts/transfonter.org-Hemase/AHamase.eot?#iefix') format('embedded-opentype'),
+        url('../../../assets/fonts/transfonter.org-Hemase/AHamase.woff2') format('woff2'),
+        url('../../../assets/fonts/transfonter.org-Hemase/AHamase.woff') format('woff'),
+        url('../../../assets/fonts/transfonter.org-Hemase/AHamase.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -258,109 +258,210 @@ header #logo img {
     background-color: #09357d2e;
 }
 
-/* ______________________________________________________________________________ */
-/* ساختار اصلی */
+/* ____________________________________________________________________ */
 
-.hero {
-    height: 300px;
-    overflow: hidden;
-    position: relative;
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
-.hero img {
+
+/* بخش اصلی خبر */
+.news-detail {
+    padding: 40px 0;
+}
+
+.news-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* تصویر خبر */
+.news-image {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+}
+
+.news-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
-.page-title {
-    width: fit-content;
-    min-width: 300px;
-    margin: -50px auto;
-    background: white;
-    border-radius: 25px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, .1);
-    position: relative;
-    z-index: 10;
-    height:80px;
-    
+
+/* محتوای خبر */
+.news-content {
+    padding: 35px;
 }
-.page-title h1{
-    margin:0;
-    width:100%;
-    height:100%;
-    padding:10px;
-    text-align: center;
-}
-.content-container {
-    /* height: 700px; */
-    width: min(1200px, 90%);
-    margin: auto;
-    background-color: #fff;
-}
-/* ------------------------------------------------------------------------------------------ */
-.container-grid{
-    padding:100px 50px;
-    display:grid;
-    grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
-    gap:50px 25px;
-}
-.source-card {
-    font-size: 18px;
-    /* height: 300px; */
-    background: white;
-    border-radius: 15px;
-    padding: 30px 17px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: 0.3s;
+
+/* دسته‌بندی و تاریخ */
+.news-meta {
     display: flex;
-    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.news-category {
+    background: #ffaa00;
+    color: #0a2a44;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.news-date {
+    color: #7f8c8d;
+    font-size: 13px;
+    display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 5px;
 }
-.source-card:hover {
-    box-shadow: 5px 5px 20px 5px #0a2a44;
-    transform: translateY(-10px);
+
+/* عنوان خبر */
+.news-title {
+    font-size: 28px;
+    color: #0a2a44;
+    margin-bottom: 20px;
+    line-height: 1.4;
 }
-.source-card button {
-    background: #0a2a44;
-    color: white;
-    border: none;
-    padding: 10px 30px;
-    border-radius: 25px;
-    cursor: pointer;
+
+/* متن خبر */
+.news-text {
+    color: #444;
+    line-height: 1.9;
+    font-size: 15px;
+}
+
+.news-text p {
+    margin-bottom: 20px;
+}
+
+.news-text h3 {
+    color: #0a2a44;
+    margin: 25px 0 15px 0;
     font-size: 20px;
-    transition: 0.5s;
-    max-width: 200px;
-}
-.source-card button:hover{
-    transform: scale(1.1);
 }
 
+.news-text ul {
+    padding-right: 25px;
+    margin-bottom: 20px;
+}
+
+.news-text li {
+    margin-bottom: 10px;
+}
+
+/* نقل قول */
+.quote {
+    background: #f0f4f8;
+    padding: 25px;
+    border-radius: 16px;
+    border-right: 4px solid #ffaa00;
+    margin: 25px 0;
+    font-style: italic;
+    color: #555;
+}
+/* دکمه بازگشت */
+.back-link {
+    display: inline-block;
+    margin-top: 25px;
+    color: #ffaa00;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* خبرهای مرتبط */
+.related-news {
+    margin-top: 40px;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.related-title {
+    font-size: 20px;
+    color: #0a2a44;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.related-item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 12px;
+    border-radius: 12px;
+    transition: 0.3s;
+    text-decoration: none;
+    background: #f8f9fa;
+}
+
+.related-item:hover {
+    background: #ffaa0010;
+    transform: translateX(-5px);
+}
+
+.related-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #0a2a44;
+}
+
+.related-info h4 {
+    font-size: 14px;
+    color: #0a2a44;
+    margin-bottom: 5px;
+}
+
+.related-info p {
+    font-size: 11px;
+    color: #7f8c8d;
+}
+
+@media (max-width: 768px) {
+    .news-image {
+        height: 250px;
+    }
+
+    .news-content {
+        padding: 25px;
+    }
+
+    .news-title {
+        font-size: 22px;
+    }
+
+    .news-text {
+        font-size: 14px;
+    }
+}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ______________________________________________________ */
-/* فوتر */
+/* _________________________________________________________________________________________ */
 .footer-up {
-    background: url('../../assets/images/bc-footer1-c.jpg') center center/cover;
+    background: url('../../../assets/images/bc-footer1-c.jpg') center center/cover;
     height: 400px;
     color: white;
     text-align: center;
     padding: 50px 200px;
     display: flex;
     justify-content: space-around;
-    /* margin-top: 100px; */
+    margin-top: 100px;
 }
 
 .footer-down {

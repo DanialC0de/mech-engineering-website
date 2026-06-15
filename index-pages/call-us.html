@@ -21,13 +21,13 @@
         <div class="nav-bar">
             <div class="logo">⚙️انجمن علمی مهندسی <span>مکانیک</span></div>
             <div class="nav-links">
-                <a href="#">صفحه اصلی</a>
+                <a href="index.html">صفحه اصلی</a>
                 <a href="#"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
                 <a href="#"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
-                <a href="#events">رویدادها</a>
-                <a href="#sources">منابع علمی</a>
-                <a href="#honors">افتخارات انجمن</a>
-                <a href="call-us.html">تماس با ما</a>
+                <a href="events.html">رویدادها</a>
+                <a href="sources.html">منابع علمی</a>
+                <a href="honors.html">افتخارات انجمن</a>
+                <a href="#">تماس با ما</a>
             </div>
         </div>
     </header>
@@ -45,21 +45,72 @@
     </section>
 
     <div class="page-title">
-        <h1>دوره های آموزشی</h1>
+        <h1>ارتباط با دانشکده</h1>
     </div>
 
     <main class="content-container">
+        <section class="contact-section">
+            <div class="call-container">
+                <div class="contact-wrapper">
+                    <div class="contact-info">
+                        <h2>اطلاعات تماس</h2>
 
+                        <div class="info-item">
+                            <div class="info-icon">📍</div>
+                            <div class="info-text">
+                                آدرس پستی: کرمان، بلوار جمهوری، بعد از کوچه 13، زیر پل ، دانشکده فنی مهندسی دانشگاه باهنر
+                            </div>
+                        </div>
 
+                        <div class="info-item">
+                            <div class="info-icon">📮</div>
+                            <div class="info-text">
+                                صندوق پستی : ۱۴۵۸۸۸۹۶۹۴
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">📞</div>
+                            <div class="info-text">
+                               تلفن :  66165501 (34) 98+
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">✉️</div>
+                            <div class="info-text">
+                                آدرس الکترونیکی: info@mech.uk.ac.ir
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- سمت چپ: فرم تماس -->
+                    <div class="contact-form">
+                        <h2>ارتباط با دانشکده</h2>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <input type="text" id="fullName" placeholder="نام و نام خانوادگی" required>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="email" id="email" placeholder="ایمیل شما" required>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" id="subject" placeholder="موضوع" required>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea id="message" rows="5" placeholder="پیام شما" required></textarea>
+                            </div>
+
+                            <button type="submit" class="submit-btn">ارسال</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
-
-
-
-
-
-
-
-
 
     <footer>
         <div class="footer-up">
@@ -129,6 +180,25 @@
         relationUl.addEventListener('mouseout', function () {
             relationUl.classList.remove("show");
         });
+    </script>
+    <script>
+            // اسکریپت ساده برای فرم تماس
+            document.getElementById('contactForm')?.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const fullName = document.getElementById('fullName').value;
+                const email = document.getElementById('email').value;
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value;
+
+                if (!fullName || !email || !subject || !message) {
+                    alert('لطفاً تمام فیلدها را پر کنید');
+                    return;
+                }
+
+                alert('پیام شما با موفقیت ارسال شد');
+                this.reset();
+            });
     </script>
 </body>
 
