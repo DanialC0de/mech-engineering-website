@@ -75,8 +75,8 @@ STATICFILES_DIRS = [BASE_DIR / 'static'] # اضافه شد برای شناسای
 
 # تنظیمات SMS
 IPPANEL_API_KEY = "your-new-key"
-IPPANEL_PATTERN_CODE = "dj3v6rdzpofzk73"
-IPPANEL_SENDER = "+983000505"
+IPPANEL_PATTERN_CODE = ""
+IPPANEL_SENDER = ""
 
 # اساتید
 PROFESSOR_PHONES = [
