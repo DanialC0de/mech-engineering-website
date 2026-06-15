@@ -1,0 +1,465 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/index/index.css' %}">
+    <title>خانه | انجمن علمی مکانیک</title>
+</head>
+
+<body>
+    <header>
+        <div id="logo">
+            <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}">
+        </div>
+        <div class="header-top">
+            <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
+            <a href="../login.html" target="_blank" class="login-btn">ورود / ثبت‌نام</a>
+        </div>
+        <div class="nav-bar">
+            <div class="logo">⚙️انجمن علمی مهندسی <span>مکانیک</span></div>
+            <div class="nav-links">
+                <a href="#">صفحه اصلی</a>
+                <a href="#"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
+                <a href="#"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
+                <a href="#events">رویدادها</a>
+                <a href="#sources">منابع علمی</a>
+                <a href="#honors">افتخارات انجمن</a>
+                <a href="call-us.html">تماس با ما</a>
+            </div>
+        </div>
+    </header>
+    <ul id="ul-about">
+        <li><a href="about.html">معرفی دانشکده</a></li>
+        <li><a href="honors.html">دستاورد ها و افتخارات</a></li>
+    </ul>
+    <ul id="ul-relation">
+        <li><a href="industry.html">خدمات دانشکده به صنعت</a></li>
+    </ul>
+
+    <section class="hero">
+        <div id="seudo">
+            <div id="hero-items">
+                <div class="hero-item">
+                    <a href=""><i class="fa-solid fa-building-columns"></i><span>معرفی دانشکده </span></a>
+                </div>
+                <div class="hero-item">
+
+                    <a href=""><i class="fa-solid fa-calendar-days"></i><span>کارگاه ها و رویدادها</span></a>
+                </div>
+                <div class="hero-item">
+                    <a href=""><i class="fa-solid fa-book"></i><span>منابع علمی</span></a>
+                </div>
+                <div class="hero-item">
+
+                    <a href=""><i class="fa-solid fa-award"></i><span>دستاوردها</span></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="after-hero">
+        <p>انجمن علمی مکانیک | همراه شما در مسیر یادگیری، پژوهش و نوآوری</p>
+    </div>
+//گالری تصاویر و ویدیو ها
+<section class="gallery-slider">
+    <div class="container">
+        <h2 class="section-title">🎬 گالری تصاویر و ویدیوها</h2>
+        <div class="slider-container">
+            <div class="css-slider">
+                
+                <!-- اسلاید ۱ - تصویر -->
+                <input type="radio" name="slider" id="slide1" checked>
+                <div class="slide">
+                    <img src="{% static 'assets/images/gallery/photo1.jpg' %}" alt="گالری ۱">
+                    <div class="slide-caption">
+                       <h3>گزارش مسابقه سازه های ماکارونی</h3>
+                        <p>#fun</p>
+                    </div>
+                </div>
+
+                <!-- اسلاید ۲ - ویدیو -->
+                <input type="radio" name="slider" id="slide2">
+                <div class="slide video-slide">
+                    <video controls preload="auto" playsinline muted>
+                        <source src="{% static 'assets/videos/gallery/video1.mp4' %}" type="video/mp4">
+                        مرورگر شما ویدیو را پشتیبانی نمی‌کند.
+                    </video>
+                    <div class="slide-caption">
+                        <h3>ویدیو آموزشی</h3>
+                        <p>محصول انجمن علمی مکانیک</p>
+                    </div>
+                </div>
+
+                <!-- اسلاید ۳ - تصویر -->
+                <input type="radio" name="slider" id="slide3">
+                <div class="slide">
+                    <img src="{% static 'assets/images/gallery/photo2.jpg' %}" alt="گالری ۲">
+                    <div class="slide-caption">
+                        <h3>گزارش کارگاه نگارش صحیح پروژه تخصصی پایان نامه</h3>
+                        <p>اردیبهشت ۱۴۰۴</p>
+                    </div>
+                </div>
+
+                <input type="radio" name="slider" id="slide4">
+                <div class="slide">
+                    <img src="{% static 'assets/images/gallery/photo3.jpg' %}" alt="گالری ۳">
+                    <div class="slide-caption">
+                        <h3>آموزشی</h3>
+                        <p>#آموزشی</p>
+                    </div>
+                </div>
+
+                <input type="radio" name="slider" id="slide5">
+                <div class="slide">
+                    <img src="{% static 'assets/images/gallery/photo4.jpg' %}" alt="گالری ۴">
+                    <div class="slide-caption">
+                        <h3>آموزشی</h3>
+                        <p>#آموزشی</p>
+                    </div>
+                </div>
+
+                <!-- نقاط ناوبری -->
+                <div class="slider-nav">
+                    <label for="slide1" class="nav-btn"></label>
+                    <label for="slide2" class="nav-btn"></label>
+                    <label for="slide3" class="nav-btn"></label>
+                    <label for="slide4" class="nav-btn"></label>
+                    <label for="slide5" class="nav-btn"></label>
+                </div>
+
+                //دکمه های قبلی و بعدی
+                <div class="slider-controls">
+                    <label class="control prev">❮</label>
+                    <label class="control next">❯</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let currentSlide = 1;
+    const totalSlides = 5;
+    
+    // تابع پیدا کردن شماره اسلاید فعلی بر اساس رادیوباکس تیک‌خورده
+    function updateCurrentSlide() {
+        for(let i = 1; i <= totalSlides; i++) {
+            if(document.getElementById('slide' + i).checked) {
+                currentSlide = i;
+                break;
+            }
+        }
+    }
+    
+    // تابع اصلی رفتن به اسلاید مشخص و کنترل ویدیوها
+    function goToSlide(n) {
+        if(n < 1) n = totalSlides;
+        if(n > totalSlides) n = 1;
+        
+        // تغییر وضعیت رادیو باکس اسلاید
+        const targetRadio = document.getElementById('slide' + n);
+        if (targetRadio) {
+            targetRadio.checked = true;
+            currentSlide = n;
+        }
+        
+        // ۱. ابتدا تمام ویدیوها را متوقف و صفر می‌کنیم
+        document.querySelectorAll('video').forEach(video => {
+            video.pause();
+            video.currentTime = 0;
+        });
+
+        // ۲. حالا ویدیو اسلاید فعال را پیدا کرده و پخش می‌کنیم (کوتیشن‌ها اصلاح شد)
+        const activeSlide = document.querySelector('input[name="slider"]#slide' + n + ' + .slide');
+        
+        if (activeSlide) {
+            const video = activeSlide.querySelector('video');
+            if (video) {
+                video.muted = true; 
+                
+                let playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("پخش خودکار توسط مرورگر مسدود شد:", error);
+                    });
+                }
+            }
+        }
+    }
+    
+    // گوش دادن به تغییر وضعیت رادیوباکس‌ها (کلیک روی نقاط ناوبری پایین)
+    for(let i = 1; i <= totalSlides; i++) {
+        const radioBtn = document.getElementById('slide' + i);
+        if(radioBtn) {
+            radioBtn.addEventListener('change', function() {
+                updateCurrentSlide();
+                goToSlide(currentSlide);
+            });
+        }
+    }
+    
+    // فعال‌سازی دقیق دکمه‌های قبلی و بعدی بر اساس کلاس‌های اختصاصی شما
+    const prevBtn = document.querySelector('.slider-controls .prev');
+    const nextBtn = document.querySelector('.slider-controls .next');
+    
+    if(prevBtn) {
+        prevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            goToSlide(currentSlide - 1);
+        });
+    }
+    
+    if(nextBtn) {
+        nextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            goToSlide(currentSlide + 1);
+        });
+    }
+    
+    // اجرای اولیه برای هماهنگی مقادیر
+    updateCurrentSlide();
+</script>
+
+
+    <div class="container">
+        
+        <h2 class="section-title">📰اخبار واطلاعیه ها</h2>
+        <div class="news-grid">
+
+            <div class="news-card">
+                <div class="news-image">
+                    <img src="https://via.placeholder.com/400x200" alt="خبر">
+                </div>
+                <div class="news-content">
+                    <div class="news-category">دومین همایش هوش مصنوعی در صنایع دریایی</div>
+                    <div class="news-text">تحصیلات جابجا</div>
+                    <div class="news-link">
+                        <a href="#">redirect=%2F</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-card">
+                <div class="news-image">
+                    <img src="https://via.placeholder.com/400x200" alt="خبر">
+                </div>
+                <div class="news-content">
+                    <div class="news-category">پیام دکتر السینی، رئیس دانشگاه تهران</div>
+                    <div class="news-text">تحصیلات جابجا</div>
+                    <div class="news-link">
+                        <a href="#">redirect=%2F</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-card">
+                <div class="news-image">
+                    <img src="https://via.placeholder.com/400x200" alt="خبر">
+                </div>
+                <div class="news-content">
+                    <div class="news-category">پیش بینی و پیش‌نهادی</div>
+                    <div class="news-text">ساخت و تولید</div>
+                    <div class="news-link">
+                        <a href="#">redirect=%2F</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="all-container">
+                <a href="events.html" class="all-btn">مشاهده همه <i class="fa-solid fa-arrow-left"></i></a>
+            </div>
+        </div>
+        
+        <br><br><br><br><br><br>
+        <hr><br><br><br><br><br>
+
+
+        <h2 class="section-title">📅 رویدادها و کارگاه ها</h2>
+        <div class="events-grid" id="events">
+
+            <div class="event-card">
+                <div class="news-image">
+                    <img src="https://via.placeholder.com/400x200" alt="خبر">
+                </div>
+                <h3>وبینار سیستم‌های تعلیق خودرو</h3>
+                <div class="event-date">📆 20 فروردین 1404 | 🕒 15:00</div>
+                <p>بررسی آخرین دستاوردها در طراحی سیستم تعلیق فعال </p>
+                <button onclick="alert('لطفاً ابتدا وارد حساب کاربری شوید')">ثبت‌نام →</button>
+            </div>
+
+            <div class="event-card">
+                <div class="news-image">
+                    <img src="https://via.placeholder.com/400x200" alt="خبر">
+                </div>
+                <h3>بازدید علمی از ایران خودرو</h3>
+                <div class="event-date">📆 5 اردیبهشت 1404 | 🕒 08:00</div>
+                <p>آشنایی با خط تولید و فرآیندهای مونتاژ</p>
+                <button onclick="alert('لطفاً ابتدا وارد حساب کاربری شوید')">ثبت‌نام →</button>
+            </div>
+
+            <div class="event-card">
+                <div class="news-image">
+                    <img src="https://via.placeholder.com/400x200" alt="خبر">
+                </div>
+                <h3>مسابقه ملی طراحی با سالیدورک</h3>
+                <div class="event-date">📆 15 اردیبهشت 1404 | 🕒 10:00</div>
+                <p>رقابت بین تیم‌های برتر دانشگاه‌های کشور</p>
+                <button onclick="alert('لطفاً ابتدا وارد حساب کاربری شوید')">ثبت‌نام →</button>
+            </div>
+
+            <div class="all-container">
+                <a href="events.html" class="all-btn">مشاهده همه <i class="fa-solid fa-arrow-left"></i></a>
+            </div>
+        </div>
+
+        <br><br><br><br><br><br>
+        <hr><br><br><br><br><br>
+
+        <h2 class="section-title">📚 جدیدترین منابع علمی</h2>
+        <div class="events-grid" id="sources">
+
+            <div class="event-card">
+                <div class="news-image">
+                    <img src="https://via.placeholder.com/400x200" alt="خبر">
+                </div>
+                <h3>جزوه پیشرفته ترمودینامیک</h3>
+                <p>تألیف دکتر رضایی - ویژه ترم بهار 1404</p>
+                <button onclick="alert('وارد شوید تا بتوانید دانلود کنید')">دانلود PDF</button>
+            </div>
+
+            <div class="event-card">
+                <div class="news-image">
+                    <img src="https://via.placeholder.com/400x200" alt="خبر">
+                </div>
+                <h3>ویدیوهای آموزش سالیدورک</h3>
+                <p>مجموعه 20 جلسه آموزشی از صفر تا پیشرفته</p>
+                <button onclick="alert('وارد شوید تا بتوانید دانلود کنید')">مشاهده ودانلود</button>
+            </div>
+
+            <div class="event-card">
+                <div class="news-image">
+                    <img src="https://via.placeholder.com/400x200" alt="خبر">
+                </div>
+                <h3>مقالات همایش ملی مکانیک 1403</h3>
+                <p>مجموعه مقالات پذیرفته شده</p>
+                <button onclick="alert('وارد شوید تا بتوانید دانلود کنید')">مشاهده مقالات</button>
+            </div>
+
+            <div class="all-container">
+                <a href="sources.html" class="all-btn">مشاهده همه <i class="fa-solid fa-arrow-left"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <br><hr><br><br>
+    
+    <section class="honors" id="honors">
+        <h2>افتخارات</h2>
+        <table width="1400">
+            <thead>
+                <tr>
+                    <th>عنوان جشنواره یا مسابقه</th>
+                    <th>مقام</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background-color: #f9f9fc;">
+                    <td>دوره سوم جشنواره حرکت</td>
+                    <td>انجمن قابل تقدیر ترویجی</td>
+                </tr>
+                <tr style="background-color: #ffffff;">
+                    <td>دوره چهارم جشنواره حرکت</td>
+                    <td>انجمن برگزیده جشنواره</td>
+                </tr>
+                <tr style="background-color: #f9f9fc;">
+                    <td>دوره ششم جشنواره حرکت</td>
+                    <td>انجمن قابل تقدیر ترویجی</td>
+                </tr>
+                <tr style="background-color: #ffffff;">
+                    <td>دوره هفتم جشنواره حرکت</td>
+                    <td>انجمن برگزیده در نشریه</td>
+                </tr>
+                <tr style="background-color: #f9f9fc;">
+                    <td>دوره هفتم جشنواره حرکت</td>
+                    <td>انجمن برگزیده در اختراع و نوآوری</td>
+                </tr>
+                <tr style="background-color: #ffffff;">
+                    <td>دوره یازدهم جشنواره حرکت</td>
+                    <td>انجمن برتر</td>
+                </tr>
+                <tr style="background-color: #f9f9fc;">
+                    <td>دوره دوازدهم جشنواره حرکت</td>
+                    <td>انجمن برتر</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container about-content">
+            <div class="about-text">
+                <h3>درباره انجمن علمی مکانیک</h3>
+                <p>انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان در سال 1386 با هدف ارتقا دانش و تخصص
+                    دانشجویان و پژوهشگران این رشته تاسیس شد.انجمن علمی دانشجویی مهندسی مکانیک مفتخر است که در طول بیش از
+                    یک دهه از فعالیت خود; گام های تاثیرگذار و مفیدی را جهت ارتقاء کیفی و کمی سطح علمی دانشجویان این رشته
+                    بردارد; که میتوان به برگزاری کارگاه های آموزشی متعدد پیرامون نرم افزار های کاربردی این رشته که جزء
+                    لاینفک عوامل لازم برای موفقیت مهندسان و دانشجویان مکانیک است اشاره کرد.</p>
+                <p style="margin-top: 15px; font-weight:bold; color:rgb(255, 64, 0)">همین حالا به خانواده بزرگ انجمن
+                    علمی مکانیک بپیوندید و از امکانات اختصاصی
+                    ما بهره‌مند شوید.</p>
+            </div>
+            <div class="about-stats">
+                <div class="stat">
+                    <div class="number">20+</div>
+                    <div class="label">عضو فعال</div>
+                </div>
+                <div class="stat">
+                    <div class="number">25+</div>
+                    <div class="label">رویداد برگزار شده</div>
+                </div>
+                <div class="stat">
+                    <div class="number">50+</div>
+                    <div class="label">منبع علمی</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-up">
+            <div class="content">
+                <p><i class="fa-solid fa-location-dot"></i>&nbsp;&nbsp;&nbsp;&nbsp; کرمان - بلوار جمهوری - پل امیرکبیر - دانشکده فنی مهندسی &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;دانشگاه شهید باهنر - دانشکده مکانیک</p>
+                <p><i class="fa-brands fa-telegram"></i> &nbsp;&nbsp;&nbsp;&nbsp; ukmechanics@</p>
+                <p><i class="fa-brands fa-instagram"></i> &nbsp;&nbsp;&nbsp;&nbsp; ukmechanics@</p>
+            </div>
+
+            <div class="map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3445.4741871022507!2d57.012748796789545!3d30.28055960000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f0218b67107c6dd%3A0x398906da69669661!2sFaculty%20of%20Engineering%20Campus%20-Shahid%20Bahonar%20University%20of%20Kerman!5e0!3m2!1sen!2s!4v1781183631960!5m2!1sen!2s"
+                    width="550" height="320" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+
+        <div class="footer-down">
+            <p>&copy; ۲۰۲۵ انجمن علمی مکانیک - تمامی حقوق محفوظ است</p>
+        </div>
+    </footer>
+
+
+    <div id="icons">
+        <a href="https://t.me/ukmechanics" target="_blank">
+            <img src="{% static 'assets/icons/15.png' %}">
+        </a>
+        <a href="https://instagram.com/ukmechanics?igshid=14gmuy96orpnd" target="_blank">
+            <img src="{% static 'assets/icons/2.png' %}">
+        </a>
+    </div>
+    
+    <script src="{% static 'js/index.js' %}"></script>
+</body>
+
+</html>
