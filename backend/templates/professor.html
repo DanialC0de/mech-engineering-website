@@ -1,0 +1,274 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/professor.css' %}">
+    <title>پنل استاد | انجمن علمی مکانیک</title>
+</head>
+
+<body>
+    <div class="sidebar">
+        <button id="toggleSidebar"><i class="fas fa-bars"></i></button>
+        <div class="logo">
+            ⚙️ انجمن <span>مکانیک</span>
+            <small>پنل استاد</small>
+        </div>
+        <ul class="menu">
+            <li class="active" data-tab="dashboard"><a href="#">📊 داشبورد</a></li>
+            <li data-tab="calendar"><a href="#">📅 تقویم و رویدادها</a></li>
+            <li data-tab="resources"><a href="#">📚 منابع علمی و پژوهشی</a></li>
+            <li data-tab="communication"><a href="#">💬 ارتباطات</a></li>
+            <li data-tab="profile"><a href="#">👤 پروفایل من</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="page-title" id="pageTitle">داشبورد استاد</div>
+            <button class="logout-btn" onclick="logout()">خروج</button>
+        </div>
+
+        <!-- داشبورد -->
+        <div id="dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="number" id="upcomingEvents">۰</div>
+                    <div class="label">رویدادهای پیش رو</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="invitations">۰</div>
+                    <div class="label">دعوتنامه‌های جدید</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="newMessages">۰</div>
+                    <div class="label">پیام‌های جدید</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="myArticles">۰</div>
+                    <div class="label">مقالات من</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">📩 دعوتنامه‌های رویداد</div>
+                <table id="invitationsTable">
+                    <thead>
+                        <tr>
+                            <th>عنوان رویداد</th>
+                            <th>تاریخ</th>
+                            <th>نقش شما</th>
+                            <th>وضعیت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invitationsBody"></tbody>
+                </table>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">📅 رویدادهای پیش رو (نقش شما)</div>
+                <table id="myEventsTable">
+                    <thead>
+                        <tr>
+                            <th>عنوان رویداد</th>
+                            <th>تاریخ</th>
+                            <th>ساعت</th>
+                            <th>نقش شما</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myEventsBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- تقویم و رویدادها -->
+        <div id="calendar" class="tab-content">
+            <div class="section-card">
+                <div class="section-title">📅 تقویم شخصی</div>
+                <div id="calendarWidget"
+                    style="background:#f5f7fa; padding:20px; border-radius:12px; text-align:center; min-height:200px;">
+                    <!-- تقویم ساده -->
+                    <div style="font-size:48px; color:#0a2a44;">۱۴۰۴</div>
+                    <div style="font-size:24px; margin:10px 0;">فروردین</div>
+                    <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:5px; margin-top:15px;">
+                        <div style="font-weight:bold;">ش</div>
+                        <div style="font-weight:bold;">ی</div>
+                        <div style="font-weight:bold;">د</div>
+                        <div style="font-weight:bold;">س</div>
+                        <div style="font-weight:bold;">چ</div>
+                        <div style="font-weight:bold;">پ</div>
+                        <div style="font-weight:bold;">ج</div>
+                        <div>۱</div>
+                        <div>۲</div>
+                        <div>۳</div>
+                        <div>۴</div>
+                        <div>۵</div>
+                        <div>۶</div>
+                        <div>۷</div>
+                        <div>۸</div>
+                        <div>۹</div>
+                        <div>۱۰</div>
+                        <div>۱۱</div>
+                        <div>۱۲</div>
+                        <div>۱۳</div>
+                        <div>۱۴</div>
+                        <div>۱۵</div>
+                        <div>۱۶</div>
+                        <div>۱۷</div>
+                        <div>۱۸</div>
+                        <div>۱۹</div>
+                        <div style="background:#ffaa00; border-radius:50%;">۲۰</div>
+                        <div>۲۱</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">📝 پیشنهاد رویداد جدید</div>
+                <button onclick="openProposeEventModal()"
+                    style="background:#0a2a44; color:white; padding:10px 20px; border:none; border-radius:8px;">+
+                    پیشنهاد رویداد علمی</button>
+            </div>
+        </div>
+
+        <!-- منابع علمی -->
+        <div id="resources" class="tab-content">
+            <div class="section-card">
+                <div class="section-title">📚 مقالات و منابع علمی</div>
+                <table id="articlesTable">
+                    <thead>
+                        <tr>
+                            <th>عنوان مقاله</th>
+                            <th>نویسنده</th>
+                            <th>تاریخ ارسال</th>
+                            <th>وضعیت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="articlesBody"></tbody>
+                </table>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">📤 افزودن مقاله جدید</div>
+                <button onclick="openAddArticleModal()"
+                    style="background:#0a2a44; color:white; padding:10px 20px; border:none; border-radius:8px;">+ آپلود
+                    مقاله</button>
+            </div>
+        </div>
+
+        <!-- ارتباطات -->
+        <div id="communication" class="tab-content">
+            <div class="section-card">
+                <div class="section-title">📨 صندوق پیام‌ها</div>
+                <table id="messagesTable">
+                    <thead>
+                        <tr>
+                            <th>از</th>
+                            <th>موضوع</th>
+                            <th>تاریخ</th>
+                            <th>وضعیت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="messagesBody"></tbody>
+                </table>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">✉️ ارسال پیام جدید</div>
+                <select id="messageTarget" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px;">
+                    <option value="admin">دبیر انجمن</option>
+                    <option value="students">دانشجویان</option>
+                </select>
+                <input type="text" id="messageSubject" placeholder="موضوع"
+                    style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px;">
+                <textarea id="messageText" rows="3" placeholder="متن پیام..."
+                    style="width:100%; padding:10px; border-radius:8px;"></textarea>
+                <button onclick="sendMessage()"
+                    style="background:#0a2a44; color:white; padding:10px 20px; border:none; border-radius:8px; margin-top:10px;">ارسال
+                    پیام</button>
+            </div>
+        </div>
+
+        <!-- پروفایل -->
+        <div id="profile" class="tab-content">
+            <div class="section-card">
+                <div class="section-title">👤 اطلاعات پایه</div>
+                <div style="display:flex; gap:20px; flex-wrap:wrap;">
+                    <div style="flex:1;">
+                        <p><strong>نام:</strong> <span id="profName">دکتر سعید کریمی</span></p>
+                        <p><strong>سمت:</strong> <span id="profPosition">دانشیار</span></p>
+                        <p><strong>دانشکده:</strong> مهندسی مکانیک</p>
+                        <p><strong>ایمیل:</strong> karimi@mech.ac.ir</p>
+                    </div>
+                    <div style="text-align:center;">
+                        <div
+                            style="width:100px; height:100px; background:#0a2a44; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:36px;">
+                            👨‍🏫</div>
+                        <button onclick="changeProfilePic()" style="margin-top:10px;">تغییر عکس</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">📝 اطلاعات تخصصی</div>
+                <textarea id="expertise" rows="3"
+                    style="width:100%; padding:10px; border-radius:8px;">مقالات مهم: طراحی سیستم‌های تعلیق، دینامیک خودرو، کنترل فعال</textarea>
+                <button onclick="saveExpertise()" style="margin-top:10px;">ذخیره اطلاعات</button>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">🔒 تنظیمات حساب کاربری</div>
+                <input type="password" id="newPassword" placeholder="رمز عبور جدید"
+                    style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px;">
+                <input type="password" id="confirmNewPassword" placeholder="تکرار رمز عبور"
+                    style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px;">
+                <button onclick="changePassword()"
+                    style="background:#0a2a44; color:white; padding:10px 20px; border:none; border-radius:8px;">تغییر
+                    رمز عبور</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال پیشنهاد رویداد -->
+    <div id="proposeEventModal" class="modal">
+        <div class="modal-content">
+            <h3>📝 پیشنهاد رویداد علمی</h3>
+            <input type="text" id="proposeTitle" placeholder="عنوان رویداد">
+            <textarea id="proposeDesc" rows="3" placeholder="توضیحات"></textarea>
+            <input type="date" id="proposeDate">
+            <select id="proposeType">
+                <option>کارگاه تخصصی</option>
+                <option>سمینار</option>
+                <option>نشست علمی</option>
+            </select>
+            <div class="modal-buttons">
+                <button onclick="closeProposeModal()" style="background:#999;">انصراف</button>
+                <button onclick="submitProposal()" style="background:#0a2a44;">ارسال برای دبیر انجمن</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال آپلود مقاله -->
+    <div id="addArticleModal" class="modal">
+        <div class="modal-content">
+            <h3>📄 آپلود مقاله جدید</h3>
+            <input type="text" id="articleTitle" placeholder="عنوان مقاله">
+            <textarea id="articleAbstract" rows="3" placeholder="چکیده مقاله"></textarea>
+            <input type="file" id="articleFile" accept=".pdf">
+            <div class="modal-buttons">
+                <button onclick="closeArticleModal()" style="background:#999;">انصراف</button>
+                <button onclick="submitArticle()" style="background:#0a2a44;">ارسال مقاله</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/professor.js' %}"></script>
+</body>
+
+</html>
