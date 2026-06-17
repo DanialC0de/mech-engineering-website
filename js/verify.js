@@ -1,7 +1,7 @@
 
 // دیتابیس کاربران آزمایشی
 const USERS_DB = [
-    { phone: "09139971950", email: "danial_sh@eng.uk.ac.ir", name: "دانیال شیخ شعاعی", role: "student", studentId: "403405045" },
+    { phone: "09123456789", email: "rezaei@eng.uk.ac.ir", name: "علی رضایی", role: "student", studentId: "403405045" },
     { phone: "09198765432", email: "karimi@eng.uk.ac.ir", name: "دکتر کریمی", role: "professor", studentId: "40198765" },
     { phone: "09111111111", email: "admin@eng.uk.ac.ir", name: "ادمین سیستم", role: "admin", studentId: "admin001" }
 ];
