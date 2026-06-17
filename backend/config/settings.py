@@ -74,9 +74,15 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static'] # اضافه شد برای شناسایی فایل‌های CSS و JS
 
 # تنظیمات SMS
+<<<<<<< HEAD
 IPPANEL_API_KEY = "your-new-key"
+IPPANEL_PATTERN_CODE = ""
+IPPANEL_SENDER = ""
+=======
+IPPANEL_API_KEY = "YTIwOWQzNTEtOGUxZS00NzNiLThhY2QtMTBkYjE1ZWQ0MWU2NGEzMjgxYzIwN2U0OGVlODY5ZWE0OTI4ZTE4NWY1NzY="
 IPPANEL_PATTERN_CODE = "dj3v6rdzpofzk73"
 IPPANEL_SENDER = "+983000505"
+>>>>>>> Danial
 
 # اساتید
 PROFESSOR_PHONES = [
@@ -89,5 +95,7 @@ STATICFILES_DIRS = [
 ]
 
 
+import os
+
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

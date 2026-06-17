@@ -1,0 +1,524 @@
+@font-face {
+    font-family: 'A Hamase';
+    src: url('../../../assets/fonts/transfonter.org-Hemase/AHamase.eot');
+    src: url('../../../assets/fonts/transfonter.org-Hemase/AHamase.eot?#iefix') format('embedded-opentype'),
+        url('../../../assets/fonts/transfonter.org-Hemase/AHamase.woff2') format('woff2'),
+        url('../../../assets/fonts/transfonter.org-Hemase/AHamase.woff') format('woff'),
+        url('../../../assets/fonts/transfonter.org-Hemase/AHamase.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+* {
+    font-family: "A Hamase";
+    scroll-padding-top: 300px;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: 'Tahoma', sans-serif;
+    /* background: url('../../assets/images/bc-index.jpg'); */
+    background-color: #edecf3;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* _____________________________________________________________________ */
+/* هدر و نویگیشن */
+header {
+    background: #012e71;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header #logo {
+    background-color: #002051;
+    width: 100px;
+    height: 90px;
+    float: right;
+
+}
+
+header #logo img {
+    width: 100%;
+    height: 100%;
+}
+
+.header-top {
+    width: 100%;
+    height: 90px;
+    background-color: #002051;
+    padding: 25px;
+}
+
+.header-top a:first-child {
+    font-weight: bold;
+    font-size: 30px;
+    color: white;
+    margin-right: 25px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-bar {
+    height: 65px;
+    font-size: 16px;
+    display: flex;
+    justify-content: right;
+    flex-wrap: wrap;
+}
+
+.nav-bar .logo {
+    padding: 10px 0;
+    padding-left: 10px;
+    font-size: 23px;
+}
+
+.logo span {
+    color: #ffaa00;
+}
+
+.nav-links {
+    height: 60px;
+    margin-right: 50px;
+    border-bottom: 3px solid #938c8c3f;
+}
+
+.nav-links a {
+    display: inline-block;
+    height: 100%;
+    position: relative;
+    /*after */
+    padding: 12px 0 0 0;
+    color: rgb(201, 196, 196);
+    text-decoration: none;
+    margin-right: 25px;
+    transition: 0.5s;
+}
+
+.nav-links a:first-child {
+    margin-right: 0px;
+}
+
+/* after => start */
+.nav-links a::after {
+    margin-bottom: 0px;
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    height: 2px;
+    background: #ffaa00;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.6s ease;
+}
+
+.nav-links a:hover::after {
+    transform: scaleX(1);
+}
+
+/* after => end */
+
+.nav-links a:hover {
+    color: #ffaa00;
+}
+
+.login-btn {
+    background: #ffaa00;
+    color: #0a2a44 !important;
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    position: absolute;
+    left: 120px;
+    top: 25px;
+}
+
+.login-btn:hover {
+    background: #ffcc44;
+}
+
+/* Multi level lists */
+#ul-about {
+    z-index: 101;
+    background-color: #73d0e8;
+    width: 250px;
+    position: fixed;
+    right: 510px;
+    top: 155px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    /* transition */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+#ul-about.show {
+    opacity: 5;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/*transition  end !*/
+#ul-about li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px 20px;
+    font-weight: 700;
+    color: #012e71;
+}
+
+#ul-about li:last-child a {
+    /* margin-top: 15px; */
+    padding-bottom: 15px;
+}
+
+#ul-about li:last-child a:hover {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+#ul-about li a:hover {
+    color: rgb(196, 65, 65);
+    ;
+    background-color: #09357d2e;
+}
+
+#ul-relation {
+    z-index: 101;
+    background-color: #73d0e8;
+    width: 250px;
+    position: fixed;
+    right: 670px;
+    top: 155px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    /* transition */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+#ul-relation.show {
+    opacity: 5;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/*transition  end !*/
+
+#ul-relation li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px 20px;
+    font-weight: 700;
+    color: #012e71;
+}
+
+#ul-relation li:last-child a {
+    padding-bottom: 15px;
+}
+
+#ul-relation li:last-child a:hover {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+#ul-relation li a:hover {
+    color: rgb(196, 65, 65);
+    ;
+    background-color: #09357d2e;
+}
+
+/* ____________________________________________________________________ */
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* بخش اصلی خبر */
+.news-detail {
+    padding: 40px 0;
+}
+
+.news-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* تصویر خبر */
+.news-image {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+}
+
+.news-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* محتوای خبر */
+.news-content {
+    padding: 35px;
+}
+
+/* دسته‌بندی و تاریخ */
+.news-meta {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.news-category {
+    background: #ffaa00;
+    color: #0a2a44;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.news-date {
+    color: #7f8c8d;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* عنوان خبر */
+.news-title {
+    font-size: 28px;
+    color: #0a2a44;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+/* متن خبر */
+.news-text {
+    color: #444;
+    line-height: 1.9;
+    font-size: 15px;
+}
+
+.news-text p {
+    margin-bottom: 20px;
+}
+
+.news-text h3 {
+    color: #0a2a44;
+    margin: 25px 0 15px 0;
+    font-size: 20px;
+}
+
+.news-text ul {
+    padding-right: 25px;
+    margin-bottom: 20px;
+}
+
+.news-text li {
+    margin-bottom: 10px;
+}
+
+/* نقل قول */
+.quote {
+    background: #f0f4f8;
+    padding: 25px;
+    border-radius: 16px;
+    border-right: 4px solid #ffaa00;
+    margin: 25px 0;
+    font-style: italic;
+    color: #555;
+}
+/* دکمه بازگشت */
+.back-link {
+    display: inline-block;
+    margin-top: 25px;
+    color: #ffaa00;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* خبرهای مرتبط */
+.related-news {
+    margin-top: 40px;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.related-title {
+    font-size: 20px;
+    color: #0a2a44;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.related-item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 12px;
+    border-radius: 12px;
+    transition: 0.3s;
+    text-decoration: none;
+    background: #f8f9fa;
+}
+
+.related-item:hover {
+    background: #ffaa0010;
+    transform: translateX(-5px);
+}
+
+.related-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #0a2a44;
+}
+
+.related-info h4 {
+    font-size: 14px;
+    color: #0a2a44;
+    margin-bottom: 5px;
+}
+
+.related-info p {
+    font-size: 11px;
+    color: #7f8c8d;
+}
+
+@media (max-width: 768px) {
+    .news-image {
+        height: 250px;
+    }
+
+    .news-content {
+        padding: 25px;
+    }
+
+    .news-title {
+        font-size: 22px;
+    }
+
+    .news-text {
+        font-size: 14px;
+    }
+}
+
+
+/* _________________________________________________________________________________________ */
+.footer-up {
+    background: url('../../../assets/images/bc-footer1-c.jpg') center center/cover;
+    height: 400px;
+    color: white;
+    text-align: center;
+    padding: 50px 200px;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 100px;
+}
+
+.footer-down {
+    height: 50px;
+    color: white;
+    background-color: #002051;
+}
+
+.footer-down p {
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+}
+
+.map iframe {
+    border: 10px double #0a2a44;
+
+}
+
+.footer-up .content {
+    width: 550px;
+    padding: 25px;
+    text-align: right;
+}
+
+.footer-up .content p {
+    margin: 25px;
+
+}
+
+/* ___________________________________________________________ */
+
+#icons {
+    position: fixed;
+    left: 7px;
+    bottom: 150px;
+    z-index: 200;
+}
+
+#icons a {
+    display: block;
+    width: 60px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+#icons a:hover {
+    transform: scale(1.1);
+}
+
+#icons a:last-child {
+    width: 55px;
+    margin-top: 7px;
+}
+
+#icons a img {
+    border-radius: 100%;
+
+    width: 100%;
+}

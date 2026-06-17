@@ -1,19 +1,16 @@
-// ============================================================
-// دیتابیس کاربران
-// ============================================================
+
+// دیتابیس کاربران آزمایشی
 const USERS_DB = [
-    { phone: "09123456789", email: "ali@mech.ac.ir", name: "علی رضایی", role: "student", studentId: "40112345" },
-    { phone: "09198765432", email: "karimi@mech.ac.ir", name: "دکتر کریمی", role: "professor", studentId: "40198765" },
-    { phone: "09111111111", email: "admin@mech.ac.ir", name: "ادمین سیستم", role: "admin", studentId: "admin001" }
+    { phone: "09123456789", email: "rezaei@eng.uk.ac.ir", name: "علی رضایی", role: "student", studentId: "403405045" },
+    { phone: "09198765432", email: "karimi@eng.uk.ac.ir", name: "دکتر کریمی", role: "professor", studentId: "40198765" },
+    { phone: "09111111111", email: "admin@eng.uk.ac.ir", name: "ادمین سیستم", role: "admin", studentId: "admin001" }
 ];
 
 if (!localStorage.getItem("registeredUsers")) {
     localStorage.setItem("registeredUsers", JSON.stringify(USERS_DB));
 }
 
-// ============================================================
 // دریافت اطلاعات از صفحه قبل
-// ============================================================
 const tempIdentifier = localStorage.getItem("tempIdentifier");
 const tempIdentifierType = localStorage.getItem("tempIdentifierType");
 
@@ -25,9 +22,8 @@ if (!tempIdentifier) {
     window.location.href = "login.html";
 }
 
-// ============================================================
 // بررسی وجود کاربر
-// ============================================================
+
 let foundUser = null;
 let isExisting = false;
 
@@ -44,9 +40,9 @@ isExisting = (foundUser !== null);
 console.log("User exists:", isExisting);
 if (foundUser) console.log("Found user:", foundUser);
 
-// ============================================================
+
 // نمایش اطلاعات در صفحه
-// ============================================================
+
 function displayUserStatus() {
     const banner = document.getElementById("statusBanner");
     const icon = document.getElementById("statusIcon");
@@ -92,9 +88,9 @@ function displayUserStatus() {
 
 displayUserStatus();
 
-// ============================================================
+
 // مدیریت فیلدهای کد (از چپ به راست - حالت عادی)
-// ============================================================
+
 const inputs = document.querySelectorAll('.otp-input');
 
 inputs.forEach((input, index) => {
@@ -138,9 +134,9 @@ function checkComplete() {
     }
 }
 
-// ============================================================
+
 // تایمر
-// ============================================================
+
 let timerSeconds = 120;
 let timerInterval = null;
 
@@ -178,9 +174,9 @@ document.getElementById("resendBtn").addEventListener("click", () => {
     document.getElementById("verifyBtn").disabled = true;
 });
 
-// ============================================================
+
 // تایید کد
-// ============================================================
+
 const CORRECT_CODE = "123456";
 
 function showError(msg) {

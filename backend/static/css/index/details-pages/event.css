@@ -1,0 +1,543 @@
+@font-face {
+    font-family: 'A Hamase';
+    src: url('../../../assets/fonts/transfonter.org-Hemase/AHamase.eot');
+    src: url('../../../assets/fonts/transfonter.org-Hemase/AHamase.eot?#iefix') format('embedded-opentype'),
+        url('../../../assets/fonts/transfonter.org-Hemase/AHamase.woff2') format('woff2'),
+        url('../../../assets/fonts/transfonter.org-Hemase/AHamase.woff') format('woff'),
+        url('../../../assets/fonts/transfonter.org-Hemase/AHamase.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+* {
+    font-family: "A Hamase";
+    scroll-padding-top: 300px;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: 'Tahoma', sans-serif;
+    /* background: url('../../assets/images/bc-index.jpg'); */
+    background-color: #edecf3;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* _____________________________________________________________________ */
+/* هدر و نویگیشن */
+header {
+    background: #012e71;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+header #logo {
+    background-color: #002051;
+    width: 100px;
+    height: 90px;
+    float: right;
+
+}
+header #logo img {
+    width: 100%;
+    height: 100%;
+}
+.header-top {
+    width: 100%;
+    height: 90px;
+    background-color: #002051;
+    padding: 25px;
+}
+.header-top a:first-child {
+    font-weight: bold;
+    font-size: 30px;
+    color: white;
+    margin-right: 25px;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.nav-bar {
+    height: 65px;
+    font-size: 16px;
+    display: flex;
+    justify-content: right;
+    flex-wrap: wrap;
+}
+.nav-bar .logo {
+    padding: 10px 0;
+    padding-left: 10px;
+    font-size: 23px;
+}
+.logo span {
+    color: #ffaa00;
+}
+.nav-links {
+    height: 60px;
+    margin-right: 50px;
+    border-bottom: 3px solid #938c8c3f;
+}
+.nav-links a {
+    display: inline-block;
+    height: 100%;
+    position: relative;
+    /*after */
+    padding: 12px 0 0 0;
+    color: rgb(201, 196, 196);
+    text-decoration: none;
+    margin-right: 25px;
+    transition: 0.5s;
+}
+
+.nav-links a:first-child {
+    margin-right: 0px;
+}
+
+/* after => start */
+.nav-links a::after {
+    margin-bottom: 0px;
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    height: 2px;
+    background: #ffaa00;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.6s ease;
+}
+
+.nav-links a:hover::after {
+    transform: scaleX(1);
+}
+
+/* after => end */
+
+.nav-links a:hover {
+    color: #ffaa00;
+}
+
+.login-btn {
+    background: #ffaa00;
+    color: #0a2a44 !important;
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    position: absolute;
+    left: 120px;
+    top: 25px;
+}
+
+.login-btn:hover {
+    background: #ffcc44;
+}
+
+/* Multi level lists */
+#ul-about {
+    z-index: 101;
+    background-color: #73d0e8;
+    width: 250px;
+    position: fixed;
+    right: 510px;
+    top: 155px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    /* transition */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+#ul-about.show {
+    opacity: 5;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/*transition  end !*/
+#ul-about li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px 20px;
+    font-weight: 700;
+    color: #012e71;
+}
+
+#ul-about li:last-child a {
+    /* margin-top: 15px; */
+    padding-bottom: 15px;
+}
+
+#ul-about li:last-child a:hover {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+#ul-about li a:hover {
+    color: rgb(196, 65, 65);
+    ;
+    background-color: #09357d2e;
+}
+
+#ul-relation {
+    z-index: 101;
+    background-color: #73d0e8;
+    width: 250px;
+    position: fixed;
+    right: 670px;
+    top: 155px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    /* transition */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+#ul-relation.show {
+    opacity: 5;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/*transition  end !*/
+
+#ul-relation li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px 20px;
+    font-weight: 700;
+    color: #012e71;
+}
+
+#ul-relation li:last-child a {
+    padding-bottom: 15px;
+}
+
+#ul-relation li:last-child a:hover {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+#ul-relation li a:hover {
+    color: rgb(196, 65, 65);
+    ;
+    background-color: #09357d2e;
+}
+/* ____________________________________________________________________ */
+
+.ev-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* بخش اصلی */
+.event-detail {
+    padding: 40px 0;
+}
+
+.event-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* بنر بالایی */
+.event-banner {
+    background: linear-gradient(135deg, #0a2a44, #002051);
+    padding: 30px;
+    color: white;
+}
+
+.event-banner h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.event-banner .event-type {
+    display: inline-block;
+    background: #ffaa00;
+    color: #0a2a44;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* محتوای اصلی */
+.event-content {
+    padding: 30px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.info-icon {
+    font-size: 28px;
+}
+
+.info-text {
+    font-size: 14px;
+    color: #555;
+}
+
+.info-text strong {
+    display: block;
+    color: #0a2a44;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+/* توضیحات رویداد */
+.event-description {
+    margin-bottom: 30px;
+}
+
+.event-description h3 {
+    color: #0a2a44;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.event-description p {
+    color: #555;
+    line-height: 1.8;
+    font-size: 15px;
+}
+
+/* سرفصل‌ها */
+.syllabus {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+}
+
+.syllabus h3 {
+    color: #0a2a44;
+    margin-bottom: 15px;
+}
+
+.syllabus ul {
+    padding-right: 20px;
+}
+
+.syllabus li {
+    margin-bottom: 10px;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* مدرس */
+.instructor {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.instructor-img {
+    width: 80px;
+    height: 80px;
+    background: #0a2a44;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 36px;
+}
+
+.instructor-info h4 {
+    color: #0a2a44;
+    margin-bottom: 5px;
+}
+
+.instructor-info p {
+    color: #666;
+    font-size: 13px;
+}
+
+/* دکمه ثبت‌نام */
+.register-box {
+    background: #e8f5e9;
+    padding: 25px;
+    border-radius: 16px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.capacity {
+    margin-bottom: 15px;
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.register-btn {
+    background: #ffaa00;
+    color: #0a2a44;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.register-btn:hover {
+    background: #ffcc44;
+    transform: scale(1.02);
+}
+
+.register-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    display: none;
+    font-size: 13px;
+}
+
+.message.success {
+    background: #c8e6c9;
+    color: #2e7d32;
+    display: block;
+}
+
+.message.error {
+    background: #ffcdd2;
+    color: #c62828;
+    display: block;
+}
+
+.message.warning {
+    background: #fff3e0;
+    color: #ff9800;
+    display: block;
+}
+
+/* دکمه بازگشت */
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #ffaa00;
+    text-decoration: none;
+}
+/* _________________________________________________________________________________________ */
+.footer-up {
+    background: url('../../../assets/images/bc-footer1-c.jpg') center center/cover;
+    height: 400px;
+    color: white;
+    text-align: center;
+    padding: 50px 200px;
+    display: flex;
+    justify-content: space-around;
+    margin-top:100px;
+}
+
+.footer-down {
+    height: 50px;
+    color: white;
+    background-color: #002051;
+}
+
+.footer-down p {
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+}
+
+.map iframe {
+    border: 10px double #0a2a44;
+
+}
+
+.footer-up .content {
+    width: 550px;
+    padding: 25px;
+    text-align: right;
+}
+
+.footer-up .content p {
+    margin: 25px;
+
+}
+
+/* ___________________________________________________________ */
+
+#icons {
+    position: fixed;
+    left: 7px;
+    bottom: 150px;
+    z-index: 200;
+}
+
+#icons a {
+    display: block;
+    width: 60px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+#icons a:hover {
+    transform: scale(1.1);
+}
+
+#icons a:last-child {
+    width: 55px;
+    margin-top: 7px;
+}
+
+#icons a img {
+    border-radius: 100%;
+
+    width: 100%;
+}
