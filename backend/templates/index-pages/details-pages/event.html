@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 
@@ -5,14 +6,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="css/new.css">
+    <link rel="stylesheet" href=" {% static 'css/index/details-pages/event.css' %}">
     <title>جزئیات رویداد</title>
 </head>
 
 <body>
     <header>
         <div id="logo">
-            <img src="../../assets/images/shahid-bahonar-university-of-kerman-logo.png">
+            <img src=" {% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}">
         </div>
         <div class="header-top">
             <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
@@ -39,106 +40,90 @@
         <li><a href="../industry.html">خدمات دانشکده به صنعت</a></li>
     </ul>
 
-    <div class="news-detail">
-        <div class="container">
-            <div class="news-card">
-                <div class="news-image">
-                    <img src="../../assets/images/fani.jpg" alt="تصویر خبر">
+    <div class="event-detail">
+        <div class="ev-container">
+            <div class="event-card">
+                <!-- بنر -->
+                <div class="event-banner">
+                    <h1>عنوان وبینار یا کارگاه</h1>
+                    <p>توضیح مختصر</p>
                 </div>
 
-                <!-- محتوای خبر -->
-                <div class="news-content">
-
-                    <div class="news-meta">
-                        <span class="news-category">📢 اطلاعیه</span>
-                        <span class="news-date">📅 ۱۵ فروردین ۱۴۰۴</span>
+                <!-- محتوا -->
+                <div class="event-content">
+                    <!-- اطلاعات پایه -->
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-icon">📅</div>
+                            <div class="info-text">
+                                <strong>تاریخ یا روز های برگزاری</strong>
+                                ۲۰ فروردین ۱۴۰۴
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">⏰</div>
+                            <div class="info-text">
+                                <strong>ساعت</strong>
+                                ۱۵:۰۰ - ۱۸:۰۰
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">👥</div>
+                            <div class="info-text">
+                                <strong>ظرفیت</strong>
+                                <span id="capacityText">۵۰ نفر</span> | <span id="remainingText">۲۵ نفر
+                                    باقی‌مانده</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <h1 class="news-title">
-                        عنوان خبر
-                    </h1>
-
-                    <!-- متن خبر -->
-                    <div class="news-text">
+                    <!-- توضیحات -->
+                    <div class="event-description">
+                        <h3>📖 درباره رویداد</h3>
                         <p>
-                            دومین همایش هوش مصنوعی در صنایع دریایی با همکاری دانشگاه صنعتی شریف و سازمان صنایع دریایی 
-                            در تاریخ ۲۵ اردیبهشت ماه ۱۴۰۴ برگزار می‌شود. این همایش با هدف بررسی آخرین دستاوردهای 
-                            فناوری هوش مصنوعی در صنایع دریایی و کشتی‌سازی برگزار خواهد شد.
-                           ( توضیحات تکمیلی)
+                            در این وبینار تخصصی، به بررسی سیستم‌های تعلیق خودروهای مدرن می‌پردازیم.
+                            مباحثی مانند سیستم تعلیق فعال، نیمه فعال، و تأثیر آن بر هندلینگ و سواری خودرو
+                            مورد بحث قرار خواهد گرفت. این کارگاه برای دانشجویان کارشناسی ارشد و دکتری
+                            مهندسی مکانیک (گرایش طراحی کاربردی) مناسب است.
                         </p>
+                    </div>
 
-                        <h3>محورهای همایش</h3>
+                    <!-- سرفصل‌ها -->
+                    <div class="syllabus">
+                        <h3>📝 سرفصل‌ها</h3>
                         <ul>
-                            <li>طراحی و ساخت هوشمند شناورهای دریایی</li>
-                            <li>سیستم‌های ناوبری خودکار مبتنی بر هوش مصنوعی</li>
-                            <li>تعمیر و نگهداری پیش‌بینی‌شده در صنایع دریایی</li>
-                            <li>اینترنت اشیا و هوش مصنوعی در بنادر هوشمند</li>
+                            <li>مفاهیم پایه سیستم تعلیق و انواع آن</li>
+                            <li>سیستم تعلیق فعال (Active Suspension)</li>
+                            <li>سیستم تعلیق نیمه فعال (Semi-Active Suspension)</li>
+                            <li>شبیه‌سازی با نرم‌افزار متلب و سیمولینک</li>
                         </ul>
-
-                        <div class="quote">
-                            "هوش مصنوعی صنایع دریایی را متحول می‌کند. ما در این همایش تلاش می‌کنیم تا 
-                            پلی بین دانشگاه و صنعت ایجاد کنیم." — دکتر حسینی، دبیر علمی همایش
-                        </div>
-
-                        <h3>مهلت ارسال مقالات</h3>
-                        <p>
-                            علاقه‌مندان به ارسال مقاله می‌توانند چکیده مقالات خود را تا تاریخ ۱۰ اردیبهشت ۱۴۰۴ 
-                            از طریق سامانه همایش ارسال نمایند. مقالات پذیرفته شده در پایگاه‌های معتبر علمی نمایه خواهند شد.
-                        </p>
-
-                        <h3>ثبت‌نام در همایش</h3>
-                        <p>
-                            ثبت‌نام برای شرکت در همایش از تاریخ ۱ اردیبهشت آغاز می‌شود. دانشجویان، اساتید و پژوهشگران 
-                            می‌توانند با مراجعه به بخش رویدادهای سایت انجمن، نسبت به ثبت‌نام اقدام نمایند.
-                        </p>
                     </div>
 
-                    <!-- اشتراک گذاری -->
-                    <div class="share-section">
-                        <span class="share-title">📤 اشتراک گذاری:</span>
-                        <div class="share-links">
-                            <a href="#">تلگرام</a>
-                            <a href="#">اینستاگرام</a>
-                            <a href="#">واتساپ</a>
-                            <a href="#">توییتر</a>
+                    <!-- مدرس -->
+                    <div class="instructor">
+                        <div class="instructor-img">👨‍🏫</div>
+                        <div class="instructor-info">
+                            <h4>نام مدرس</h4>
+                            <p>مدرک نحصیلی</p>
                         </div>
                     </div>
 
-                    <a href="../news.html" class="back-link">← بازگشت به صفحه اخبار</a>
-                </div>
-            </div>
+                    <!-- بخش ثبت‌نام -->
+                    <div class="register-box">
+                        <div class="capacity">
+                            ✅ ظرفیت باقیمانده: <span id="remainingCount">۲۵</span> نفر
+                        </div>
+                        <button class="register-btn" id="registerBtn">ثبت‌نام در رویداد</button>
+                        <div class="message" id="message"></div>
+                    </div>
 
-            <!-- خبرهای مرتبط -->
-            <div class="related-news">
-                <div class="related-title">📰 اخبار مرتبط</div>
-                <div class="related-grid">
-                    <a href="#" class="related-item">
-                        <img src="https://via.placeholder.com/60x60/0a2a44/white?text=خبر" class="related-img" alt="خبر">
-                        <div class="related-info">
-                            <h4>فراخوان ارسال مقاله به همایش ملی مکانیک</h4>
-                            <p>۲۵ فروردین ۱۴۰۴</p>
-                        </div>
-                    </a>
-                    <a href="#" class="related-item">
-                        <img src="https://via.placeholder.com/60x60/0a2a44/white?text=خبر" class="related-img" alt="خبر">
-                        <div class="related-info">
-                            <h4>بازدید علمی از شرکت ایران خودرو</h4>
-                            <p>۲۰ فروردین ۱۴۰۴</p>
-                        </div>
-                    </a>
-                    <a href="#" class="related-item">
-                        <img src="https://via.placeholder.com/60x60/0a2a44/white?text=خبر" class="related-img" alt="خبر">
-                        <div class="related-info">
-                            <h4>کارگاه تخصصی سالیدورک برگزار می‌شود</h4>
-                            <p>۱۸ فروردین ۱۴۰۴</p>
-                        </div>
-                    </a>
+                    <!-- <a href="../../student/index.html" class="back-link">← بازگشت به پنل کاربری</a> -->
                 </div>
             </div>
         </div>
     </div>
 
-   
+
     <footer>
         <div class="footer-up">
             <div class="content">
@@ -162,6 +147,7 @@
             <p>&copy; ۲۰۲۵ انجمن علمی مکانیک - تمامی حقوق محفوظ است</p>
         </div>
     </footer>
+
     <div id="icons">
         <a href="https://t.me/ukmechanics" target="_blank">
             <img src="../../assets/icons/15.png">
@@ -208,9 +194,9 @@
             relationUl.classList.remove("show");
         });
 
-        // ============================================================
+       
         // اطلاعات رویداد (در آینده از دیتابیس میاد)
-        // ============================================================
+        
         const eventData = {
             id: 1,
             title: "وبینار تخصصی سیستم‌های تعلیق خودرو",
