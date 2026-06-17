@@ -24,7 +24,7 @@ body {
     margin: 0;
     font-family: 'Tahoma', sans-serif;
     /* background: url('../../assets/images/bc-index.jpg'); */
-    background-color: #f5f7fa;
+    background-color: #edecf3;
 }
 
 a {
@@ -46,7 +46,6 @@ header {
     top: 0;
     z-index: 100;
 }
-
 header #logo {
     background-color: #002051;
     width: 100px;
@@ -54,32 +53,27 @@ header #logo {
     float: right;
 
 }
-
 header #logo img {
     width: 100%;
     height: 100%;
 }
-
 .header-top {
     width: 100%;
     height: 90px;
     background-color: #002051;
     padding: 25px;
 }
-
 .header-top a:first-child {
     font-weight: bold;
     font-size: 30px;
     color: white;
     margin-right: 25px;
 }
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
-
 .nav-bar {
     height: 65px;
     font-size: 16px;
@@ -87,23 +81,19 @@ header #logo img {
     justify-content: right;
     flex-wrap: wrap;
 }
-
 .nav-bar .logo {
     padding: 10px 0;
     padding-left: 10px;
     font-size: 23px;
 }
-
 .logo span {
     color: #ffaa00;
 }
-
 .nav-links {
     height: 60px;
     margin-right: 50px;
     border-bottom: 3px solid #938c8c3f;
 }
-
 .nav-links a {
     display: inline-block;
     height: 100%;
@@ -259,8 +249,8 @@ header #logo img {
 }
 
 
-/* بخش Hero */
 /* ________________________________________________________________________ */
+/* بخش Hero */
 .hero {
     background: url('../../assets/images/fani.jpg') no-repeat center center/cover;
     color: white;
@@ -331,10 +321,302 @@ header #logo img {
     padding: 1px;
     color: white;
     background-color: #012e71;
-    margin-bottom: 100px;
+    /* margin-bottom: 100px; */
     font-weight: 600;
 }
+/* __________________________________________________________________________________________ */
+.about-text {
+    font-weight: 900;
+    flex: 1;
+    margin-left: 100px;
+    order:-1;
+    padding:60px 10px;
+    max-width: 600px;
+}
 
+.about-text h3 {
+    color: #0a2a44;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.about-text p {
+    text-align: justify;
+    line-height: 1.8;
+    color: #555;
+    font-size: 20px;
+}
+
+.about-stats {
+    flex: 1;
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    margin:50px auto;
+}
+
+.stat {
+    text-align: center;
+    background: #cde3e4;
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.stat .number {
+    font-size: 36px;
+    font-weight: bold;
+    color: #0a2a44;
+}
+
+.stat .label {
+    color: #666;
+}
+
+/* =======================================================================گالری تصاویر(اسلایدر) */
+.container-s{
+    /* max-width: 1200px; */
+    /* margin: 0 auto; */
+    padding: 0 20px;
+}
+.gallery-slider {
+    display: flex;
+    justify-content: center;
+    padding: 100px;
+    margin-bottom: 200px;
+
+}
+.gallery-slider .section-title {
+    color: #0a2a44;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    font-size: 32px;
+}
+.slider-container {
+    width:650px;
+    margin: 0 auto;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3);
+    display:flex;
+    border:20px double black;
+    border-style: double;
+}
+.css-slider {
+    position: relative;
+    width: 100%;
+    height: 800px;
+}
+.css-slider input[type="radio"] {
+    display: none;
+}
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden; /* اضافه شد: اسلاید غیرفعال کلیک‌ها را بلاک نکند */
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+}
+
+/* وقتی اسلایدی انتخاب می‌شود هم لایه بالا بیاید و هم مرئی شود */
+#slide1:checked ~ .slide:nth-of-type(1),
+#slide2:checked ~ .slide:nth-of-type(2),
+#slide3:checked ~ .slide:nth-of-type(3),
+#slide4:checked ~ .slide:nth-of-type(4),
+#slide5:checked ~ .slide:nth-of-type(5) {
+    opacity: 1;
+    visibility: visible; /* اضافه شد */
+    z-index: 10;        /* اضافه شد: اسلاید فعال روی بقیه قرار بگیرد */
+}
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #1a1a2e;
+}
+.slide video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+.slide-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    color: white;
+    padding: 50px 40px 30px;
+    text-align: right;
+    direction: rtl;
+    z-index: 12; /* اضافه شد */
+    pointer-events: none; /* اضافه شد: کلیک از روی متن عبور کند و به ویدیو برسد */
+}
+.slide-caption h3 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #ffaa00;
+    font-weight: bold;
+}
+.slide-caption p {
+    font-size: 18px;
+    opacity: 0.95;
+}
+
+/* نقاط ناوبری بزرگتر */
+.slider-nav {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 20;
+}
+.nav-btn {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+.nav-btn:hover {
+    background: #ffaa00;
+    transform: scale(1.3);
+}
+
+#slide1:checked ~ .slider-nav label:nth-of-type(1),
+#slide2:checked ~ .slider-nav label:nth-of-type(2),
+#slide3:checked ~ .slider-nav label:nth-of-type(3),
+#slide4:checked ~ .slider-nav label:nth-of-type(4),
+#slide5:checked ~ .slider-nav label:nth-of-type(5) {
+    background: #ffaa00;
+    width: 35px;
+    border-radius: 10px;
+    border: none;
+}
+
+/* دکمه‌های قبلی و بعدی بزرگتر */
+.slider-controls {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 25px;
+    z-index: 30; /* مقدار از ۲۰ به ۳۰ تغییر کرد تا حتما روی اسلاید قرار بگیرد */
+    pointer-events: none; /* اجازه عبور کلیک از فضاهای خالی بین دکمه‌ها */
+
+}
+.control {
+    background: rgba(10, 42, 68, 0.374);
+    color: white;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.2);
+    pointer-events: auto; /* فعال کردن مجدد کلیک دقیقاً روی خود دکمه‌ها */
+}
+.control:hover {
+    background: #ffaa00;
+    color: #0a2a44;
+    transform: scale(1.15);
+}
+
+/* ریسپانسیو برای موبایل */
+
+/* @media (max-width: 992px) {
+    .css-slider {
+        height: 500px;
+    }
+    .slide-caption h3 {
+        font-size: 22px;
+    }
+    .slide-caption p {
+        font-size: 15px;
+    }
+    .slide-caption {
+        padding: 35px 25px 20px;
+    }
+}
+@media (max-width: 768px) {
+    .css-slider {
+        height: 400px;
+    }
+    .control {
+        width: 45px;
+        height: 45px;
+        font-size: 22px;
+    }
+    .slide-caption h3 {
+        font-size: 18px;
+    }
+    .slide-caption p {
+        font-size: 13px;
+    }
+    .slide-caption {
+        padding: 25px 20px 15px;
+    }
+    .nav-btn {
+        width: 10px;
+        height: 10px;
+    }
+}
+@media (max-width: 480px) {
+    .css-slider {
+        height: 300px;
+    }
+    .control {
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
+        padding: 0 15px;
+    }
+    .slider-controls {
+        padding: 0 12px;
+    }
+    .slide-caption h3 {
+        font-size: 15px;
+    }
+    .slide-caption p {
+        font-size: 11px;
+    }
+} */
+/* رفع مشکل ویدیو در گالری */
+.video-slide {
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.video-slide video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+}
+video::-webkit-media-controls {
+    z-index: 20;
+}
 /* _______________________________________________________________________________________ */
 /* اخبار و تازه ها */
 
@@ -365,16 +647,6 @@ header #logo img {
     width: 50px;
     height: 3px;
     background: #ffaa00;
-}
-.more-link {
-    color: #ffaa00;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: bold;
-    transition: 0.3s;
-}
-.more-link:hover {
-    color: #0a2a44;
 }
 .news-grid {
     display: grid;
@@ -411,21 +683,21 @@ header #logo img {
     padding: 20px;
 }
 .news-category {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
     color: #0a2a44;
     margin-bottom: 8px;
     line-height: 1.5;
 }
 .news-text {
-    font-size: 13px;
+    font-size: 15px;
     color: #7f8c8d;
     margin-bottom: 12px;
 }
 .news-link a {
     color: #ffaa00;
     text-decoration: none;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: bold;
     display: inline-flex;
     align-items: center;
@@ -481,10 +753,10 @@ header #logo img {
     }
 }
 .all-container {
-    grid-column: 3;
+    grid-column: 2;
     grid-row: 2;
     padding: 50px 20px;
-    text-align: end;
+    text-align: center;
 }
 /* دکمه مشاهده همه */
 .all-btn {
@@ -505,7 +777,7 @@ header #logo img {
 .section-title {
     text-align: center;
     font-size: 32px;
-    /* margin: 50px 0 30px; */
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
     margin-bottom: 120px;
     color: #0a2a44;
 }
@@ -553,105 +825,70 @@ header #logo img {
     transform: scale(1.1);
 }
 
-/* درباره انجمن */
-/* _________________________________________________________________ */
-.about {
-    background: white;
-    padding: 50px 0;
-    margin-top: 30px;
-}
-
-.about-content {
-    display: flex;
-    gap: 40px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.about-text {
-    font-weight: 900;
-    flex: 1;
-    margin-left: 100px;
-}
-
-.about-text h3 {
-    color: #0a2a44;
-    margin-bottom: 20px;
-    font-size: 24px;
-}
-
-.about-text p {
-    text-align: justify;
-    line-height: 1.8;
-    color: #555;
-}
-
-.about-stats {
-    flex: 1;
-    display: flex;
-    gap: 30px;
-    justify-content: center;
-}
-
-.stat {
-    text-align: center;
-    background: #f0f4f8;
-    padding: 25px;
-    border-radius: 15px;
-}
-
-.stat .number {
-    font-size: 36px;
-    font-weight: bold;
-    color: #0a2a44;
-}
-
-.stat .label {
-    color: #666;
-}
 
 /* افتخارات */
 /* __________________________________________________________________ */
 .honors {
-    margin: auto;
+    margin:240px auto;
     max-width: fit-content;
+    margin-top:90px;
 }
 
 .honors h2 {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     font-size: 40px;
     font-weight: bold;
     color: #0a2a44;
 }
-
-.honors table {
-    font-weight: bold;
-    border-collapse: collapse;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    border-radius: 12px;
+.honors-container{
+    width:1200px;
+    min-height:500px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    padding:80px 0px;
+    gap:50px 25px;
+}
+.honor-card{
+    min-height: 300px;
+    /* background-color: #cdc9c9; */
+    border-radius: 20px;
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-shadow: 2px 2px 15px 2px rgb(81, 150, 169);
+}
+.one{
+    grid-row: 1/3;
+}
+.tree{
+    grid-column: 2;
+}
+.honor-image{
+    width: 100%;
+    height: 100%;
+}
+.honor-image img{
+    width: 100%;
+    height: 100%;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+}
+.honor-content{
+    padding:25px 30px;
+}
+.honor-title{
+    font-weight: 900;
+    font-size:25px;
+    text-shadow: 5px 5px 10px rgba(42, 6, 248, 0.3);
+    margin-bottom: 20px;
+}
+.honor-festival{
     font-size: 20px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    color:#802222;
+    font-weight: 500;
 }
-
-table thead tr {
-    background-color: #1e3a5f;
-    color: white;
-    text-align: center;
-}
-
-table thead tr th {
-    padding: 12px;
-    border: 1px solid #ddd;
-}
-
-table tbody tr td {
-    padding: 25px;
-    border: 1px solid #ddd;
-    text-align: center;
-}
-
 /* ______________________________________________________ */
 /* فوتر */
 .footer-up {
@@ -662,6 +899,7 @@ table tbody tr td {
     padding: 50px 200px;
     display: flex;
     justify-content: space-around;
+    margin-top:100px;
 }
 
 .footer-down {
@@ -693,10 +931,12 @@ table tbody tr td {
 }
 
 /* ___________________________________________________________ */
+
 #icons {
     position: fixed;
     left: 7px;
     bottom: 150px;
+    z-index: 200;
 }
 
 #icons a {
@@ -720,272 +960,3 @@ table tbody tr td {
 
     width: 100%;
 }
-
-    
-
-
-
-/* //از اینجا تا جایی که دوباره کامنت گذاشتم مربوط میشه به گالری تصاویر Benyamin */
-.gallery-slider {
-    background: linear-gradient(135deg, #0a2a44 0%, #1e3a5f 100%);
-    padding: 60px 0 80px;
-    margin: 50px 0;
-}
-
-.gallery-slider .section-title {
-    color: white;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    font-size: 38px;
-}
-
-.slider-container {
-    max-width: 1300px;
-    margin: 0 auto;
-    border-radius: 25px;
-    overflow: hidden;
-    box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3);
-}
-
-.css-slider {
-    position: relative;
-    width: 100%;
-    height: 600px;
-}
-
-.css-slider input[type="radio"] {
-    display: none;
-}
-
-.slide {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    visibility: hidden; /* اضافه شد: اسلاید غیرفعال کلیک‌ها را بلاک نکند */
-    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #000;
-}
-
-/* وقتی اسلایدی انتخاب می‌شود هم لایه بالا بیاید و هم مرئی شود */
-#slide1:checked ~ .slide:nth-of-type(1),
-#slide2:checked ~ .slide:nth-of-type(2),
-#slide3:checked ~ .slide:nth-of-type(3),
-#slide4:checked ~ .slide:nth-of-type(4),
-#slide5:checked ~ .slide:nth-of-type(5) {
-    opacity: 1;
-    visibility: visible; /* اضافه شد */
-    z-index: 10;        /* اضافه شد: اسلاید فعال روی بقیه قرار بگیرد */
-}
-
-.slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: #1a1a2e;
-}
-
-.slide video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: #000;
-}
-
-.slide-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
-    color: white;
-    padding: 50px 40px 30px;
-    text-align: right;
-    direction: rtl;
-    z-index: 12; /* اضافه شد */
-    pointer-events: none; /* اضافه شد: کلیک از روی متن عبور کند و به ویدیو برسد */
-}
-.slide-caption h3 {
-    font-size: 28px;
-    margin-bottom: 10px;
-    color: #ffaa00;
-    font-weight: bold;
-}
-
-.slide-caption p {
-    font-size: 18px;
-    opacity: 0.95;
-}
-
-/* نقاط ناوبری بزرگتر */
-.slider-nav {
-    position: absolute;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 15px;
-    z-index: 20;
-}
-
-.nav-btn {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255,255,255,0.3);
-}
-
-.nav-btn:hover {
-    background: #ffaa00;
-    transform: scale(1.3);
-}
-
-#slide1:checked ~ .slider-nav label:nth-of-type(1),
-#slide2:checked ~ .slider-nav label:nth-of-type(2),
-#slide3:checked ~ .slider-nav label:nth-of-type(3),
-#slide4:checked ~ .slider-nav label:nth-of-type(4),
-#slide5:checked ~ .slider-nav label:nth-of-type(5) {
-    background: #ffaa00;
-    width: 35px;
-    border-radius: 10px;
-    border: none;
-}
-
-/* دکمه‌های قبلی و بعدی بزرگتر */
-.slider-controls {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    transform: translateY(-50%);
-    display: flex;
-    justify-content: space-between;
-    padding: 0 25px;
-    z-index: 30; /* مقدار از ۲۰ به ۳۰ تغییر کرد تا حتما روی اسلاید قرار بگیرد */
-    pointer-events: none; /* اجازه عبور کلیک از فضاهای خالی بین دکمه‌ها */
-}
-
-.control {
-    background: rgba(10, 42, 68, 0.8);
-    color: white;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255,255,255,0.2);
-    pointer-events: auto; /* فعال کردن مجدد کلیک دقیقاً روی خود دکمه‌ها */
-}
-
-.control:hover {
-    background: #ffaa00;
-    color: #0a2a44;
-    transform: scale(1.15);
-}
-
-/* ریسپانسیو برای موبایل */
-/* @media (max-width: 992px) {
-    .css-slider {
-        height: 500px;
-    }
-    
-    .slide-caption h3 {
-        font-size: 22px;
-    }
-    
-    .slide-caption p {
-        font-size: 15px;
-    }
-    
-    .slide-caption {
-        padding: 35px 25px 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    .css-slider {
-        height: 400px;
-    }
-    
-    .control {
-        width: 45px;
-        height: 45px;
-        font-size: 22px;
-    }
-    
-    .slide-caption h3 {
-        font-size: 18px;
-    }
-    
-    .slide-caption p {
-        font-size: 13px;
-    }
-    
-    .slide-caption {
-        padding: 25px 20px 15px;
-    }
-    
-    .nav-btn {
-        width: 10px;
-        height: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .css-slider {
-        height: 300px;
-    }
-    
-    .control {
-        width: 38px;
-        height: 38px;
-        font-size: 18px;
-        padding: 0 15px;
-    }
-    
-    .slider-controls {
-        padding: 0 12px;
-    }
-    
-    .slide-caption h3 {
-        font-size: 15px;
-    }
-    
-    .slide-caption p {
-        font-size: 11px;
-    }
-} */
-/* رفع مشکل ویدیو در گالری */
-.video-slide {
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.video-slide video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: #000;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-}
-
-video::-webkit-media-controls {
-    z-index: 20;
-}
-/* //تا اینجا مربوط میشه به گالری تصاویر Benyamin */
-

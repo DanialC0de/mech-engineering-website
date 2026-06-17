@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="css/source.css">
+    <title>جزئیات رویداد</title>
+</head>
+
+<body>
+    <header>
+        <div id="logo">
+            <img src="../../assets/images/shahid-bahonar-university-of-kerman-logo.png">
+        </div>
+        <div class="header-top">
+            <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
+            <a href="../../login.html" target="_blank" class="login-btn">ورود / ثبت‌نام</a>
+        </div>
+        <div class="nav-bar">
+            <div class="logo">⚙️انجمن علمی مهندسی <span>مکانیک</span></div>
+            <div class="nav-links">
+                <a href="../index.html">صفحه اصلی</a>
+                <a href="#"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
+                <a href="#"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
+                <a href="../events.html">رویدادها</a>
+                <a href="../sources.html">منابع علمی</a>
+                <a href="../honors.html">افتخارات انجمن</a>
+                <a href="../call-us.html">تماس با ما</a>
+            </div>
+        </div>
+    </header>
+    <ul id="ul-about">
+        <li><a href="../about.html">معرفی دانشکده</a></li>
+        <li><a href="../honors.html">دستاورد ها و افتخارات</a></li>
+    </ul>
+    <ul id="ul-relation">
+        <li><a href="../industry.html">خدمات دانشکده به صنعت</a></li>
+    </ul>
+
+   
+
+
+
+
+
+    <footer>
+        <div class="footer-up">
+            <div class="content">
+                <p><i class="fa-solid fa-location-dot"></i>&nbsp;&nbsp;&nbsp;&nbsp; کرمان - بلوار جمهوری - پل امیرکبیر -
+                    دانشکده فنی مهندسی &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;دانشگاه شهید باهنر - دانشکده
+                    مکانیک</p>
+                <p><i class="fa-brands fa-telegram"></i> &nbsp;&nbsp;&nbsp;&nbsp; ukmechanics@</p>
+                <p><i class="fa-brands fa-instagram"></i> &nbsp;&nbsp;&nbsp;&nbsp; ukmechanics@</p>
+            </div>
+
+            <div class="map">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3445.4741871022507!2d57.012748796789545!3d30.28055960000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f0218b67107c6dd%3A0x398906da69669661!2sFaculty%20of%20Engineering%20Campus%20-Shahid%20Bahonar%20University%20of%20Kerman!5e0!3m2!1sen!2s!4v1781183631960!5m2!1sen!2s"
+                    width="550" height="320" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+
+        <div class="footer-down">
+            <p>&copy; ۲۰۲۵ انجمن علمی مکانیک - تمامی حقوق محفوظ است</p>
+        </div>
+    </footer>
+    <div id="icons">
+        <a href="https://t.me/ukmechanics" target="_blank">
+            <img src="../../assets/icons/15.png">
+        </a>
+        <a href="https://instagram.com/ukmechanics?igshid=14gmuy96orpnd" target="_blank">
+            <img src="../../assets/icons/2.png">
+        </a>
+    </div>
+
+    <script>
+        let aboutLink = document.querySelector('.nav-links a:nth-child(2)');
+        let aboutUl = document.getElementById('ul-about');
+
+        aboutLink.addEventListener('mouseover', function () {
+            aboutUl.classList.add('show');
+        });
+        aboutLink.addEventListener('mouseout', function () {
+            aboutUl.classList.remove("show");
+        });
+
+        aboutUl.addEventListener('mouseover', function () {
+            aboutUl.classList.add('show');
+        });
+        aboutUl.addEventListener('mouseout', function () {
+            aboutUl.classList.remove("show");
+        });
+
+
+
+        let relationLink = document.querySelector('.nav-links a:nth-child(3)');
+        let relationUl = document.getElementById('ul-relation');
+
+        relationLink.addEventListener('mouseover', function () {
+            relationUl.classList.add('show');
+        });
+        relationLink.addEventListener('mouseout', function () {
+            relationUl.classList.remove("show");
+        });
+
+        relationUl.addEventListener('mouseover', function () {
+            relationUl.classList.add('show');
+        });
+        relationUl.addEventListener('mouseout', function () {
+            relationUl.classList.remove("show");
+        });
+
+        // ============================================================
+        // اطلاعات رویداد (در آینده از دیتابیس میاد)
+        // ============================================================
+        const eventData = {
+            id: 1,
+            title: "وبینار تخصصی سیستم‌های تعلیق خودرو",
+            totalCapacity: 50,
+            registeredCount: 25,
+            isActive: true
+        };
+
+        // کاربر فعلی (از localStorage میاد)
+        let currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
+
+        // رویدادهایی که کاربر در آنها ثبت‌نام کرده (شبیه‌سازی)
+        let userRegistrations = JSON.parse(localStorage.getItem("userRegistrations")) || [];
+
+        // بررسی اینکه کاربر قبلاً ثبت‌نام کرده یا نه
+        function isUserRegistered() {
+            return userRegistrations.some(reg => reg.eventId === eventData.id);
+        }
+
+        // بروزرسانی نمایش ظرفیت
+        function updateCapacityDisplay() {
+            const remaining = eventData.totalCapacity - eventData.registeredCount;
+            document.getElementById("remainingCount").innerText = remaining;
+            document.getElementById("remainingText").innerHTML = `${remaining} نفر باقی‌مانده`;
+        }
+
+        // بروزرسانی وضعیت دکمه ثبت‌نام
+        function updateRegisterButton() {
+            const btn = document.getElementById("registerBtn");
+            const remaining = eventData.totalCapacity - eventData.registeredCount;
+            const isRegistered = isUserRegistered();
+
+            if (!currentUser) {
+                btn.disabled = false;
+                btn.textContent = "ابتدا وارد شوید";
+                return;
+            }
+
+            if (isRegistered) {
+                btn.disabled = true;
+                btn.textContent = "✓ قبلاً ثبت‌نام کرده‌اید";
+                btn.style.background = "#4caf50";
+                return;
+            }
+
+            if (remaining <= 0) {
+                btn.disabled = false;
+                btn.textContent = "⏳ ظرفیت پر است - قرار گرفتن در صف انتظار";
+                btn.style.background = "#ff9800";
+                return;
+            }
+
+            btn.disabled = false;
+            btn.textContent = "📝 ثبت‌نام در رویداد";
+            btn.style.background = "#ffaa00";
+        }
+
+        // نمایش پیام
+        function showMessage(text, type) {
+            const msgDiv = document.getElementById("message");
+            msgDiv.textContent = text;
+            msgDiv.className = `message ${type}`;
+
+            setTimeout(() => {
+                msgDiv.style.display = "none";
+                msgDiv.className = "message";
+            }, 3000);
+        }
+
+        // ثبت‌نام
+        function register() {
+            const remaining = eventData.totalCapacity - eventData.registeredCount;
+            const isRegistered = isUserRegistered();
+
+            // بررسی ورود کاربر
+            if (!currentUser) {
+                showMessage("لطفاً ابتدا وارد حساب کاربری خود شوید", "error");
+                setTimeout(() => {
+                    window.location.href = "../../login.html";
+                }, 1500);
+                return;
+            }
+
+            // بررسی ثبت‌نام قبلی
+            if (isRegistered) {
+                showMessage("شما قبلاً در این رویداد ثبت‌نام کرده‌اید", "error");
+                return;
+            }
+
+            // ثبت‌نام موفق
+            if (remaining > 0) {
+                // اضافه کردن به لیست ثبت‌نام‌ها
+                userRegistrations.push({
+                    eventId: eventData.id,
+                    eventTitle: eventData.title,
+                    registerDate: new Date().toISOString()
+                });
+                localStorage.setItem("userRegistrations", JSON.stringify(userRegistrations));
+
+                // کاهش ظرفیت
+                eventData.registeredCount++;
+                updateCapacityDisplay();
+                updateRegisterButton();
+
+                showMessage("✅ ثبت‌نام شما با موفقیت انجام شد", "success");
+            }
+            // صف انتظار
+            else {
+                showMessage("⏳ ظرفیت رویداد پر است. شما در صف انتظار قرار گرفتید", "warning");
+            }
+        }
+
+        // رویداد دکمه ثبت‌نام
+        document.getElementById("registerBtn").addEventListener("click", register);
+
+        // بارگذاری اولیه
+        updateCapacityDisplay();
+        updateRegisterButton();
+    </script>
+</body>
+
+</html>

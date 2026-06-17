@@ -14,15 +14,9 @@
     scroll-padding-top: 300px;
     box-sizing: border-box;
 }
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
 body {
-    font-family: 'Tahoma', sans-serif;
-    background: linear-gradient(135deg, #0a2a44 0%, #1e4a76 100%);
+    background: linear-gradient(135deg, #0a2a44 0%, #5f2c21 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -31,11 +25,11 @@ body {
 }
 
 .register-container {
-    max-width: 600px;
+    max-width: 650px;
     width: 100%;
     background: white;
     border-radius: 24px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 5px 20px 5px rgb(24, 24, 24);
     overflow: hidden;
     animation: fadeInUp 0.5s ease;
 }
@@ -53,7 +47,7 @@ body {
 }
 
 .register-header {
-    background: linear-gradient(135deg, #0a2a44 0%, #1e4a76 100%);
+    background: linear-gradient(135deg, #0a2a44 0%, #6f869c 100%);
     padding: 30px;
     text-align: center;
     color: white;
@@ -223,11 +217,14 @@ body {
 }
 
 .back-link a {
-    color: #7f8c8d;
+    color: #535657;
     text-decoration: none;
     font-size: 13px;
+    transition: 0.5s;
 }
-
+.back-link a:hover{
+    color:#b4b2b2;
+}
 .error-message {
     background: #fee2e2;
     color: #c0392b;
