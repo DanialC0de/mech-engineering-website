@@ -263,7 +263,7 @@ def contact(request):
 
 def industry(request):
     """صفحه ارتباط با صنعت"""
-    return render(request, 'index-pages/industry.html', context)
+    return render(request, 'index-pages/industry.html')
 
 def register(request):
     """صفحه ثبت‌نام کاربر"""
