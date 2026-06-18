@@ -196,6 +196,7 @@ header #logo img {
 
 #ul-about li a:hover {
     color: rgb(196, 65, 65);
+    ;
     background-color: #09357d2e;
 }
 
@@ -983,7 +984,6 @@ table tbody tr td {
 
 #icons a img {
     border-radius: 100%;
-
     width: 100%;
 }
 
