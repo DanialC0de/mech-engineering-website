@@ -23,7 +23,6 @@ html {
 body {
     margin: 0;
     font-family: 'Tahoma', sans-serif;
-    /* background: url('../../assets/images/bc-index.jpg'); */
     background-color: #edecf3;
 }
 
@@ -37,8 +36,7 @@ ul {
     padding: 0;
 }
 
-/* _____________________________________________________________________ */
-/* هدر و نویگیشن */
+/* ==================== HEADER ==================== */
 header {
     background: #012e71;
     color: white;
@@ -46,73 +44,89 @@ header {
     top: 0;
     z-index: 100;
 }
+
 header #logo {
     background-color: #002051;
     width: 100px;
     height: 90px;
     float: right;
-
 }
+
 header #logo img {
     width: 100%;
     height: 100%;
 }
+
 .header-top {
     width: 100%;
     height: 90px;
     background-color: #002051;
     padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
+
 .header-top a:first-child {
     font-weight: bold;
-    font-size: 30px;
+    font-size: clamp(18px, 3vw, 30px);
     color: white;
     margin-right: 25px;
 }
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+
+.login-btn {
+    background: #ffaa00;
+    color: #0a2a44 !important;
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
 }
+
+.login-btn:hover {
+    background: #ffcc44;
+}
+
+/* ===== NAVBAR ===== */
 .nav-bar {
-    height: 65px;
+    min-height: 65px;
     font-size: 16px;
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
+    padding: 0 20px;
 }
+
 .nav-bar .logo {
     padding: 10px 0;
-    padding-left: 10px;
-    font-size: 23px;
+    font-size: clamp(18px, 2.5vw, 23px);
 }
+
 .logo span {
     color: #ffaa00;
 }
+
 .nav-links {
-    height: 60px;
-    margin-right: 50px;
-    border-bottom: 3px solid #938c8c3f;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 20px;
+    padding: 10px 0;
 }
+
 .nav-links a {
     display: inline-block;
-    height: 100%;
-    position: relative;
-    /*after */
-    padding: 12px 0 0 0;
+    padding: 8px 0;
     color: rgb(201, 196, 196);
     text-decoration: none;
-    margin-right: 25px;
     transition: 0.5s;
+    position: relative;
+    font-size: clamp(14px, 1.2vw, 16px);
 }
 
-.nav-links a:first-child {
-    margin-right: 0px;
-}
-
-/* after => start */
 .nav-links a::after {
-    margin-bottom: 0px;
     content: "";
     position: absolute;
     left: 0;
@@ -129,132 +143,64 @@ header #logo img {
     transform: scaleX(1);
 }
 
-/* after => end */
-
 .nav-links a:hover {
     color: #ffaa00;
 }
 
-.login-btn {
-    background: #ffaa00;
-    color: #0a2a44 !important;
-    padding: 8px 20px;
-    border-radius: 25px;
-    font-weight: bold;
-    font-size: 16px;
-    position: absolute;
-    left: 120px;
-    top: 25px;
-}
-
-.login-btn:hover {
-    background: #ffcc44;
-}
-
-/* Multi level lists */
-#ul-about {
-    z-index: 101;
-    background-color: #73d0e8;
-    width: 250px;
-    position: fixed;
-    right: 510px;
-    top: 155px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    /* transition */
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-}
-
-#ul-about.show {
-    opacity: 5;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-/*transition  end !*/
-#ul-about li a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    padding: 10px 20px;
-    font-weight: 700;
-    color: #012e71;
-}
-
-#ul-about li:last-child a {
-    /* margin-top: 15px; */
-    padding-bottom: 15px;
-}
-
-#ul-about li:last-child a:hover {
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-}
-
-#ul-about li a:hover {
-    color: rgb(196, 65, 65);
-    ;
-    background-color: #09357d2e;
-}
-
+/* ===== Dropdown Menus ===== */
+#ul-about,
 #ul-relation {
     z-index: 101;
     background-color: #73d0e8;
     width: 250px;
     position: fixed;
-    right: 670px;
-    top: 155px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    /* transition */
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.3s ease;
 }
 
+#ul-about {
+    right: 510px;
+    top: 155px;
+}
+
+#ul-relation {
+    right: 670px;
+    top: 155px;
+}
+
+#ul-about.show,
 #ul-relation.show {
     opacity: 5;
     visibility: visible;
     transform: translateY(0);
 }
 
-/*transition  end !*/
-
+#ul-about li a,
 #ul-relation li a {
     display: block;
     width: 100%;
-    height: 100%;
     padding: 10px 20px;
     font-weight: 700;
     color: #012e71;
 }
 
-#ul-relation li:last-child a {
-    padding-bottom: 15px;
-}
-
-#ul-relation li:last-child a:hover {
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-}
-
+#ul-about li a:hover,
 #ul-relation li a:hover {
     color: rgb(196, 65, 65);
-    ;
     background-color: #09357d2e;
 }
 
-
-/* ________________________________________________________________________ */
-/* بخش Hero */
+/* ==================== HERO ==================== */
 .hero {
     background: url('../../assets/images/fani.jpg') no-repeat center center/cover;
     color: white;
-    height: 950px;
+    min-height: 600px;
+    height: 100vh;
+    max-height: 950px;
     text-align: center;
 }
 
@@ -262,30 +208,29 @@ header #logo img {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    /* padding-top: 400px; */
-    /* border-bottom: solid 1px #7c7b7b; */
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
 }
 
 #hero-items {
-    /* background-color: #fff; */
-    margin: 0 auto;
-    height: 100%;
+    width: 100%;
+    max-width: 1100px;
     display: flex;
     flex-wrap: wrap;
-    width: 1100px;
-    justify-content: space-around;
-    align-items: end;
+    justify-content: center;
+    gap: 30px;
+    padding: 0 20px 80px;
 }
 
 .hero-item {
     background: url('../../assets/images/bc-heroitems.jpg') no-repeat center center/cover;
-    width: 200px;
-    height: 200px;
-    margin-bottom: 130px;
+    width: 180px;
+    height: 180px;
     border: 7px solid #ffaa00;
     border-radius: 30px;
     transition: 0.5s;
-
+    flex-shrink: 0;
 }
 
 .hero-item:hover {
@@ -295,125 +240,84 @@ header #logo img {
 
 .hero-item a {
     color: #005689;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
-    position: relative;
-
 }
 
 .hero-item a i {
-    padding: 20px;
-    font-size: 60px;
+    font-size: 50px;
+    margin-bottom: 10px;
 }
 
 .hero-item a span {
-    position: absolute;
-    bottom: 40px;
-    left: 0;
-    right: 0;
     font-weight: bold;
-    font-size: 20px;
+    font-size: clamp(14px, 1.5vw, 20px);
+    text-align: center;
+    padding: 0 10px;
 }
 
 #after-hero {
     text-align: center;
-    padding: 1px;
+    padding: 15px;
     color: white;
     background-color: #012e71;
-    /* margin-bottom: 100px; */
     font-weight: 600;
-}
-/* __________________________________________________________________________________________ */
-.about-text {
-    font-weight: 900;
-    flex: 1;
-    margin-left: 100px;
-    order:-1;
-    padding:60px 10px;
-    max-width: 600px;
+    font-size: clamp(14px, 1.5vw, 20px);
 }
 
-.about-text h3 {
-    color: #0a2a44;
-    margin-bottom: 20px;
-    font-size: 24px;
-}
-
-.about-text p {
-    text-align: justify;
-    line-height: 1.8;
-    color: #555;
-    font-size: 20px;
-}
-
-.about-stats {
-    flex: 1;
-    display: flex;
-    gap: 30px;
-    justify-content: center;
-    margin:50px auto;
-}
-
-.stat {
-    text-align: center;
-    background: #cde3e4;
-    padding: 25px;
-    border-radius: 15px;
-}
-
-.stat .number {
-    font-size: 36px;
-    font-weight: bold;
-    color: #0a2a44;
-}
-
-.stat .label {
-    color: #666;
-}
-
-/* =======================================================================گالری تصاویر(اسلایدر) */
-.container-s{
-    /* max-width: 1200px; */
-    /* margin: 0 auto; */
+/* ==================== CONTAINER ==================== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 0 20px;
 }
-.gallery-slider {
-    display: flex;
-    justify-content: center;
-    padding: 100px;
-    margin-bottom: 200px;
 
+/* ==================== GALLERY SLIDER ==================== */
+.gallery-slider {
+    padding: 50px 20px;
 }
+
 .gallery-slider .section-title {
     color: #0a2a44;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    font-size: 32px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    font-size: clamp(24px, 4vw, 32px);
+    text-align: center;
+    margin-bottom: 30px;
 }
+
 .slider-container {
-    width:650px;
+    max-width: 650px;
+    width: 100%;
     margin: 0 auto;
     border-radius: 25px;
     overflow: hidden;
     box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3);
-    display:flex;
-    border:20px double black;
-    border-style: double;
+    border: 20px double black;
 }
+
 .css-slider {
     position: relative;
     width: 100%;
-    height: 800px;
+    padding-bottom: 120%; /* نسبت ارتفاع به عرض برای ریسپانسیو */
+    height: 0;
 }
+
 .css-slider input[type="radio"] {
     display: none;
 }
+
 .slide {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     opacity: 0;
-    visibility: hidden; /* اضافه شد: اسلاید غیرفعال کلیک‌ها را بلاک نکند */
+    visibility: hidden;
     transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
     display: flex;
     flex-direction: column;
@@ -422,28 +326,23 @@ header #logo img {
     background: #000;
 }
 
-/* وقتی اسلایدی انتخاب می‌شود هم لایه بالا بیاید و هم مرئی شود */
 #slide1:checked ~ .slide:nth-of-type(1),
 #slide2:checked ~ .slide:nth-of-type(2),
 #slide3:checked ~ .slide:nth-of-type(3),
 #slide4:checked ~ .slide:nth-of-type(4),
 #slide5:checked ~ .slide:nth-of-type(5) {
     opacity: 1;
-    visibility: visible; /* اضافه شد */
-    z-index: 10;        /* اضافه شد: اسلاید فعال روی بقیه قرار بگیرد */
+    visibility: visible;
+    z-index: 10;
 }
-.slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: #1a1a2e;
-}
+
+.slide img,
 .slide video {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    background: #000;
 }
+
 .slide-caption {
     position: absolute;
     bottom: 0;
@@ -451,42 +350,43 @@ header #logo img {
     right: 0;
     background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
     color: white;
-    padding: 50px 40px 30px;
+    padding: 30px 20px 20px;
     text-align: right;
     direction: rtl;
-    z-index: 12; /* اضافه شد */
-    pointer-events: none; /* اضافه شد: کلیک از روی متن عبور کند و به ویدیو برسد */
+    z-index: 12;
+    pointer-events: none;
 }
+
 .slide-caption h3 {
-    font-size: 28px;
-    margin-bottom: 10px;
+    font-size: clamp(18px, 3vw, 28px);
+    margin-bottom: 5px;
     color: #ffaa00;
-    font-weight: bold;
 }
+
 .slide-caption p {
-    font-size: 18px;
+    font-size: clamp(13px, 1.5vw, 18px);
     opacity: 0.95;
 }
 
-/* نقاط ناوبری بزرگتر */
 .slider-nav {
     position: absolute;
-    bottom: 25px;
+    bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 15px;
+    gap: 12px;
     z-index: 20;
 }
+
 .nav-btn {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.6);
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 1px solid rgba(255,255,255,0.3);
 }
+
 .nav-btn:hover {
     background: #ffaa00;
     transform: scale(1.3);
@@ -498,12 +398,10 @@ header #logo img {
 #slide4:checked ~ .slider-nav label:nth-of-type(4),
 #slide5:checked ~ .slider-nav label:nth-of-type(5) {
     background: #ffaa00;
-    width: 35px;
+    width: 30px;
     border-radius: 10px;
-    border: none;
 }
 
-/* دکمه‌های قبلی و بعدی بزرگتر */
 .slider-controls {
     position: absolute;
     top: 50%;
@@ -512,188 +410,156 @@ header #logo img {
     transform: translateY(-50%);
     display: flex;
     justify-content: space-between;
-    padding: 0 25px;
-    z-index: 30; /* مقدار از ۲۰ به ۳۰ تغییر کرد تا حتما روی اسلاید قرار بگیرد */
-    pointer-events: none; /* اجازه عبور کلیک از فضاهای خالی بین دکمه‌ها */
-
+    padding: 0 10px;
+    z-index: 30;
+    pointer-events: none;
 }
+
 .control {
     background: rgba(10, 42, 68, 0.374);
     color: white;
-    width: 55px;
-    height: 55px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
+    font-size: 22px;
     cursor: pointer;
     transition: all 0.3s ease;
     backdrop-filter: blur(5px);
-    border: 1px solid rgba(255,255,255,0.2);
-    pointer-events: auto; /* فعال کردن مجدد کلیک دقیقاً روی خود دکمه‌ها */
+    pointer-events: auto;
 }
+
 .control:hover {
     background: #ffaa00;
     color: #0a2a44;
     transform: scale(1.15);
 }
 
-/* ریسپانسیو برای موبایل */
-
-/* @media (max-width: 992px) {
-    .css-slider {
-        height: 500px;
-    }
-    .slide-caption h3 {
-        font-size: 22px;
-    }
-    .slide-caption p {
-        font-size: 15px;
-    }
-    .slide-caption {
-        padding: 35px 25px 20px;
-    }
-}
-@media (max-width: 768px) {
-    .css-slider {
-        height: 400px;
-    }
-    .control {
-        width: 45px;
-        height: 45px;
-        font-size: 22px;
-    }
-    .slide-caption h3 {
-        font-size: 18px;
-    }
-    .slide-caption p {
-        font-size: 13px;
-    }
-    .slide-caption {
-        padding: 25px 20px 15px;
-    }
-    .nav-btn {
-        width: 10px;
-        height: 10px;
-    }
-}
-@media (max-width: 480px) {
-    .css-slider {
-        height: 300px;
-    }
-    .control {
-        width: 38px;
-        height: 38px;
-        font-size: 18px;
-        padding: 0 15px;
-    }
-    .slider-controls {
-        padding: 0 12px;
-    }
-    .slide-caption h3 {
-        font-size: 15px;
-    }
-    .slide-caption p {
-        font-size: 11px;
-    }
-} */
-/* رفع مشکل ویدیو در گالری */
-.video-slide {
-    background: #000;
+/* ==================== ABOUT ==================== */
+.about-content {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    gap: 40px;
+    padding: 40px 0;
 }
-.video-slide video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: #000;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-}
-video::-webkit-media-controls {
-    z-index: 20;
-}
-/* _______________________________________________________________________________________ */
-/* اخبار و تازه ها */
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+.about-text {
+    flex: 1 1 400px;
+    padding: 20px;
+    max-width: 600px;
 }
-.section-header {
+
+.about-text h3 {
+    color: #0a2a44;
+    margin-bottom: 20px;
+    font-size: clamp(22px, 3vw, 28px);
+}
+
+.about-text p {
+    text-align: justify;
+    line-height: 1.8;
+    color: #555;
+    font-size: clamp(16px, 1.5vw, 20px);
+}
+
+.about-stats {
+    flex: 1 1 300px;
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 30px;
+    gap: 20px;
+    justify-content: center;
     flex-wrap: wrap;
 }
-.section-header h2 {
-    font-size: 24px;
-    color: #0a2a44;
+
+.stat {
+    text-align: center;
+    background: #cde3e4;
+    padding: 20px 25px;
+    border-radius: 15px;
+    min-width: 120px;
+    flex: 1;
+}
+
+.stat .number {
+    font-size: clamp(28px, 4vw, 36px);
     font-weight: bold;
-    position: relative;
-    padding-bottom: 10px;
+    color: #0a2a44;
 }
-.section-header h2::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 50px;
-    height: 3px;
-    background: #ffaa00;
+
+.stat .label {
+    color: #666;
+    font-size: clamp(14px, 1.2vw, 16px);
 }
-.news-grid {
+
+/* ==================== NEWS & EVENTS ==================== */
+.section-title {
+    text-align: center;
+    font-size: clamp(24px, 4vw, 32px);
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    margin: 40px 0;
+    color: #0a2a44;
+}
+
+.news-grid,
+.events-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 25px;
+    margin-bottom: 30px;
 }
-.news-card {
+
+.news-card,
+.event-card {
     background: white;
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
-    cursor: pointer;
 }
-.news-card:hover {
+
+.news-card:hover,
+.event-card:hover {
     box-shadow: 5px 5px 20px 5px #0a2a44;
     transform: translateY(-10px);
 }
+
 .news-image {
     width: 100%;
     height: 200px;
     overflow: hidden;
 }
+
 .news-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
 }
+
 .news-card:hover .news-image img {
     transform: scale(1.05);
 }
+
 .news-content {
     padding: 20px;
 }
+
 .news-category {
-    font-size: 20px;
+    font-size: clamp(16px, 1.5vw, 20px);
     font-weight: bold;
     color: #0a2a44;
     margin-bottom: 8px;
-    line-height: 1.5;
 }
+
 .news-text {
-    font-size: 15px;
+    font-size: clamp(14px, 1.2vw, 16px);
     color: #7f8c8d;
     margin-bottom: 12px;
 }
+
 .news-link a {
     color: #ffaa00;
     text-decoration: none;
@@ -704,234 +570,175 @@ video::-webkit-media-controls {
     gap: 5px;
     transition: 0.3s;
 }
+
 .news-link a:hover {
     color: #0a2a44;
     gap: 8px;
 }
-/* ریسپانسیو */
-@media (max-width: 768px) {
-    .news-section {
-        padding: 40px 0;
-    }
 
-    .section-header h2 {
-        font-size: 20px;
-    }
-
-    .news-grid {
-        gap: 15px;
-    }
-
-    .news-card {
-        border-radius: 12px;
-    }
-
-    .news-image {
-        height: 180px;
-    }
-
-    .news-content {
-        padding: 15px;
-    }
-
-    .news-category {
-        font-size: 14px;
-    }
-}
-@media (max-width: 480px) {
-    .section-header {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .section-header h2::after {
-        width: 40px;
-    }
-
-    .news-grid {
-        grid-template-columns: 1fr;
-    }
-}
-.all-container {
-    grid-column: 2;
-    grid-row: 2;
-    padding: 50px 20px;
-    text-align: center;
-}
-/* دکمه مشاهده همه */
-.all-btn {
-    display: inline-block;
-    padding: 10px;
-    background-color: #fa3c52;
-    color: black;
-    border-radius: 25px;
-    transition: 0.3s;
-    font-size:18px;
-}
-.all-btn:hover {
-    transform: scale(1.05);
-}
-
-/* رویدادهای پیش رو */
-/* ______________________________________________________________________ */
-.section-title {
-    text-align: center;
-    font-size: 32px;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    margin-bottom: 120px;
-    color: #0a2a44;
-}
-
-.events-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-    margin-bottom: 50px;
-}
+/* ===== Event Card ===== */
 .event-card {
-    font-size: 18px;
-    /* height: 300px; */
-    background: white;
-    border-radius: 15px;
-    padding: 30px 17px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: 0.3s;
+    padding: 25px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    text-align: center;
 }
-.event-card:hover {
-    box-shadow: 5px 5px 20px 5px #0a2a44;
-    transform: translateY(-10px);
+
+.event-card h3 {
+    font-size: clamp(18px, 2vw, 22px);
+    margin: 15px 0 10px;
 }
+
 .event-date {
     color: #ffaa00;
     font-weight: bold;
     margin: 10px 0;
+    font-size: clamp(14px, 1.2vw, 16px);
 }
+
+.event-card p {
+    font-size: clamp(14px, 1.2vw, 16px);
+    color: #555;
+    margin-bottom: 15px;
+}
+
 .event-card button {
     background: #0a2a44;
     color: white;
     border: none;
-    padding: 10px 30px;
+    padding: 10px 25px;
     border-radius: 25px;
     cursor: pointer;
-    font-size: 20px;
+    font-size: clamp(16px, 1.5vw, 20px);
     transition: 0.5s;
-    max-width: 200px;
-}
-.event-card button:hover{
-    transform: scale(1.1);
 }
 
+.event-card button:hover {
+    transform: scale(1.05);
+}
 
-/* افتخارات */
-/* __________________________________________________________________ */
+/* ===== All Button ===== */
+.all-container {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.all-btn {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: #fa3c52;
+    color: black;
+    border-radius: 25px;
+    transition: 0.3s;
+    font-size: clamp(16px, 1.5vw, 18px);
+}
+
+.all-btn:hover {
+    transform: scale(1.05);
+}
+
+/* ==================== HONORS ==================== */
 .honors {
-    margin:240px auto;
-    max-width: fit-content;
-    margin-top:90px;
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
 }
 
 .honors h2 {
     text-align: center;
     margin-bottom: 40px;
-    font-size: 40px;
-    font-weight: bold;
+    font-size: clamp(30px, 4vw, 40px);
     color: #0a2a44;
 }
-.honors-container{
-    width:1200px;
-    min-height:500px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    padding:80px 0px;
-    gap:50px 25px;
+
+.honors table {
+    width: 100% !important;
+    max-width: 1400px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
-.honor-card{
-    min-height: 300px;
-    /* background-color: #cdc9c9; */
-    border-radius: 20px;
-    display:flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    box-shadow: 2px 2px 15px 2px rgb(81, 150, 169);
+
+.honors th,
+.honors td {
+    padding: 15px 20px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
 }
-.one{
-    grid-row: 1/3;
+
+.honors th {
+    background: #012e71;
+    color: white;
+    font-size: clamp(16px, 1.5vw, 18px);
 }
-.tree{
-    grid-column: 2;
+
+.honors td {
+    font-size: clamp(14px, 1.2vw, 16px);
 }
-.honor-image{
-    width: 100%;
-    height: 100%;
-}
-.honor-image img{
-    width: 100%;
-    height: 100%;
-    border-top-right-radius: 20px;
-    border-top-left-radius: 20px;
-}
-.honor-content{
-    padding:25px 30px;
-}
-.honor-title{
-    font-weight: 900;
-    font-size:25px;
-    text-shadow: 5px 5px 10px rgba(42, 6, 248, 0.3);
-    margin-bottom: 20px;
-}
-.honor-festival{
-    font-size: 20px;
-    color:#802222;
-    font-weight: 500;
-}
-/* ______________________________________________________ */
-/* فوتر */
+
+/* ==================== FOOTER ==================== */
 .footer-up {
     background: url('../../assets/images/bc-footer1-c.jpg') center center/cover;
-    height: 400px;
+    min-height: 400px;
     color: white;
-    text-align: center;
-    padding: 50px 200px;
+    padding: 40px 20px;
     display: flex;
-    justify-content: space-around;
-    margin-top:100px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-top: 60px;
+}
+
+.footer-up .content {
+    flex: 1 1 400px;
+    max-width: 550px;
+    padding: 20px;
+    text-align: right;
+}
+
+.footer-up .content p {
+    margin: 15px 0;
+    font-size: clamp(14px, 1.2vw, 16px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.map {
+    flex: 1 1 400px;
+    max-width: 550px;
+    width: 100%;
+}
+
+.map iframe {
+    width: 100%;
+    height: 320px;
+    border: 10px double #0a2a44;
 }
 
 .footer-down {
     height: 50px;
     color: white;
     background-color: #002051;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .footer-down p {
     margin: 0;
     padding: 10px;
     text-align: center;
+    font-size: clamp(12px, 1.2vw, 14px);
 }
 
-.map iframe {
-    border: 10px double #0a2a44;
-
-}
-
-.footer-up .content {
-    width: 550px;
-    padding: 25px;
-    text-align: right;
-}
-
-.footer-up .content p {
-    margin: 25px;
-
-}
-
-/* ___________________________________________________________ */
-
+/* ==================== FLOATING ICONS ==================== */
 #icons {
     position: fixed;
     left: 7px;
@@ -941,7 +748,7 @@ video::-webkit-media-controls {
 
 #icons a {
     display: block;
-    width: 60px;
+    width: clamp(45px, 5vw, 60px);
     cursor: pointer;
     transition: 0.5s;
 }
@@ -951,12 +758,318 @@ video::-webkit-media-controls {
 }
 
 #icons a:last-child {
-    width: 55px;
+    width: clamp(40px, 4.5vw, 55px);
     margin-top: 7px;
 }
 
 #icons a img {
     border-radius: 100%;
-
     width: 100%;
+}
+
+/* ============================================================ */
+/* ==================== MEDIA QUERIES ==================== */
+/* ============================================================ */
+
+/* تبلت و موبایل بزرگ */
+@media (max-width: 992px) {
+    .header-top {
+        height: auto;
+        padding: 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .header-top a:first-child {
+        margin-right: 0;
+        font-size: 20px;
+    }
+
+    .login-btn {
+        position: static;
+    }
+
+    #ul-about,
+    #ul-relation {
+        display: none !important;
+    }
+
+    .nav-bar {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .nav-links {
+        justify-content: center;
+    }
+
+    .nav-links a {
+        font-size: 14px;
+        margin: 0 10px;
+    }
+
+    #hero-items {
+        gap: 20px;
+        padding-bottom: 40px;
+    }
+
+    .hero-item {
+        width: 150px;
+        height: 150px;
+    }
+
+    .hero-item a i {
+        font-size: 40px;
+    }
+}
+
+/* موبایل */
+@media (max-width: 768px) {
+    header #logo {
+        width: 70px;
+        height: 65px;
+    }
+
+    .header-top {
+        padding: 10px;
+    }
+
+    .header-top a:first-child {
+        font-size: 16px;
+    }
+
+    .login-btn {
+        padding: 6px 15px;
+        font-size: 14px;
+    }
+
+    .nav-links {
+        gap: 5px 12px;
+    }
+
+    .nav-links a {
+        font-size: 13px;
+        margin: 0 5px;
+        padding: 5px 0;
+    }
+
+    .nav-bar .logo {
+        font-size: 18px;
+    }
+
+    .hero {
+        min-height: 450px;
+        max-height: 600px;
+    }
+
+    .hero-item {
+        width: 120px;
+        height: 120px;
+        border-width: 5px;
+    }
+
+    .hero-item a i {
+        font-size: 30px;
+        padding: 5px;
+    }
+
+    .hero-item a span {
+        font-size: 13px;
+    }
+
+    #hero-items {
+        gap: 15px;
+        padding-bottom: 30px;
+    }
+
+    .slider-container {
+        border-width: 10px;
+    }
+
+    .control {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+
+    .about-text {
+        margin-left: 0;
+        padding: 20px 10px;
+    }
+
+    .about-stats {
+        gap: 15px;
+    }
+
+    .stat {
+        padding: 15px;
+        min-width: 80px;
+    }
+
+    .news-grid,
+    .events-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .news-image {
+        height: 160px;
+    }
+
+    .honors table {
+        font-size: 12px;
+    }
+
+    .honors th,
+    .honors td {
+        padding: 10px;
+    }
+
+    .footer-up {
+        flex-direction: column;
+        padding: 30px 15px;
+        min-height: auto;
+    }
+
+    .footer-up .content {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .map iframe {
+        height: 250px;
+    }
+
+    #icons {
+        bottom: 100px;
+        left: 5px;
+    }
+
+    #icons a {
+        width: 40px;
+    }
+
+    #icons a:last-child {
+        width: 36px;
+    }
+
+    .gallery-slider {
+        padding: 30px 10px;
+    }
+}
+
+/* موبایل خیلی کوچک */
+@media (max-width: 480px) {
+    .hero-item {
+        width: 100px;
+        height: 100px;
+        border-width: 4px;
+        border-radius: 20px;
+    }
+
+    .hero-item a i {
+        font-size: 24px;
+    }
+
+    .hero-item a span {
+        font-size: 11px;
+    }
+
+    #hero-items {
+        gap: 10px;
+        padding-bottom: 20px;
+    }
+
+    .hero {
+        min-height: 350px;
+        max-height: 500px;
+    }
+
+    .nav-links a {
+        font-size: 11px;
+        margin: 0 3px;
+    }
+
+    .control {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .slider-controls {
+        padding: 0 5px;
+    }
+
+    .nav-btn {
+        width: 8px;
+        height: 8px;
+        gap: 8px;
+    }
+
+    #slide1:checked ~ .slider-nav label:nth-of-type(1),
+    #slide2:checked ~ .slider-nav label:nth-of-type(2),
+    #slide3:checked ~ .slider-nav label:nth-of-type(3),
+    #slide4:checked ~ .slider-nav label:nth-of-type(4),
+    #slide5:checked ~ .slider-nav label:nth-of-type(5) {
+        width: 20px;
+    }
+
+    .slide-caption {
+        padding: 15px 10px 10px;
+    }
+
+    .slide-caption h3 {
+        font-size: 14px;
+    }
+
+    .slide-caption p {
+        font-size: 11px;
+    }
+
+    .section-title {
+        font-size: 20px;
+        margin: 25px 0;
+    }
+
+    .news-image {
+        height: 140px;
+    }
+
+    .event-card {
+        padding: 15px;
+    }
+
+    .honors th,
+    .honors td {
+        padding: 8px 5px;
+        font-size: 11px;
+    }
+
+    .honors h2 {
+        font-size: 24px;
+    }
+
+    .map iframe {
+        height: 200px;
+        border-width: 5px;
+    }
+
+    #icons {
+        bottom: 80px;
+        left: 3px;
+    }
+
+    #icons a {
+        width: 32px;
+    }
+
+    #icons a:last-child {
+        width: 28px;
+    }
+
+    .footer-up .content p {
+        font-size: 12px;
+        margin: 10px 0;
+    }
 }
