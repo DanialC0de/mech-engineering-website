@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/member.css' %}">
+    <title>پنل عضو انجمن | انجمن علمی مکانیک</title>
+</head>
+
+<body>
+    <div class="sidebar">
+        <button id="toggleSidebar"><i class="fas fa-bars"></i></button>
+        <div class="logo">
+            ⚙️ انجمن <span>مکانیک</span>
+            <small>پنل عضو انجمن</small>
+        </div>
+        <ul class="menu">
+            <li class="active" data-tab="dashboard"><a href="#">📊 داشبورد</a></li>
+            <li data-tab="community"><a href="#">👥 مدیریت انجمن</a></li>
+            <li data-tab="events"><a href="#">📅 مدیریت رویدادها</a></li>
+            <li data-tab="gallery"><a href="#">🖼️ گالری و رسانه</a></li>
+            <li data-tab="resources"><a href="#">📚 منابع و دانلودها</a></li>
+            <li data-tab="profile"><a href="#">👤 پروفایل من</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="page-title" id="pageTitle">داشبورد عضو انجمن</div>
+            <button class="logout-btn" onclick="logout()">خروج</button>
+        </div>
+
+        <!-- داشبورد -->
+        <div id="dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="number" id="myEvents">۰</div>
+                    <div class="label">رویدادهای تحت مسئولیت</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="pendingRequests">۰</div>
+                    <div class="label">درخواست عضویت</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="newMessages">۰</div>
+                    <div class="label">پیام‌های جدید</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">📢 آخرین اطلاعیه‌های انجمن</div>
+                <ul>
+                    <li>جلسه کمیته آموزش - ۲۵ فروردین</li>
+                    <li>فراخوان ثبت‌نام در مسابقه سالیدورک</li>
+                </ul>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">📅 رویدادهای تحت مسئولیت من</div>
+                <table id="myManagedEventsTable">
+                    <thead>
+                        <tr>
+                            <th>عنوان</th>
+                            <th>تاریخ</th>
+                            <th>شرکت‌کنندگان</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myManagedEventsBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- مدیریت انجمن -->
+        <div id="community" class="tab-content">
+            <div class="section-card">
+                <div class="section-title">👥 درخواست‌های عضویت</div>
+                <table id="memberRequestsTable">
+                    <thead>
+                        <tr>
+                            <th>نام</th>
+                            <th>شماره دانشجویی</th>
+                            <th>کمیته</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="memberRequestsBody"></tbody>
+                </table>
+            </div>
+            <div class="section-card">
+                <div class="section-title">📋 اعضای انجمن</div>
+                <table id="membersListTable">
+                    <thead>
+                        <tr>
+                            <th>نام</th>
+                            <th>نقش</th>
+                            <th>کمیته</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="membersListBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- مدیریت رویدادها -->
+        <div id="events" class="tab-content">
+            <div class="section-card">
+                <div class="section-title">📅 رویدادهای من</div>
+                <button onclick="openCreateEventModal()" style="margin-bottom:15px;">+ ایجاد رویداد جدید</button>
+                <table id="allManagedEventsTable">
+                    <thead>
+                        <tr>
+                            <th>عنوان</th>
+                            <th>تاریخ</th>
+                            <th>وضعیت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allManagedEventsBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- گالری -->
+        <div id="gallery" class="tab-content">
+            <div class="section-card">
+                <div class="section-title">🖼️ گالری تصاویر</div>
+                <button onclick="openUploadImageModal()">+ بارگذاری تصویر جدید</button>
+                <div id="galleryGrid"
+                    style="display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:15px; margin-top:20px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- منابع -->
+        <div id="resources" class="tab-content">
+            <div class="section-card">
+                <div class="section-title">📚 منابع داخلی انجمن</div>
+                <table id="internalResourcesTable">
+                    <thead>
+                        <tr>
+                            <th>عنوان</th>
+                            <th>دسته‌بندی</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="internalResourcesBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- پروفایل -->
+        <div id="profile" class="tab-content">
+            <div class="section-card">
+                <div class="section-title">👤 اطلاعات من</div>
+                <p><strong>نام:</strong> رضا کریمی</p>
+                <p><strong>نقش:</strong> مسئول کمیته آموزش</p>
+                <p><strong>کمیته:</strong> آموزش</p>
+                <button onclick="changePassword()">تغییر رمز عبور</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال‌ها -->
+    <div id="createEventModal" class="modal">
+        <div class="modal-content">
+            <h3>رویداد جدید</h3><input type="text" id="newEventTitle" placeholder="عنوان"><input type="date"
+                id="newEventDate"><select id="newEventType">
+                <option>کارگاه</option>
+                <option>سمینار</option>
+            </select>
+            <div class="modal-buttons"><button onclick="closeCreateEventModal()">انصراف</button><button
+                    onclick="createEvent()">ایجاد</button></div>
+        </div>
+    </div>
+    <div id="uploadImageModal" class="modal">
+        <div class="modal-content">
+            <h3>بارگذاری تصویر</h3><input type="file" accept="image/*">
+            <div class="modal-buttons"><button onclick="closeUploadImageModal()">انصراف</button><button
+                    onclick="uploadImage()">بارگذاری</button></div>
+        </div>
+    </div>
+
+    <script src="member.js"></script>
+</body>
+
+</html>
