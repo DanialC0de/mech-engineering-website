@@ -19,8 +19,8 @@
             <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
             {% if user.is_authenticated %}
                 <div style="display: inline-block;">
-                    <span style="color: white; margin-left: 10px;">خوش آمدی {{ user.first_name }}</span>
-                    <a href="{% url 'logout' %}" class="login-btn">خروج</a>
+                    <span style="color: white; margin-left: 10px;">خوش آمدی {{ user.first_name|default:user.username }}</span>
+                    {% comment %} <a href="{% url 'logout' %}" class="login-btn">خروج</a> {% endcomment %}
                 </div>
             {% else %}
                 <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
@@ -32,14 +32,15 @@
                 <a href="{% url 'home' %}">صفحه اصلی</a>
                 <a href="{% url 'about' %}"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
                 <a href="{% url 'industry' %}"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
-                <a href="#events">رویدادها</a>
-                <a href="#sources">منابع علمی</a>
+                <a href="{% url 'all_events' %}">رویدادها</a>
+                <a href="{% url 'all_resources' %}">منابع علمی</a>
                 <a href="{% url 'honors' %}">افتخارات انجمن</a>
                 <a href="{% url 'contact' %}">تماس با ما</a>
             </div>
         </div>
     </header>
-    
+
+
     <ul id="ul-about">
         <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
         <li><a href="{% url 'honors' %}">دستاورد ها و افتخارات</a></li>
@@ -52,7 +53,7 @@
         <div id="seudo">
             <div id="hero-items">
                 <div class="hero-item">
-                    <a href="{% url 'about' %}"><i class="fa-solid fa-building-columns"></i><span>معرفی دانشکده </span></a>
+                    <a href="{% url 'about' %}"><i class="fa-solid fa-building-columns"></i><span>معرفی دانشکده</span></a>
                 </div>
                 <div class="hero-item">
                     <a href="{% url 'all_events' %}"><i class="fa-solid fa-calendar-days"></i><span>کارگاه ها و رویدادها</span></a>
@@ -66,15 +67,14 @@
             </div>
         </div>
     </section>
-    
+
     <div id="after-hero">
         <p>انجمن علمی مکانیک | همراه شما در مسیر یادگیری، پژوهش و نوآوری</p>
     </div>
 
-    <!-- گالری تصاویر و ویدیو ها -->
+    
     <section class="gallery-slider">
-        <div class="container">
-            <h2 class="section-title">🎬 گالری تصاویر و ویدیوها</h2>
+        <div class="container-s">
             <div class="slider-container">
                 <div class="css-slider">
                     
@@ -88,6 +88,8 @@
                                 <source src="{{ item.video_file.url }}" type="video/mp4">
                                 مرورگر شما ویدیو را پشتیبانی نمی‌کند.
                             </video>
+                        {% else %}
+                            <img src="https://via.placeholder.com/800x400" alt="گالری">
                         {% endif %}
                         <div class="slide-caption">
                             <h3>{{ item.caption_title }}</h3>
@@ -104,14 +106,12 @@
                     </div>
                     {% endfor %}
 
-                    <!-- نقاط ناوبری -->
                     <div class="slider-nav">
                         {% for item in gallery_items %}
                         <label for="slide{{ forloop.counter }}" class="nav-btn"></label>
                         {% endfor %}
                     </div>
 
-                    <!-- دکمه های قبلی و بعدی -->
                     <div class="slider-controls">
                         <label class="control prev">❮</label>
                         <label class="control next">❯</label>
@@ -119,93 +119,43 @@
                 </div>
             </div>
         </div>
+
+        <div class="about-text">
+            <h2>درباره انجمن علمی مکانیک</h2>
+            <p>{{ about.description|default:"انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان در سال 1386 با هدف ارتقا دانش و تخصص دانشجویان و پژوهشگران این رشته تاسیس شد." }}</p>
+
+            <div class="about-stats">
+                <div class="stat">
+                    <div class="number">{{ about.active_members|default:"20" }}+</div>
+                    <div class="label">عضو فعال</div>
+                </div>
+                <div class="stat">
+                    <div class="number">{{ about.events_held|default:"25" }}+</div>
+                    <div class="label">رویداد برگزار شده</div>
+                </div>
+                <div class="stat">
+                    <div class="number">{{ about.total_resources|default:"50" }}+</div>
+                    <div class="label">منبع علمی</div>
+                </div>
+            </div>
+
+            {% if user.is_authenticated %}
+                <a href="{{ about.button_link|default:'#' }}">
+                    <p style="margin-top: 15px; font-weight:bold; color:rgb(255, 64, 0)">
+                        {{ about.button_text|default:"همین حالا به خانواده بزرگ انجمن علمی مکانیک بپیوندید" }}
+                    </p>
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}">
+                    <p style="margin-top: 15px; font-weight:bold; color:rgb(255, 64, 0)">
+                        برای دسترسی به امکانات، وارد شوید
+                    </p>
+                </a>
+            {% endif %}
+        </div>
     </section>
 
-    <script>
-        let currentSlide = 1;
-        const totalSlides = {{ gallery_items.count|default:1 }};
-        
-        // تابع پیدا کردن شماره اسلاید فعلی بر اساس رادیوباکس تیک‌خورده
-        function updateCurrentSlide() {
-            for(let i = 1; i <= totalSlides; i++) {
-                if(document.getElementById('slide' + i) && document.getElementById('slide' + i).checked) {
-                    currentSlide = i;
-                    break;
-                }
-            }
-        }
-        
-        // تابع اصلی رفتن به اسلاید مشخص و کنترل ویدیوها
-        function goToSlide(n) {
-            if(n < 1) n = totalSlides;
-            if(n > totalSlides) n = 1;
-            
-            // تغییر وضعیت رادیو باکس اسلاید
-            const targetRadio = document.getElementById('slide' + n);
-            if (targetRadio) {
-                targetRadio.checked = true;
-                currentSlide = n;
-            }
-            
-            // ۱. ابتدا تمام ویدیوها را متوقف و صفر می‌کنیم
-            document.querySelectorAll('video').forEach(video => {
-                video.pause();
-                video.currentTime = 0;
-            });
-
-            // ۲. حالا ویدیو اسلاید فعال را پیدا کرده و پخش می‌کنیم
-            const activeSlide = document.querySelector('input[name="slider"]#slide' + n + ' + .slide');
-            
-            if (activeSlide) {
-                const video = activeSlide.querySelector('video');
-                if (video) {
-                    video.muted = true; 
-                    
-                    let playPromise = video.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(error => {
-                            console.log("پخش خودکار توسط مرورگر مسدود شد:", error);
-                        });
-                    }
-                }
-            }
-        }
-        
-        // گوش دادن به تغییر وضعیت رادیوباکس‌ها (کلیک روی نقاط ناوبری پایین)
-        for(let i = 1; i <= totalSlides; i++) {
-            const radioBtn = document.getElementById('slide' + i);
-            if(radioBtn) {
-                radioBtn.addEventListener('change', function() {
-                    updateCurrentSlide();
-                    goToSlide(currentSlide);
-                });
-            }
-        }
-        
-        // فعال‌سازی دقیق دکمه‌های قبلی و بعدی بر اساس کلاس‌های اختصاصی شما
-        const prevBtn = document.querySelector('.slider-controls .prev');
-        const nextBtn = document.querySelector('.slider-controls .next');
-        
-        if(prevBtn) {
-            prevBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                goToSlide(currentSlide - 1);
-            });
-        }
-        
-        if(nextBtn) {
-            nextBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                goToSlide(currentSlide + 1);
-            });
-        }
-        
-        // اجرای اولیه برای هماهنگی مقادیر
-        updateCurrentSlide();
-    </script>
-
     <div class="container">
-        
         <h2 class="section-title">📰 اخبار و اطلاعیه ها</h2>
         <div class="news-grid">
             {% for item in news %}
@@ -219,7 +169,7 @@
                 </div>
                 <div class="news-content">
                     <div class="news-category">{{ item.category }}</div>
-                    <div class="news-text">{{ item.summary|default:item.title|truncatechars:100 }}</div>
+                    <div class="news-text">{{ item.summary|default:item.title|truncatechars:80 }}</div>
                     <div class="news-link">
                         <a href="{% url 'news_detail' item.id %}">مشاهده جزئیات →</a>
                     </div>
@@ -237,7 +187,7 @@
                 <a href="{% url 'all_news' %}" class="all-btn">مشاهده همه <i class="fa-solid fa-arrow-left"></i></a>
             </div>
         </div>
-        
+
         <br><br><br><br><br><br>
         <hr><br><br><br><br><br>
 
@@ -257,7 +207,11 @@
                 <p>{{ event.short_description|truncatechars:80 }}</p>
                 
                 {% if user.is_authenticated %}
-                    <button onclick="alert('ثبت‌نام شما با موفقیت انجام شد. برای تکمیل ثبت‌نام با ما تماس بگیرید.')">ثبت‌نام →</button>
+                    {% if event.is_full %}
+                        <button disabled style="background: #6c757d; cursor: not-allowed;">ظرفیت تکمیل</button>
+                    {% else %}
+                        <a href="{% url 'register_event' event.id %}" class="btn-register">ثبت‌نام →</a>
+                    {% endif %}
                 {% else %}
                     <button onclick="alert('لطفاً ابتدا وارد حساب کاربری شوید')">ثبت‌نام →</button>
                 {% endif %}
@@ -292,9 +246,9 @@
                 <p>{{ resource.description|truncatechars:60 }}</p>
                 
                 {% if user.is_authenticated %}
-                    <a href="{% url 'download_resource' resource.id %}" style="display: inline-block; background: #007bff; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; border: none; cursor: pointer; font-size: 14px;">دانلود PDF</a>
+                    <a href="{% url 'download_resource' resource.id %}" class="btn-download">دانلود PDF</a>
                 {% else %}
-                    <button onclick="alert('لطفاً ابتدا وارد حساب کاربری شوید')">دانلود PDF</button>
+                    <button onclick="alert('لطفاً ابتدا وارد حساب کاربری شوید')">دانلود</button>
                 {% endif %}
             </div>
             {% empty %}
@@ -310,53 +264,36 @@
         </div>
     </div>
 
-    <br><hr><br><br>
-    
+    <br>
+    <hr><br><br>
+
     <section class="honors" id="honors">
         <h2>افتخارات</h2>
-        <table width="1400">
-            <thead>
-                <tr>
-                    <th>عنوان جشنواره یا مسابقه</th>
-                    <th>مقام</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for honor in honors %}
-                <tr style="background-color: {% cycle '#f9f9fc' '#ffffff' %};">
-                    <td>{{ honor.competition_name }}</td>
-                    <td>{{ honor.rank }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="2" style="text-align: center;">هیچ افتخاری ثبت نشده است</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
-
-    <section class="about" id="about">
-        <div class="container about-content">
-            <div class="about-text">
-                <h3>درباره انجمن علمی مکانیک</h3>
-                <p>{{ about.description|default:"انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان در سال 1386 با هدف ارتقا دانش و تخصص دانشجویان و پژوهشگران این رشته تاسیس شد.انجمن علمی دانشجویی مهندسی مکانیک مفتخر است که در طول بیش از یک دهه از فعالیت خود; گام های تاثیرگذار و مفیدی را جهت ارتقاء کیفی و کمی سطح علمی دانشجویان این رشته بردارد; که میتوان به برگزاری کارگاه های آموزشی متعدد پیرامون نرم افزار های کاربردی این رشته که جزء لاینفک عوامل لازم برای موفقیت مهندسان و دانشجویان مکانیک است اشاره کرد." }}</p>
-                <p style="margin-top: 15px; font-weight:bold; color:rgb(255, 64, 0)">همین حالا به خانواده بزرگ انجمن علمی مکانیک بپیوندید و از امکانات اختصاصی ما بهره‌مند شوید.</p>
-            </div>
-            <div class="about-stats">
-                <div class="stat">
-                    <div class="number">{{ about.active_members|default:"20" }}+</div>
-                    <div class="label">عضو فعال</div>
+        <div class="honors-container">
+            {% for honor in honors %}
+            <div class="honor-card {% if forloop.first %}one{% elif forloop.last %}tree{% endif %}">
+                <div class="honor-image">
+                    {% if honor.image %}
+                        <img src="{{ honor.image.url }}" alt="{{ honor.competition_name }}">
+                    {% else %}
+                        <img src="{% static 'assets/images/bc-footer.jpg' %}" alt="افتخار">
+                    {% endif %}
                 </div>
-                <div class="stat">
-                    <div class="number">{{ about.events_held|default:"25" }}+</div>
-                    <div class="label">رویداد برگزار شده</div>
-                </div>
-                <div class="stat">
-                    <div class="number">{{ about.total_resources|default:"50" }}+</div>
-                    <div class="label">منبع علمی</div>
+                <div class="honor-content">
+                    <div class="honor-title">{{ honor.rank }}</div>
+                    <div class="honor-festival">{{ honor.competition_name }}</div>
                 </div>
             </div>
+            {% empty %}
+            <div class="honor-card">
+                <div class="honor-content">
+                    <div class="honor-title">هیچ افتخاری ثبت نشده است</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="all-container" style="padding:0">
+            <a href="{% url 'honors' %}" class="all-btn">مشاهده همه <i class="fa-solid fa-arrow-left"></i></a>
         </div>
     </section>
 
@@ -365,12 +302,20 @@
             <div class="content">
                 <p><i class="fa-solid fa-location-dot"></i>&nbsp;&nbsp;&nbsp;&nbsp; کرمان - بلوار جمهوری - پل امیرکبیر - دانشکده فنی مهندسی &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;دانشگاه شهید باهنر - دانشکده مکانیک</p>
                 {% for social in footer_socials %}
-                <p><i class="{{ social.icon_class }}"></i> &nbsp;&nbsp;&nbsp;&nbsp; {{ social.platform }}: {{ social.url }}</p>
+                <p>
+                    {% if social.icon_image %}
+                        <img src="{{ social.icon_image.url }}" alt="{{ social.platform }}" style="width: 20px; height: 20px; display: inline-block;">
+                    {% elif social.icon_class %}
+                        <i class="{{ social.icon_class }}"></i>
+                    {% endif %}
+                    &nbsp;&nbsp;&nbsp;&nbsp; {{ social.platform }}: {{ social.url }}
+                </p>
                 {% endfor %}
             </div>
 
             <div class="map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3445.4741871022507!2d57.012748796789545!3d30.28055960000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f0218b67107c6dd%3A0x398906da69669661!2sFaculty%20of%20Engineering%20Campus%20-Shahid%20Bahonar%20University%20of%20Kerman!5e0!3m2!1sen!2s!4v1781183631960!5m2!1sen!2s"
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3445.4741871022507!2d57.012748796789545!3d30.28055960000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f0218b67107c6dd%3A0x398906da69669661!2sFaculty%20of%20Engineering%20Campus%20-Shahid%20Bahonar%20University%20of%20Kerman!5e0!3m2!1sen!2s!4v1781183631960!5m2!1sen!2s"
                     width="550" height="320" allowfullscreen="" loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade">
                 </iframe>
@@ -385,11 +330,88 @@
     <div id="icons">
         {% for social in floating_socials %}
         <a href="{{ social.url }}" target="_blank">
-            <i class="{{ social.icon_class }}"></i>
+            {% if social.icon_image %}
+                <img src="{{ social.icon_image.url }}" alt="{{ social.platform }}">
+            {% elif social.icon_class %}
+                <i class="{{ social.icon_class }}"></i>
+            {% endif %}
         </a>
         {% endfor %}
     </div>
-    
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = {{ gallery_items.count|default:1 }};
+        
+        function updateCurrentSlide() {
+            for(let i = 1; i <= totalSlides; i++) {
+                if(document.getElementById('slide' + i) && document.getElementById('slide' + i).checked) {
+                    currentSlide = i;
+                    break;
+                }
+            }
+        }
+        
+        function goToSlide(n) {
+            if(n < 1) n = totalSlides;
+            if(n > totalSlides) n = 1;
+            
+            const targetRadio = document.getElementById('slide' + n);
+            if (targetRadio) {
+                targetRadio.checked = true;
+                currentSlide = n;
+            }
+            
+            document.querySelectorAll('video').forEach(video => {
+                video.pause();
+                video.currentTime = 0;
+            });
+
+            const activeSlide = document.querySelector('input[name="slider"]#slide' + n + ' + .slide');
+            if (activeSlide) {
+                const video = activeSlide.querySelector('video');
+                if (video) {
+                    video.muted = true;
+                    let playPromise = video.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.log("پخش خودکار توسط مرورگر مسدود شد:", error);
+                        });
+                    }
+                }
+            }
+        }
+        
+        for(let i = 1; i <= totalSlides; i++) {
+            const radioBtn = document.getElementById('slide' + i);
+            if(radioBtn) {
+                radioBtn.addEventListener('change', function() {
+                    updateCurrentSlide();
+                    goToSlide(currentSlide);
+                });
+            }
+        }
+        
+        const prevBtn = document.querySelector('.slider-controls .prev');
+        const nextBtn = document.querySelector('.slider-controls .next');
+        
+        if(prevBtn) {
+            prevBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                goToSlide(currentSlide - 1);
+            });
+        }
+        
+        if(nextBtn) {
+            nextBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                goToSlide(currentSlide + 1);
+            });
+        }
+        
+        updateCurrentSlide();
+    </script>
+
     <script src="{% static 'js/index.js' %}"></script>
 </body>
 
