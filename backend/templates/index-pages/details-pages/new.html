@@ -7,94 +7,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/index/details-pages/new.css' %}">
-    <title>جزئیات رویداد</title>
+    <title>{{ news.title }}</title>
 </head>
 
 <body>
     <header>
         <div id="logo">
-           <img src=" {% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}">
+            <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}">
         </div>
         <div class="header-top">
             <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
-            <a href="../../login.html" target="_blank" class="login-btn">ورود / ثبت‌نام</a>
+            {% if user.is_authenticated %}
+                <span class="user-welcome">خوش آمدی {{ user.get_full_name|default:user.username }}</span>
+                <a href="{% url 'logout' %}" class="logout-btn">خروج</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
+            {% endif %}
         </div>
         <div class="nav-bar">
             <div class="logo">⚙️انجمن علمی مهندسی <span>مکانیک</span></div>
             <div class="nav-links">
-                <a href="../index.html">صفحه اصلی</a>
+                <a href="{% url 'home' %}">صفحه اصلی</a>
                 <a href="#"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
                 <a href="#"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
-                <a href="../events.html">رویدادها</a>
-                <a href="../sources.html">منابع علمی</a>
-                <a href="../honors.html">افتخارات انجمن</a>
-                <a href="../call-us.html">تماس با ما</a>
+                <a href="{% url 'all_events' %}">رویدادها</a>
+                <a href="{% url 'all_news' %}">منابع علمی</a>
+                <a href="{% url 'honors' %}">افتخارات انجمن</a>
+                <a href="{% url 'contact' %}">تماس با ما</a>
             </div>
         </div>
     </header>
     <ul id="ul-about">
-        <li><a href="../about.html">معرفی دانشکده</a></li>
-        <li><a href="../honors.html">دستاورد ها و افتخارات</a></li>
+        <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
+        <li><a href="{% url 'honors' %}">دستاورد ها و افتخارات</a></li>
     </ul>
     <ul id="ul-relation">
-        <li><a href="../industry.html">خدمات دانشکده به صنعت</a></li>
+        <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
     </ul>
 
     <div class="news-detail">
         <div class="container">
             <div class="news-card">
                 <div class="news-image">
-                    <img src=" {% static 'assets/images/fani.jpg' %}">
+                    {% if news.image %}
+                        <img src="{{ news.image.url }}" alt="{{ news.title }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/800x400" alt="{{ news.title }}">
+                    {% endif %}
                 </div>
 
-                <!-- محتوای خبر -->
                 <div class="news-content">
-
                     <div class="news-meta">
-                        <span class="news-category">📢 اطلاعیه</span>
-                        <span class="news-date">📅 ۱۵ فروردین ۱۴۰۴</span>
+                        <span class="news-category">{{ news.get_category_display_fa }}</span>
+                        <span class="news-date">📅 {{ news.jalali_date }}</span>
                     </div>
 
-                    <h1 class="news-title">
-                        عنوان خبر
-                    </h1>
+                    <h1 class="news-title">{{ news.title }}</h1>
 
-                    <!-- متن خبر -->
                     <div class="news-text">
-                        <p>
-                            دومین همایش هوش مصنوعی در صنایع دریایی با همکاری دانشگاه صنعتی شریف و سازمان صنایع دریایی 
-                            در تاریخ ۲۵ اردیبهشت ماه ۱۴۰۴ برگزار می‌شود. این همایش با هدف بررسی آخرین دستاوردهای 
-                            فناوری هوش مصنوعی در صنایع دریایی و کشتی‌سازی برگزار خواهد شد.
-                           ( توضیحات تکمیلی)
-                        </p>
-
-                        <h3>محورهای همایش</h3>
-                        <ul>
-                            <li>طراحی و ساخت هوشمند شناورهای دریایی</li>
-                            <li>سیستم‌های ناوبری خودکار مبتنی بر هوش مصنوعی</li>
-                            <li>تعمیر و نگهداری پیش‌بینی‌شده در صنایع دریایی</li>
-                            <li>اینترنت اشیا و هوش مصنوعی در بنادر هوشمند</li>
-                        </ul>
-
-                        <div class="quote">
-                            "هوش مصنوعی صنایع دریایی را متحول می‌کند. ما در این همایش تلاش می‌کنیم تا 
-                            پلی بین دانشگاه و صنعت ایجاد کنیم." — دکتر حسینی، دبیر علمی همایش
-                        </div>
-
-                        <h3>مهلت ارسال مقالات</h3>
-                        <p>
-                            علاقه‌مندان به ارسال مقاله می‌توانند چکیده مقالات خود را تا تاریخ ۱۰ اردیبهشت ۱۴۰۴ 
-                            از طریق سامانه همایش ارسال نمایند. مقالات پذیرفته شده در پایگاه‌های معتبر علمی نمایه خواهند شد.
-                        </p>
-
-                        <h3>ثبت‌نام در همایش</h3>
-                        <p>
-                            ثبت‌نام برای شرکت در همایش از تاریخ ۱ اردیبهشت آغاز می‌شود. دانشجویان، اساتید و پژوهشگران 
-                            می‌توانند با مراجعه به بخش رویدادهای سایت انجمن، نسبت به ثبت‌نام اقدام نمایند.
-                        </p>
+                        {{ news.content|linebreaks }}
                     </div>
 
-                    <!-- اشتراک گذاری -->
                     <div class="share-section">
                         <span class="share-title">📤 اشتراک گذاری:</span>
                         <div class="share-links">
@@ -105,41 +78,33 @@
                         </div>
                     </div>
 
-                    <a href="../news.html" class="back-link">← بازگشت به صفحه اخبار</a>
+                    <a href="{% url 'all_news' %}" class="back-link">← بازگشت به صفحه اخبار</a>
                 </div>
             </div>
 
-            <!-- خبرهای مرتبط -->
+            {% if related_news %}
             <div class="related-news">
                 <div class="related-title">📰 اخبار مرتبط</div>
                 <div class="related-grid">
-                    <a href="#" class="related-item">
-                        <img src="https://via.placeholder.com/60x60/0a2a44/white?text=خبر" class="related-img" alt="خبر">
+                    {% for related in related_news %}
+                    <a href="{% url 'news_detail' related.id %}" class="related-item">
+                        {% if related.image %}
+                            <img src="{{ related.image.url }}" class="related-img" alt="{{ related.title }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/60x60" class="related-img" alt="خبر">
+                        {% endif %}
                         <div class="related-info">
-                            <h4>فراخوان ارسال مقاله به همایش ملی مکانیک</h4>
-                            <p>۲۵ فروردین ۱۴۰۴</p>
+                            <h4>{{ related.title|truncatechars:40 }}</h4>
+                            <p>{{ related.jalali_date }}</p>
                         </div>
                     </a>
-                    <a href="#" class="related-item">
-                        <img src="https://via.placeholder.com/60x60/0a2a44/white?text=خبر" class="related-img" alt="خبر">
-                        <div class="related-info">
-                            <h4>بازدید علمی از شرکت ایران خودرو</h4>
-                            <p>۲۰ فروردین ۱۴۰۴</p>
-                        </div>
-                    </a>
-                    <a href="#" class="related-item">
-                        <img src="https://via.placeholder.com/60x60/0a2a44/white?text=خبر" class="related-img" alt="خبر">
-                        <div class="related-info">
-                            <h4>کارگاه تخصصی سالیدورک برگزار می‌شود</h4>
-                            <p>۱۸ فروردین ۱۴۰۴</p>
-                        </div>
-                    </a>
+                    {% endfor %}
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
 
-   
     <footer>
         <div class="footer-up">
             <div class="content">
@@ -163,12 +128,13 @@
             <p>&copy; ۲۰۲۵ انجمن علمی مکانیک - تمامی حقوق محفوظ است</p>
         </div>
     </footer>
+
     <div id="icons">
         <a href="https://t.me/ukmechanics" target="_blank">
-            <img src="../../assets/icons/15.png">
+            <img src="{% static 'assets/icons/15.png' %}">
         </a>
         <a href="https://instagram.com/ukmechanics?igshid=14gmuy96orpnd" target="_blank">
-            <img src="../../assets/icons/2.png">
+            <img src="{% static 'assets/icons/2.png' %}">
         </a>
     </div>
 
@@ -189,8 +155,6 @@
         aboutUl.addEventListener('mouseout', function () {
             aboutUl.classList.remove("show");
         });
-
-
 
         let relationLink = document.querySelector('.nav-links a:nth-child(3)');
         let relationUl = document.getElementById('ul-relation');

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en" dir="rtl">
 
@@ -5,102 +6,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="../css/index/news.css">
+    <link rel="stylesheet" href="{% static 'css/index/news.css' %}">
     <title>اخبار دانشکده</title>
 </head>
 
 <body>
     <header>
         <div id="logo">
-            <img src="../assets/images/shahid-bahonar-university-of-kerman-logo.png">
+            <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}">
         </div>
         <div class="header-top">
             <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
-            <a href="../login.html" target="_blank" class="login-btn">ورود / ثبت‌نام</a>
+            {% if user.is_authenticated %}
+                <span class="user-welcome">خوش آمدی {{ user.get_full_name|default:user.username }}</span>
+                <a href="{% url 'logout' %}" class="logout-btn">خروج</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
+            {% endif %}
         </div>
         <div class="nav-bar">
             <div class="logo">⚙️انجمن علمی مهندسی <span>مکانیک</span></div>
             <div class="nav-links">
-                <a href="index.html">صفحه اصلی</a>
-                <a href="#"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
-                <a href="#"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
-                <a href="events.html">رویدادها</a>
-                <a href="sources.html">منابع علمی</a>
-                <a href="honors.html">افتخارات انجمن</a>
-                <a href="call-us.html">تماس با ما</a>
+                <a href="{% url 'home' %}">صفحه اصلی</a>
+                <a href="{% url 'about' %}"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
+                <a href="{% url 'industry' %}"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
+                <a href="{% url 'all_events' %}">رویدادها</a>
+                <a href="{% url 'all_news' %}" class="active">منابع علمی</a>
+                <a href="{% url 'honors' %}">افتخارات انجمن</a>
+                <a href="{% url 'contact' %}">تماس با ما</a>
             </div>
         </div>
     </header>
     <ul id="ul-about">
-        <li><a href="about.html">معرفی دانشکده</a></li>
-        <li><a href="honors.html">دستاورد ها و افتخارات</a></li>
+        <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
+        <li><a href="{% url 'honors' %}">دستاورد ها و افتخارات</a></li>
     </ul>
     <ul id="ul-relation">
-        <li><a href="industry.html">خدمات دانشکده به صنعت</a></li>
+        <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
     </ul>
 
-
     <section class="hero">
-        <img src="../assets/images/fani.jpg" alt="">
+        <img src="{% static 'assets/images/fani.jpg' %}" alt="">
     </section>
 
     <div class="page-title">
         <h1>اخبار و اطلاعیه ها</h1>
     </div>
 
+    <!-- فیلتر دسته‌بندی -->
+    <div class="filter-section">
+        <div class="filter-buttons">
+            <a href="{% url 'all_news' %}" class="filter-btn {% if not category %}active{% endif %}">همه</a>
+            {% for cat_code, cat_name in categories %}
+                <a href="?category={{ cat_code }}" class="filter-btn {% if category == cat_code %}active{% endif %}">
+                    {{ cat_name }}
+                </a>
+            {% endfor %}
+        </div>
+        
+        <form method="GET" class="search-form">
+            <input type="text" name="search" placeholder="جستجوی خبر..." value="{{ search_query }}">
+            <button type="submit"><i class="fa-solid fa-search"></i></button>
+        </form>
+    </div>
+
     <main class="content-container">
         <div class="news-grid">
+            {% for news in page_obj %}
+            <div class="news-card {% if forloop.first %}big-right{% elif forloop.counter == 2 %}two{% elif forloop.counter == 3 %}big-left{% elif forloop.counter == 4 %}for{% endif %}">
+                <div class="news-image">
+                    {% if news.image %}
+                        <img src="{{ news.image.url }}" alt="{{ news.title }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/400x250" alt="{{ news.title }}">
+                    {% endif %}
+                </div>
+                <div class="news-content">
+                    <div class="news-category">{{ news.get_category_display_fa }}</div>
+                    <div class="news-text">{{ news.summary|truncatechars:60 }}</div>
+                    <div class="news-link">
+                        <a href="{% url 'news_detail' news.id %}">برای اطلاعات بیشتر کلیک کنید</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="news-card">
+                <div class="news-content">
+                    <div class="news-text">هیچ خبری یافت نشد.</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- صفحه‌بندی -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; اول</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">قبلی</a>
+                {% endif %}
 
-            <div class="news-card big-right">
-                <div class="news-image">
-                    <img src="../assets/images/bc-index.jpg">
-                </div>
-                <div class="news-content">
-                    <div class="news-category">1دومین همایش هوش مصنوعی در صنایع دریایی</div>
-                    <div class="news-text">تحصیلات جابجا</div>
-                    <div class="news-link">
-                        <a href="details-pages/new.html">برای اطلاعات بیشتر کلیک کنید</a>
-                    </div>
-                </div>
-            </div>
-            <div class="news-card two">
-                <div class="news-image">
-                    <img src="../assets/images/bc-index.jpg">
-                </div>
-                <div class="news-content">
-                    <div class="news-category">دومین همایش هوش مصنوعی در صنایع دریایی2</div>
-                    <div class="news-text">تحصیلات جابجا</div>
-                    <div class="news-link">
-                        <a href="details-pages/new.html">برای اطلاعات بیشتر کلیک کنید</a>
-                    </div>
-                </div>
-            </div>
+                <span class="current">
+                    صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}
+                </span>
 
-            <div class="news-card big-left">
-                <div class="news-image">
-                    <img src="../assets/images/bc-index.jpg">
-                </div>
-                <div class="news-content">
-                    <div class="news-category">پیام دکتر السینی، رئیس دانشگاه تهران3</div>
-                    <div class="news-text">تحصیلات جابجا</div>
-                    <div class="news-link">
-                        <a href="details-pages/new.html">برای اطلاعات بیشتر کلیک کنید</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="news-card for">
-                <div class="news-image">
-                    <img src="../assets/images/bc-index.jpg">
-                </div>
-                <div class="news-content">
-                    <div class="news-category">پیش بینی و پیش‌نهادی4</div>
-                    <div class="news-text">ساخت و تولید</div>
-                    <div class="news-link">
-                        <a href="details-pages/new.html">برای اطلاعات بیشتر کلیک کنید</a>
-                    </div>
-                </div>
-            </div>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">بعدی</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">آخر &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
     </main>
     
     <footer>
@@ -129,12 +144,13 @@
 
     <div id="icons">
         <a href="https://t.me/ukmechanics" target="_blank">
-            <img src="../assets/icons/15.png">
+            <img src="{% static 'assets/icons/15.png' %}">
         </a>
         <a href="https://instagram.com/ukmechanics?igshid=14gmuy96orpnd" target="_blank">
-            <img src="../assets/icons/2.png">
+            <img src="{% static 'assets/icons/2.png' %}">
         </a>
     </div>
+
     <script>
         let aboutLink = document.querySelector('.nav-links a:nth-child(2)');
         let aboutUl = document.getElementById('ul-about');
@@ -152,8 +168,6 @@
         aboutUl.addEventListener('mouseout', function () {
             aboutUl.classList.remove("show");
         });
-
-
 
         let relationLink = document.querySelector('.nav-links a:nth-child(3)');
         let relationUl = document.getElementById('ul-relation');
