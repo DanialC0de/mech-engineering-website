@@ -118,8 +118,8 @@
 
                     <!-- دکمه‌های قبلی و بعدی -->
                     <div class="slider-controls">
-                        <label class="control prev">❮</label>
-                        <label class="control next">❯</label>
+                        <span class="control prev">❮</span>
+                        <span class="control next">❯</span>
                     </div>
                 </div>
             </div>
@@ -347,9 +347,6 @@
         </div>
     </footer>
 
-    <!-- ============================================ -->
-    <!-- آیکون‌های شناور (ثابت) -->
-    <!-- ============================================ -->
     <div id="icons">
         <a href="https://t.me/ukmechanics" target="_blank">
             <img src="{% static 'assets/icons/15.png' %}">
@@ -359,82 +356,11 @@
         </a>
     </div>
 
-    <!-- ============================================ -->
-    <!-- اسکریپت گالری (داینامیک) -->
-    <!-- ============================================ -->
-    <script>
-        let currentSlide = 1;
-        const totalSlides = {{ gallery_items.count|default:1 }};
-        
-        function updateCurrentSlide() {
-            for(let i = 1; i <= totalSlides; i++) {
-                if(document.getElementById('slide' + i) && document.getElementById('slide' + i).checked) {
-                    currentSlide = i;
-                    break;
-                }
-            }
-        }
-        
-        function goToSlide(n) {
-            if(n < 1) n = totalSlides;
-            if(n > totalSlides) n = 1;
-            
-            const targetRadio = document.getElementById('slide' + n);
-            if (targetRadio) {
-                targetRadio.checked = true;
-                currentSlide = n;
-            }
-            
-            document.querySelectorAll('video').forEach(video => {
-                video.pause();
-                video.currentTime = 0;
-            });
-
-            const activeSlide = document.querySelector('input[name="slider"]#slide' + n + ' + .slide');
-            if (activeSlide) {
-                const video = activeSlide.querySelector('video');
-                if (video) {
-                    video.muted = true;
-                    let playPromise = video.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(error => {
-                            console.log("پخش خودکار توسط مرورگر مسدود شد:", error);
-                        });
-                    }
-                }
-            }
-        }
-        
-        for(let i = 1; i <= totalSlides; i++) {
-            const radioBtn = document.getElementById('slide' + i);
-            if(radioBtn) {
-                radioBtn.addEventListener('change', function() {
-                    updateCurrentSlide();
-                    goToSlide(currentSlide);
-                });
-            }
-        }
-        
-        const prevBtn = document.querySelector('.slider-controls .prev');
-        const nextBtn = document.querySelector('.slider-controls .next');
-        
-        if(prevBtn) {
-            prevBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                goToSlide(currentSlide - 1);
-            });
-        }
-        
-        if(nextBtn) {
-            nextBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                goToSlide(currentSlide + 1);
-            });
-        }
-        
-        updateCurrentSlide();
-    </script>
-
+    <div id="gallery-config" 
+         data-total="{{ gallery_items.count|default:0 }}"
+         data-current="1">
+    </div>
+    
     <script src="{% static 'js/index.js' %}"></script>
 </body>
 
