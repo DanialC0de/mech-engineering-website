@@ -6,38 +6,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href=" {% static 'css/index/details-pages/event.css' %}">
-    <title>جزئیات رویداد</title>
+    <link rel="stylesheet" href="{% static 'css/index/details-pages/event.css' %}">
+    <title>{{ event.title }}</title>
 </head>
 
 <body>
     <header>
         <div id="logo">
-            <img src=" {% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}">
+            <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}">
         </div>
         <div class="header-top">
             <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
-            <a href="../../login.html" target="_blank" class="login-btn">ورود / ثبت‌نام</a>
+            {% if user.is_authenticated %}
+                <span class="user-welcome">خوش آمدی {{ user.get_full_name|default:user.username }}</span>
+                <a href="{% url 'logout' %}" class="logout-btn">خروج</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
+            {% endif %}
         </div>
         <div class="nav-bar">
             <div class="logo">⚙️انجمن علمی مهندسی <span>مکانیک</span></div>
             <div class="nav-links">
-                <a href="../index.html">صفحه اصلی</a>
+                <a href="{% url 'home' %}">صفحه اصلی</a>
                 <a href="#"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
                 <a href="#"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
-                <a href="../events.html">رویدادها</a>
-                <a href="../sources.html">منابع علمی</a>
-                <a href="../honors.html">افتخارات انجمن</a>
-                <a href="../call-us.html">تماس با ما</a>
+                <a href="{% url 'all_events' %}">رویدادها</a>
+                <a href="{% url 'all_resources' %}">منابع علمی</a>
+                <a href="{% url 'honors' %}">افتخارات انجمن</a>
+                <a href="{% url 'contact' %}">تماس با ما</a>
             </div>
         </div>
     </header>
+
+    <!-- منوهای dropdown -->
     <ul id="ul-about">
-        <li><a href="../about.html">معرفی دانشکده</a></li>
-        <li><a href="../honors.html">دستاورد ها و افتخارات</a></li>
+        <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
+        <li><a href="{% url 'honors' %}">دستاورد ها و افتخارات</a></li>
     </ul>
     <ul id="ul-relation">
-        <li><a href="../industry.html">خدمات دانشکده به صنعت</a></li>
+        <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
     </ul>
 
     <div class="event-detail">
@@ -45,8 +52,11 @@
             <div class="event-card">
                 <!-- بنر -->
                 <div class="event-banner">
-                    <h1>عنوان وبینار یا کارگاه</h1>
-                    <p>توضیح مختصر</p>
+                    {% if event.image %}
+                        <img src="{{ event.image.url }}" alt="{{ event.title }}" style="width:100%; max-height:300px; object-fit:cover; border-radius:10px 10px 0 0;">
+                    {% endif %}
+                    <h1>{{ event.title }}</h1>
+                    <p>{{ event.short_description }}</p>
                 </div>
 
                 <!-- محتوا -->
@@ -56,73 +66,142 @@
                         <div class="info-item">
                             <div class="info-icon">📅</div>
                             <div class="info-text">
-                                <strong>تاریخ یا روز های برگزاری</strong>
-                                ۲۰ فروردین ۱۴۰۴
+                                <strong>تاریخ برگزاری</strong>
+                                {{ event.jalali_date }}
                             </div>
                         </div>
                         <div class="info-item">
                             <div class="info-icon">⏰</div>
                             <div class="info-text">
                                 <strong>ساعت</strong>
-                                ۱۵:۰۰ - ۱۸:۰۰
+                                {{ event.time }}
                             </div>
                         </div>
                         <div class="info-item">
                             <div class="info-icon">👥</div>
                             <div class="info-text">
                                 <strong>ظرفیت</strong>
-                                <span id="capacityText">۵۰ نفر</span> | <span id="remainingText">۲۵ نفر
-                                    باقی‌مانده</span>
+                                {% if event.capacity == 0 %}
+                                    نامحدود
+                                {% else %}
+                                    {{ event.capacity }} نفر
+                                {% endif %}
+                                | 
+                                <span id="remainingText">
+                                    {% if event.capacity == 0 %}
+                                        نامحدود
+                                    {% else %}
+                                        {{ remaining_capacity }} نفر باقی‌مانده
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">📌</div>
+                            <div class="info-text">
+                                <strong>وضعیت</strong>
+                                {% if event.status == 'upcoming' %}
+                                    <span style="color: #28a745; font-weight: bold;">در حال ثبت‌نام</span>
+                                {% elif event.status == 'ongoing' %}
+                                    <span style="color: #ff9800; font-weight: bold;">در حال برگزاری</span>
+                                {% else %}
+                                    <span style="color: #6c757d; font-weight: bold;">به پایان رسیده</span>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
 
-                    <!-- توضیحات -->
+                    <!-- توضیحات کامل -->
+                    {% if event.full_description %}
                     <div class="event-description">
                         <h3>📖 درباره رویداد</h3>
-                        <p>
-                            در این وبینار تخصصی، به بررسی سیستم‌های تعلیق خودروهای مدرن می‌پردازیم.
-                            مباحثی مانند سیستم تعلیق فعال، نیمه فعال، و تأثیر آن بر هندلینگ و سواری خودرو
-                            مورد بحث قرار خواهد گرفت. این کارگاه برای دانشجویان کارشناسی ارشد و دکتری
-                            مهندسی مکانیک (گرایش طراحی کاربردی) مناسب است.
-                        </p>
+                        <p>{{ event.full_description|linebreaks }}</p>
                     </div>
+                    {% endif %}
 
                     <!-- سرفصل‌ها -->
+                    {% if syllabus_list %}
                     <div class="syllabus">
                         <h3>📝 سرفصل‌ها</h3>
                         <ul>
-                            <li>مفاهیم پایه سیستم تعلیق و انواع آن</li>
-                            <li>سیستم تعلیق فعال (Active Suspension)</li>
-                            <li>سیستم تعلیق نیمه فعال (Semi-Active Suspension)</li>
-                            <li>شبیه‌سازی با نرم‌افزار متلب و سیمولینک</li>
+                            {% for item in syllabus_list %}
+                                <li>{{ item }}</li>
+                            {% endfor %}
                         </ul>
                     </div>
+                    {% endif %}
 
                     <!-- مدرس -->
+                    {% if event.instructor_name %}
                     <div class="instructor">
-                        <div class="instructor-img">👨‍🏫</div>
+                        <div class="instructor-img">
+                            {% if event.instructor_image %}
+                                <img src="{{ event.instructor_image.url }}" alt="{{ event.instructor_name }}" style="width:80px; height:80px; border-radius:50%; object-fit:cover;">
+                            {% else %}
+                                👨‍🏫
+                            {% endif %}
+                        </div>
                         <div class="instructor-info">
-                            <h4>نام مدرس</h4>
-                            <p>مدرک نحصیلی</p>
+                            <h4>{{ event.instructor_name }}</h4>
+                            <p>{{ event.instructor_title|default:"مدرس دوره" }}</p>
                         </div>
                     </div>
+                    {% endif %}
 
                     <!-- بخش ثبت‌نام -->
                     <div class="register-box">
                         <div class="capacity">
-                            ✅ ظرفیت باقیمانده: <span id="remainingCount">۲۵</span> نفر
+                            ✅ ظرفیت باقیمانده: 
+                            <span id="remainingCount">
+                                {% if event.capacity == 0 %}
+                                    نامحدود
+                                {% else %}
+                                    {{ remaining_capacity }}
+                                {% endif %}
+                            </span>
+                            {% if event.capacity > 0 %}نفر{% endif %}
                         </div>
-                        <button class="register-btn" id="registerBtn">ثبت‌نام در رویداد</button>
-                        <div class="message" id="message"></div>
+
+                        {% if user.is_authenticated %}
+                            {% if is_registered %}
+                                <button class="register-btn" style="background:#4caf50; cursor:not-allowed;" disabled>
+                                    ✓ قبلاً ثبت‌نام کرده‌اید
+                                </button>
+                                {% if event.status == 'upcoming' %}
+                                    <a href="{% url 'cancel_registration' event.id %}" class="cancel-btn" 
+                                    onclick="return confirm('آیا از لغو ثبت‌نام خود مطمئن هستید؟')"
+                                    style="display:inline-block; margin-top:10px; padding:10px 20px; background:#dc3545; color:white; text-decoration:none; border-radius:5px;">
+                                        لغو ثبت‌نام
+                                    </a>
+                                {% endif %}
+                            {% elif event.can_register %}
+                                <a href="{% url 'register_event' event.id %}" class="register-btn" style="display:inline-block; padding:12px 30px; background:#ffaa00; color:#333; text-decoration:none; border-radius:5px; font-weight:bold;">
+                                    📝 ثبت‌نام در رویداد
+                                </a>
+                            {% else %}
+                                <button class="register-btn" style="background:#ff9800; cursor:not-allowed;" disabled>
+                                    {% if event.is_full %}
+                                        ⏳ ظرفیت تکمیل شده
+                                    {% elif event.status == 'completed' %}
+                                        ❌ رویداد به پایان رسیده
+                                    {% else %}
+                                        غیرفعال
+                                    {% endif %}
+                                </button>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'login' %}" class="register-btn" style="display:inline-block; padding:12px 30px; background:#2196F3; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">
+                                🔑 برای ثبت‌نام وارد شوید
+                            </a>
+                        {% endif %}
                     </div>
 
-                    <!-- <a href="../../student/index.html" class="back-link">← بازگشت به پنل کاربری</a> -->
+                        <div class="message" id="message"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 
     <footer>
         <div class="footer-up">
@@ -150,13 +229,14 @@
 
     <div id="icons">
         <a href="https://t.me/ukmechanics" target="_blank">
-            <img src="../../assets/icons/15.png">
+            <img src="{% static 'assets/icons/15.png' %}">
         </a>
         <a href="https://instagram.com/ukmechanics?igshid=14gmuy96orpnd" target="_blank">
-            <img src="../../assets/icons/2.png">
+            <img src="{% static 'assets/icons/2.png' %}">
         </a>
     </div>
 
+    <!-- اسکریپت dropdown -->
     <script>
         let aboutLink = document.querySelector('.nav-links a:nth-child(2)');
         let aboutUl = document.getElementById('ul-about');
@@ -175,8 +255,6 @@
             aboutUl.classList.remove("show");
         });
 
-
-
         let relationLink = document.querySelector('.nav-links a:nth-child(3)');
         let relationUl = document.getElementById('ul-relation');
 
@@ -193,128 +271,6 @@
         relationUl.addEventListener('mouseout', function () {
             relationUl.classList.remove("show");
         });
-
-       
-        // اطلاعات رویداد (در آینده از دیتابیس میاد)
-        
-        const eventData = {
-            id: 1,
-            title: "وبینار تخصصی سیستم‌های تعلیق خودرو",
-            totalCapacity: 50,
-            registeredCount: 25,
-            isActive: true
-        };
-
-        // کاربر فعلی (از localStorage میاد)
-        let currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
-
-        // رویدادهایی که کاربر در آنها ثبت‌نام کرده (شبیه‌سازی)
-        let userRegistrations = JSON.parse(localStorage.getItem("userRegistrations")) || [];
-
-        // بررسی اینکه کاربر قبلاً ثبت‌نام کرده یا نه
-        function isUserRegistered() {
-            return userRegistrations.some(reg => reg.eventId === eventData.id);
-        }
-
-        // بروزرسانی نمایش ظرفیت
-        function updateCapacityDisplay() {
-            const remaining = eventData.totalCapacity - eventData.registeredCount;
-            document.getElementById("remainingCount").innerText = remaining;
-            document.getElementById("remainingText").innerHTML = `${remaining} نفر باقی‌مانده`;
-        }
-
-        // بروزرسانی وضعیت دکمه ثبت‌نام
-        function updateRegisterButton() {
-            const btn = document.getElementById("registerBtn");
-            const remaining = eventData.totalCapacity - eventData.registeredCount;
-            const isRegistered = isUserRegistered();
-
-            if (!currentUser) {
-                btn.disabled = false;
-                btn.textContent = "ابتدا وارد شوید";
-                return;
-            }
-
-            if (isRegistered) {
-                btn.disabled = true;
-                btn.textContent = "✓ قبلاً ثبت‌نام کرده‌اید";
-                btn.style.background = "#4caf50";
-                return;
-            }
-
-            if (remaining <= 0) {
-                btn.disabled = false;
-                btn.textContent = "⏳ ظرفیت پر است - قرار گرفتن در صف انتظار";
-                btn.style.background = "#ff9800";
-                return;
-            }
-
-            btn.disabled = false;
-            btn.textContent = "📝 ثبت‌نام در رویداد";
-            btn.style.background = "#ffaa00";
-        }
-
-        // نمایش پیام
-        function showMessage(text, type) {
-            const msgDiv = document.getElementById("message");
-            msgDiv.textContent = text;
-            msgDiv.className = `message ${type}`;
-
-            setTimeout(() => {
-                msgDiv.style.display = "none";
-                msgDiv.className = "message";
-            }, 3000);
-        }
-
-        // ثبت‌نام
-        function register() {
-            const remaining = eventData.totalCapacity - eventData.registeredCount;
-            const isRegistered = isUserRegistered();
-
-            // بررسی ورود کاربر
-            if (!currentUser) {
-                showMessage("لطفاً ابتدا وارد حساب کاربری خود شوید", "error");
-                setTimeout(() => {
-                    window.location.href = "../../login.html";
-                }, 1500);
-                return;
-            }
-
-            // بررسی ثبت‌نام قبلی
-            if (isRegistered) {
-                showMessage("شما قبلاً در این رویداد ثبت‌نام کرده‌اید", "error");
-                return;
-            }
-
-            // ثبت‌نام موفق
-            if (remaining > 0) {
-                // اضافه کردن به لیست ثبت‌نام‌ها
-                userRegistrations.push({
-                    eventId: eventData.id,
-                    eventTitle: eventData.title,
-                    registerDate: new Date().toISOString()
-                });
-                localStorage.setItem("userRegistrations", JSON.stringify(userRegistrations));
-
-                // کاهش ظرفیت
-                eventData.registeredCount++;
-                updateCapacityDisplay();
-                updateRegisterButton();
-
-                showMessage("✅ ثبت‌نام شما با موفقیت انجام شد", "success");
-            }
-            // صف انتظار
-            else {
-                showMessage("⏳ ظرفیت رویداد پر است. شما در صف انتظار قرار گرفتید", "warning");
-            }
-        }
-
-        // رویداد دکمه ثبت‌نام
-        document.getElementById("registerBtn").addEventListener("click", register);
-
-        // بارگذاری اولیه
-        updateCapacityDisplay();
-        updateRegisterButton();
     </script>
 </body>
 
