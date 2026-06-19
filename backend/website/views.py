@@ -9,12 +9,14 @@ from .models import (
     News, Event, Resource, Honor, AboutInfo, 
     GalleryItem, SocialLink, Registration
 )
+
+from news.models import News
 import os
 
 def home(request):
     """نمایش صفحه اصلی با تمام بخش‌ها"""
     context = {
-        'news': News.objects.all()[:3],
+        'news': News.objects.filter(is_published=True)[:3],  # ← فقط خبرهای منتشر شده
         'events': Event.objects.filter(is_upcoming=True)[:3],
         'resources': Resource.objects.all()[:3],
         'honors': Honor.objects.filter(is_featured=True)[:3],
@@ -25,47 +27,47 @@ def home(request):
     }
     return render(request, 'index-pages/index.html', context)
 
-def all_news(request):
-    """نمایش همه اخبار با صفحه‌بندی، جستجو و فیلتر"""
-    news_list = News.objects.all()
+# def all_news(request):
+#     """نمایش همه اخبار با صفحه‌بندی، جستجو و فیلتر"""
+#     news_list = News.objects.all()
     
-    search_query = request.GET.get('search')
-    if search_query:
-        news_list = news_list.filter(
-            Q(title__icontains=search_query) | 
-            Q(category__icontains=search_query) |
-            Q(summary__icontains=search_query)
-        )
+#     search_query = request.GET.get('search')
+#     if search_query:
+#         news_list = news_list.filter(
+#             Q(title__icontains=search_query) | 
+#             Q(category__icontains=search_query) |
+#             Q(summary__icontains=search_query)
+#         )
     
-    category_filter = request.GET.get('category')
-    if category_filter:
-        news_list = news_list.filter(category=category_filter)
+#     category_filter = request.GET.get('category')
+#     if category_filter:
+#         news_list = news_list.filter(category=category_filter)
     
-    paginator = Paginator(news_list, 6)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+#     paginator = Paginator(news_list, 6)
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
     
-    categories = News.objects.values_list('category', flat=True).distinct()
+#     categories = News.objects.values_list('category', flat=True).distinct()
     
-    context = {
-        'page_obj': page_obj,
-        'categories': categories,
-        'search_query': search_query,
-        'category_filter': category_filter,
-    }
-    return render(request, 'index-pages/news.html', context)
+#     context = {
+#         'page_obj': page_obj,
+#         'categories': categories,
+#         'search_query': search_query,
+#         'category_filter': category_filter,
+#     }
+#     return render(request, 'index-pages/news.html', context)
 
 
-def news_detail(request, pk):
-    """نمایش جزئیات یک خبر"""
-    news = get_object_or_404(News, pk=pk)
-    related_news = News.objects.filter(category=news.category).exclude(pk=pk)[:3]
+# def news_detail(request, pk):
+#     """نمایش جزئیات یک خبر"""
+#     news = get_object_or_404(News, pk=pk)
+#     related_news = News.objects.filter(category=news.category).exclude(pk=pk)[:3]
     
-    context = {
-        'news': news,
-        'related_news': related_news,
-    }
-    return render(request, 'index-pages/details-pages/new.html', context)
+#     context = {
+#         'news': news,
+#         'related_news': related_news,
+#     }
+#     return render(request, 'index-pages/details-pages/new.html', context)
 
 
 def all_events(request):

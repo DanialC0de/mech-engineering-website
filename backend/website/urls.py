@@ -9,8 +9,8 @@ urlpatterns = [
     path('', views.home, name='home'),
     
     # ===== اخبار =====
-    path('news/', views.all_news, name='all_news'),
-    path('news/<int:pk>/', views.news_detail, name='news_detail'),
+    # path('news/', views.all_news, name='all_news'),
+    # path('news/<int:pk>/', views.news_detail, name='news_detail'),
     
     # ===== رویدادها =====
     path('events/', views.all_events, name='all_events'),
