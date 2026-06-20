@@ -19,7 +19,6 @@ class News(models.Model):
     summary = models.TextField(verbose_name="خلاصه خبر", max_length=300, 
                                help_text="متن کوتاه برای نمایش در کارت‌های خبر")
     content = models.TextField(verbose_name="متن کامل خبر")
-    slug = models.SlugField(max_length=250, unique=True, blank=True, verbose_name="اسلاگ")
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, 
                                 default='announcement', verbose_name="دسته‌بندی")
     

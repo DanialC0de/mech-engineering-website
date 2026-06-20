@@ -19,7 +19,7 @@
             <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
             {% if user.is_authenticated %}
                 <span class="user-welcome">خوش آمدی {{ user.get_full_name|default:user.username }}</span>
-                <a href="{% url 'login_page' %}" class="logout-btn">خروج</a>
+                <a href="{% url 'logout' %}" class="logout-btn">خروج</a>
             {% else %}
                 <a href="{% url 'home' %}" class="login-btn">ورود / ثبت‌نام</a>
             {% endif %}

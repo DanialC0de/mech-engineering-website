@@ -224,7 +224,7 @@
                     {% endif %}
                 </div>
                 <h3>{{ event.title }}</h3>
-                <div class="event-date">📆 {{ event.date_jalali }} | 🕒 {{ event.time }}</div>
+                <div class="event-date">📆 {{ event.jalali_date }} | 🕒 {{ event.time }}</div>
                 <p>{{ event.short_description|truncatechars:80 }}</p>
                 
                 {% if user.is_authenticated %}

@@ -1,15 +1,42 @@
 from django.contrib import admin
+from django import forms
 from .models import Event, Registration
+
+# فرم سفارشی با ویجت تاریخ
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = '__all__'
+        widgets = {
+            'jalali_date': forms.TextInput(attrs={'class': 'vDateField'}),  # ← ویجت تاریخ جنگو
+        }
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
+    form = EventForm  # ← استفاده از فرم سفارشی
+    
     list_display = ('title', 'jalali_date', 'time', 'status', 'capacity', 'registered_count')
     list_filter = ('status', 'is_full')
-    search_fields = ('title',)  # ← فقط عنوان
+    search_fields = ('title',)
     readonly_fields = ('registered_count', 'created_at', 'updated_at')
     ordering = ('-created_at',)
     list_editable = ('status',)
     list_per_page = 20
+    
+    fieldsets = (
+        ('اطلاعات اصلی', {
+            'fields': ('title', 'image', 'short_description', 'full_description')
+        }),
+        ('سرفصل‌ها و مدرس', {
+            'fields': ('syllabus', 'instructor_name', 'instructor_title', 'instructor_image')
+        }),
+        ('زمان برگزاری', {
+            'fields': ('jalali_date', 'time')
+        }),
+        ('ظرفیت و وضعیت', {
+            'fields': ('status', 'capacity', 'registered_count', 'is_full')
+        }),
+    )
     
     actions = ['change_status_to_upcoming', 'change_status_to_completed']
     
