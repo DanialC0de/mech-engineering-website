@@ -7,6 +7,10 @@ from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from .models import (
     Resource, Honor, AboutInfo, 
+    GalleryItem, SocialLink, IndustryService  # <-- IndustryService رو اضافه کن
+)
+from .models import (
+    Resource, Honor, AboutInfo, 
     GalleryItem, SocialLink
 )
 from events.models import Registration
@@ -222,8 +226,11 @@ def contact(request):
 
 def industry(request):
     """صفحه ارتباط با صنعت"""
-    return render(request, 'index-pages/industry.html')
-
+    services = IndustryService.objects.filter(is_active=True).order_by('order')
+    context = {
+        'services': services,
+    }
+    return render(request, 'index-pages/industry.html', context)
 
 def register(request):
     """صفحه ثبت‌نام کاربر"""

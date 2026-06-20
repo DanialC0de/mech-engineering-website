@@ -47,3 +47,27 @@ class GalleryItemAdmin(admin.ModelAdmin):
 class SocialLinkAdmin(admin.ModelAdmin):
     list_display = ['platform', 'is_footer', 'is_floating', 'order']
     list_editable = ['is_footer', 'is_floating', 'order']
+
+#________________________________
+from .models import IndustryService
+
+@admin.register(IndustryService)
+class IndustryServiceAdmin(admin.ModelAdmin):
+    list_display = ['title', 'order', 'is_active']
+    list_filter = ['is_active']
+    search_fields = ['title', 'description', 'manager_name']
+    ordering = ['order']
+    fieldsets = (
+        ('اطلاعات اصلی', {
+            'fields': ('title', 'description', 'image', 'order', 'is_active')
+        }),
+        ('اطلاعات مسئول', {
+            'fields': ('manager_name', 'manager_phone', 'manager_email', 'manager_room'),
+            'classes': ('collapse',)
+        }),
+        ('اهداف (مخصوص کوآپ)', {
+            'fields': ('goals',),
+            'classes': ('collapse',)
+        }),
+    )
+#_________       

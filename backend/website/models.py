@@ -180,3 +180,38 @@ class SocialLink(models.Model):
 
 #     def __str__(self):
 #         return f"{self.user.get_full_name()} - {self.event.title}"
+
+
+
+#_______________________________________
+class IndustryService(models.Model):
+    """خدمات دانشکده به صنعت"""
+    title = models.CharField(max_length=200, verbose_name="عنوان خدمت")
+    description = models.TextField(verbose_name="توضیحات")
+    image = models.ImageField(upload_to='industry/', blank=True, null=True, verbose_name="تصویر")
+    order = models.IntegerField(default=0, verbose_name="ترتیب نمایش")
+    is_active = models.BooleanField(default=True, verbose_name="فعال")
+    
+    # اطلاعات مسئول
+    manager_name = models.CharField(max_length=200, blank=True, verbose_name="نام مسئول")
+    manager_phone = models.CharField(max_length=20, blank=True, verbose_name="شماره تماس مسئول")
+    manager_email = models.EmailField(blank=True, verbose_name="ایمیل مسئول")
+    manager_room = models.CharField(max_length=50, blank=True, verbose_name="شماره اتاق")
+    
+    # اهداف (برای کوآپ)
+    goals = models.TextField(blank=True, verbose_name="اهداف (هر هدف در یک خط)")
+
+    class Meta:
+        verbose_name = "خدمات صنعت"
+        verbose_name_plural = "خدمات دانشکده به صنعت"
+        ordering = ['order']
+
+    def __str__(self):
+        return self.title
+    
+    def get_goals_list(self):
+        """برگرداندن اهداف به صورت لیست"""
+        if self.goals:
+            return [goal.strip() for goal in self.goals.split('\n') if goal.strip()]
+        return []
+#_______________________________________
