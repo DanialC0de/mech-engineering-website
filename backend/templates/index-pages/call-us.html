@@ -1,48 +1,56 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/index/call-us.css' %}">
-    <title>تماس با ما</title>
+    <title>تماس با ما | انجمن علمی مکانیک</title>
 </head>
 <body>
     <header>
         <div id="logo">
-            <img src="../assets/images/shahid-bahonar-university-of-kerman-logo.png">
+            <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}">
         </div>
         <div class="header-top">
             <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
-            <a href="../login.html" target="_blank" class="login-btn">ورود / ثبت‌نام</a>
+            <a href="{% url 'login' %}" target="_blank" class="login-btn">ورود / ثبت‌نام</a>
         </div>
         <div class="nav-bar">
             <div class="logo">⚙️انجمن علمی مهندسی <span>مکانیک</span></div>
             <div class="nav-links">
-                <a href="index.html">صفحه اصلی</a>
+                <a href="{% url 'home' %}">صفحه اصلی</a>
                 <a href="#"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
                 <a href="#"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
-                <a href="events.html">رویدادها</a>
-                <a href="sources.html">منابع علمی</a>
-                <a href="honors.html">افتخارات انجمن</a>
-                <a href="#">تماس با ما</a>
+                <a href="{% url 'all_events' %}">رویدادها</a>
+                <a href="{% url 'all_resources' %}">منابع علمی</a>
+                <a href="{% url 'honors' %}">افتخارات انجمن</a>
+                <a href="{% url 'contact' %}">تماس با ما</a>
             </div>
         </div>
     </header>
     <ul id="ul-about">
-        <li><a href="about.html">معرفی دانشکده</a></li>
-        <li><a href="honors.html">دستاورد ها و افتخارات</a></li>
+        <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
+        <li><a href="{% url 'honors' %}">دستاورد ها و افتخارات</a></li>
     </ul>
     <ul id="ul-relation">
-        <li><a href="industry.html">خدمات دانشکده به صنعت</a></li>
+        <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
     </ul>
 
-
     <section class="hero">
-        <img src="../assets/images/fani.jpg" alt="">
+        <img src="{% static 'assets/images/fani.jpg' %}" alt="دانشکده فنی">
     </section>
 
     <div class="page-title">
+        <!-- نمایش پیام موفقیت -->
+{% if messages %}
+    {% for message in messages %}
+        <div style="max-width: 1200px; margin: 20px auto; padding: 15px; background: #d4edda; color: #155724; border-radius: 8px; text-align: center; border: 1px solid #c3e6cb;">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
         <h1>ارتباط با دانشکده</h1>
     </div>
 
@@ -85,21 +93,22 @@
                     <!-- سمت چپ: فرم تماس -->
                     <div class="contact-form">
                         <h2>ارتباط با دانشکده</h2>
-                        <form id="contactForm">
+                        <form method="post" action="{% url 'contact' %}">
+                            {% csrf_token %}
                             <div class="form-group">
-                                <input type="text" id="fullName" placeholder="نام و نام خانوادگی" required>
+                                <input type="text" name="full_name" id="fullName" placeholder="نام و نام خانوادگی" required>
                             </div>
 
                             <div class="form-group">
-                                <input type="email" id="email" placeholder="ایمیل شما" required>
+                                <input type="email" name="email" id="email" placeholder="ایمیل شما" required>
                             </div>
 
                             <div class="form-group">
-                                <input type="text" id="subject" placeholder="موضوع" required>
+                                <input type="text" name="subject" id="subject" placeholder="موضوع" required>
                             </div>
 
                             <div class="form-group">
-                                <textarea id="message" rows="5" placeholder="پیام شما" required></textarea>
+                                <textarea name="message" id="message" rows="5" placeholder="پیام شما" required></textarea>
                             </div>
 
                             <button type="submit" class="submit-btn">ارسال</button>
@@ -136,10 +145,10 @@
 
     <div id="icons">
         <a href="https://t.me/ukmechanics" target="_blank">
-            <img src="../assets/icons/15.png">
+            <img src="{% static 'assets/icons/15.png' %}">
         </a>
         <a href="https://instagram.com/ukmechanics?igshid=14gmuy96orpnd" target="_blank">
-            <img src="../assets/icons/2.png">
+            <img src="{% static 'assets/icons/2.png' %}">
         </a>
     </div>
     <script>
@@ -160,8 +169,6 @@
             aboutUl.classList.remove("show");
         });
 
-
-
         let relationLink = document.querySelector('.nav-links a:nth-child(3)');
         let relationUl = document.getElementById('ul-relation');
 
@@ -178,24 +185,6 @@
         relationUl.addEventListener('mouseout', function () {
             relationUl.classList.remove("show");
         });
-
-        // اسکریپت ساده برای فرم تماس
-            document.getElementById('contactForm')?.addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                const fullName = document.getElementById('fullName').value;
-                const email = document.getElementById('email').value;
-                const subject = document.getElementById('subject').value;
-                const message = document.getElementById('message').value;
-
-                if (!fullName || !email || !subject || !message) {
-                    alert('لطفاً تمام فیلدها را پر کنید');
-                    return;
-                }
-
-                alert('پیام شما با موفقیت ارسال شد');
-                this.reset();
-            });
     </script>
 </body>
 </html>

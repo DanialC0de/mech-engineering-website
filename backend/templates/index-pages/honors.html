@@ -1,117 +1,97 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="../css/index/honors.css">
-    <title>دستاوردها</title>
+    <link rel="stylesheet" href="{% static 'css/index/honors.css' %}">
+    <title>دستاوردها و افتخارات | انجمن علمی مکانیک</title>
 </head>
 <body>
     <header>
         <div id="logo">
-            <img src="../assets/images/shahid-bahonar-university-of-kerman-logo.png">
+            <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}">
         </div>
         <div class="header-top">
             <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
-            <a href="../login.html" target="_blank" class="login-btn">ورود / ثبت‌نام</a>
+            <a href="{% url 'login' %}" target="_blank" class="login-btn">ورود / ثبت‌نام</a>
         </div>
         <div class="nav-bar">
             <div class="logo">⚙️انجمن علمی مهندسی <span>مکانیک</span></div>
             <div class="nav-links">
-                <a href="index.html">صفحه اصلی</a>
+                <a href="{% url 'home' %}">صفحه اصلی</a>
                 <a href="#"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
                 <a href="#"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
-                <a href="events.html">رویدادها</a>
-                <a href="sources.html">منابع علمی</a>
-                <a href="#">افتخارات انجمن</a>
-                <a href="call-us.html">تماس با ما</a>
+                <a href="{% url 'all_events' %}">رویدادها</a>
+                <a href="{% url 'all_resources' %}">منابع علمی</a>
+                <a href="{% url 'honors' %}">افتخارات انجمن</a>
+                <a href="{% url 'contact' %}">تماس با ما</a>
             </div>
         </div>
     </header>
     <ul id="ul-about">
-        <li><a href="about.html">معرفی دانشکده</a></li>
-        <li><a href="honors.html">دستاورد ها و افتخارات</a></li>
+        <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
+        <li><a href="{% url 'honors' %}">دستاورد ها و افتخارات</a></li>
     </ul>
     <ul id="ul-relation">
-        <li><a href="industry.html">خدمات دانشکده به صنعت</a></li>
+        <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
     </ul>
 
-
     <section class="hero">
-        <img src="../assets/images/fani.jpg" alt="">
+        <img src="{% static 'assets/images/fani.jpg' %}" alt="دانشکده فنی">
     </section>
 
     <div class="page-title">
-        <h2>دستاورد ها وافتخارات انجمن</h2>
+        <h2>دستاورد ها و افتخارات انجمن</h2>
     </div>
 
     <main class="content-container">
         <div class="container-grid">
-           <div class="honor-card">
-                <div class="honor-image">
-                    <img src="../assets/images/bc-footer.jpg" alt="">
-                </div>
-                <div class="honor-content">
-                    <div class="honor-title">انجمن قابل تقدیر ترویجی</div>
-                    <div class="honor-festival">دوره سوم جشنواره حرکت</div>
-                </div>
-            </div>
+            {% for honor in page_obj %}
             <div class="honor-card">
                 <div class="honor-image">
-                    <img src="../assets/images/bc-footer.jpg" alt="">
+                    {% if honor.image %}
+                        <img src="{{ honor.image.url }}" alt="{{ honor.competition_name }}">
+                    {% else %}
+                        <img src="{% static 'assets/images/bc-footer.jpg' %}" alt="{{ honor.competition_name }}">
+                    {% endif %}
                 </div>
                 <div class="honor-content">
-                    <div class="honor-title">انجمن برگزیده جشنواره</div>
-                    <div class="honor-festival">دوره چهارم جشنواره حرکت</div>
+                    <div class="honor-title">{{ honor.competition_name }}</div>
+                    <div class="honor-festival">{{ honor.rank }}</div>
                 </div>
             </div>
-           <div class="honor-card">
-                <div class="honor-image">
-                    <img src="../assets/images/bc-footer.jpg" alt="">
-                </div>
+            {% empty %}
+            <div class="honor-card" style="grid-column: 1/-1; text-align: center; padding: 50px;">
                 <div class="honor-content">
-                    <div class="honor-title">انجمن قابل تقدیر ترویجی</div>
-                    <div class="honor-festival">دوره ششم جشنواره حرکت</div>
+                    <div class="honor-title">هیچ افتخاری ثبت نشده است</div>
+                    <div class="honor-festival">لطفاً از پنل ادمین افتخارات را اضافه کنید</div>
                 </div>
             </div>
-           <div class="honor-card">
-                <div class="honor-image">
-                    <img src="../assets/images/bc-footer.jpg" alt="">
-                </div>
-                <div class="honor-content">
-                    <div class="honor-title">انجمن برگزیده در نشریه</div>
-                    <div class="honor-festival">دوره هفتم جشنواره حرکت</div>
-                </div>
-            </div>
-           <div class="honor-card">
-                <div class="honor-image">
-                    <img src="../assets/images/bc-footer.jpg" alt="">
-                </div>
-                <div class="honor-content">
-                    <div class="honor-title">انجمن برگزیده در نوآوری</div>
-                    <div class="honor-festival">دوره هفتم جشنواره حرکت</div>
-                </div>
-            </div>
-            <div class="honor-card">
-                <div class="honor-image">
-                    <img src="../assets/images/bc-footer.jpg" alt="">
-                </div>
-                <div class="honor-content">
-                    <div class="honor-title">انجمن برتر</div>
-                    <div class="honor-festival">دوره یازدهم جشنواره حرکت</div>
-                </div>
-            </div>
-            <div class="honor-card last">
-                <div class="honor-image">
-                    <img src="../assets/images/bc-footer.jpg" alt="">
-                </div>
-                <div class="honor-content">
-                    <div class="honor-title">انجمن برتر</div>
-                    <div class="honor-festival">دوره دوازدهم جشنواره حرکت</div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
+
+        <!-- صفحه‌بندی -->
+        {% if page_obj.has_other_pages %}
+        <div class="pagination" style="display: flex; justify-content: center; gap: 10px; padding: 20px; margin-top: 20px;">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" style="padding: 8px 15px; background: #012e71; color: white; border-radius: 5px; text-decoration: none;">&laquo; قبلی</a>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <span style="padding: 8px 15px; background: #ffaa00; color: #012e71; border-radius: 5px; font-weight: bold;">{{ num }}</span>
+                {% else %}
+                    <a href="?page={{ num }}" style="padding: 8px 15px; background: #eee; color: #012e71; border-radius: 5px; text-decoration: none;">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" style="padding: 8px 15px; background: #012e71; color: white; border-radius: 5px; text-decoration: none;">بعدی &raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
     </main>
 
     <footer>
@@ -140,10 +120,10 @@
 
     <div id="icons">
         <a href="https://t.me/ukmechanics" target="_blank">
-            <img src="../assets/icons/15.png">
+            <img src="{% static 'assets/icons/15.png' %}">
         </a>
         <a href="https://instagram.com/ukmechanics?igshid=14gmuy96orpnd" target="_blank">
-            <img src="../assets/icons/2.png">
+            <img src="{% static 'assets/icons/2.png' %}">
         </a>
     </div>
     <script>
@@ -163,8 +143,6 @@
         aboutUl.addEventListener('mouseout', function () {
             aboutUl.classList.remove("show");
         });
-
-
 
         let relationLink = document.querySelector('.nav-links a:nth-child(3)');
         let relationUl = document.getElementById('ul-relation');

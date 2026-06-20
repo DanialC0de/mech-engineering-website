@@ -138,16 +138,13 @@ class SocialLink(models.Model):
     def __str__(self):
         return self.platform
 
-
-
-# REGISTRATION_STATUS_CHOICES = [ 
+#_______________________________________
+# REGISTRATION_STATUS_CHOICES = [
 #     ('pending', 'در انتظار تایید'),
 #     ('confirmed', 'تایید شده'),
 #     ('cancelled', 'لغو شده'),
 #     ('attended', 'حضور یافته'),
 # ]
-
-
 
 # class Registration(models.Model):
 #     user = models.ForeignKey(
@@ -180,9 +177,6 @@ class SocialLink(models.Model):
 
 #     def __str__(self):
 #         return f"{self.user.get_full_name()} - {self.event.title}"
-
-
-
 #_______________________________________
 class IndustryService(models.Model):
     """خدمات دانشکده به صنعت"""
@@ -214,4 +208,20 @@ class IndustryService(models.Model):
         if self.goals:
             return [goal.strip() for goal in self.goals.split('\n') if goal.strip()]
         return []
-#_______________________________________
+#______________________call us_________________
+class ContactMessage(models.Model):
+    full_name = models.CharField(max_length=200, verbose_name="نام و نام خانوادگی")
+    email = models.EmailField(verbose_name="ایمیل")
+    subject = models.CharField(max_length=200, verbose_name="موضوع")
+    message = models.TextField(verbose_name="متن پیام")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ارسال")
+    is_read = models.BooleanField(default=False, verbose_name="خوانده شده")
+
+    class Meta:
+        verbose_name = "پیام تماس"
+        verbose_name_plural = "پیام‌های تماس"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.full_name} - {self.subject}"
+    #__________________

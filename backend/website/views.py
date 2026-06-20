@@ -215,14 +215,28 @@ def about(request):
     return render(request, 'index-pages/about.html', context)
 
 
+from .models import ContactMessage
+
 def contact(request):
     """صفحه تماس با ما"""
-    footer_socials = SocialLink.objects.filter(is_footer=True)
-    context = {
-        'social_links': footer_socials,
-    }
-    return render(request, 'index-pages/call-us.html', context)
-
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        
+        # ذخیره در دیتابیس
+        ContactMessage.objects.create(
+            full_name=full_name,
+            email=email,
+            subject=subject,
+            message=message
+        )
+        
+        messages.success(request, 'پیام شما با موفقیت ارسال شد.')
+        return redirect('contact')
+    
+    return render(request, 'index-pages/call-us.html')
 
 def industry(request):
     """صفحه ارتباط با صنعت"""
