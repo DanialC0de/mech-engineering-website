@@ -58,22 +58,22 @@ class Migration(migrations.Migration):
             name='icon_class',
             field=models.CharField(blank=True, max_length=100, verbose_name='کلاس آیکون'),
         ),
-        migrations.CreateModel(
-            name='Registration',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('registration_date', models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت\u200cنام')),
-                ('status', models.CharField(choices=[('pending', 'در انتظار تایید'), ('confirmed', 'تایید شده'), ('cancelled', 'لغو شده'), ('attended', 'حضور یافته')], default='pending', max_length=20, verbose_name='وضعیت')),
-                ('phone', models.CharField(blank=True, max_length=15, verbose_name='شماره تماس')),
-                ('notes', models.TextField(blank=True, verbose_name='توضیحات')),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='registrations', to='website.event', verbose_name='رویداد')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='registrations', to=settings.AUTH_USER_MODEL, verbose_name='کاربر')),
-            ],
-            options={
-                'verbose_name': 'ثبت\u200cنام',
-                'verbose_name_plural': 'ثبت\u200cنام\u200cها',
-                'ordering': ['-registration_date'],
-                'unique_together': {('user', 'event')},
-            },
-        ),
+        # migrations.CreateModel(
+        #     name='Registration',
+        #     fields=[
+        #         ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+        #         ('registration_date', models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت\u200cنام')),
+        #         ('status', models.CharField(choices=[('pending', 'در انتظار تایید'), ('confirmed', 'تایید شده'), ('cancelled', 'لغو شده'), ('attended', 'حضور یافته')], default='pending', max_length=20, verbose_name='وضعیت')),
+        #         ('phone', models.CharField(blank=True, max_length=15, verbose_name='شماره تماس')),
+        #         ('notes', models.TextField(blank=True, verbose_name='توضیحات')),
+        #         ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='registrations', to='website.event', verbose_name='رویداد')),
+        #         ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='registrations', to=settings.AUTH_USER_MODEL, verbose_name='کاربر')),
+        #     ],
+        #     options={
+        #         'verbose_name': 'ثبت\u200cنام',
+        #         'verbose_name_plural': 'ثبت\u200cنام\u200cها',
+        #         'ordering': ['-registration_date'],
+        #         'unique_together': {('user', 'event')},
+        #     },
+        # ),
     ]

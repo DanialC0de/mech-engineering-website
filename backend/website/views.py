@@ -6,18 +6,19 @@ from django.http import HttpResponse, Http404
 from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from .models import (
-    News, Event, Resource, Honor, AboutInfo, 
-    GalleryItem, SocialLink, Registration
+    Resource, Honor, AboutInfo, 
+    GalleryItem, SocialLink
 )
-
+from events.models import Registration
 from news.models import News
+from events.models import Event
 import os
 
 def home(request):
     """نمایش صفحه اصلی با تمام بخش‌ها"""
     context = {
-        'news': News.objects.filter(is_published=True)[:3],  # ← فقط خبرهای منتشر شده
-        'events': Event.objects.filter(is_upcoming=True)[:3],
+        'news': News.objects.filter(is_published=True)[:3],
+        'events': Event.objects.filter(status='upcoming')[:3],  # ✅ تغییر
         'resources': Resource.objects.all()[:3],
         'honors': Honor.objects.filter(is_featured=True)[:3],
         'about': AboutInfo.objects.first(),
@@ -27,57 +28,15 @@ def home(request):
     }
     return render(request, 'index-pages/index.html', context)
 
-# def all_news(request):
-#     """نمایش همه اخبار با صفحه‌بندی، جستجو و فیلتر"""
-#     news_list = News.objects.all()
-    
-#     search_query = request.GET.get('search')
-#     if search_query:
-#         news_list = news_list.filter(
-#             Q(title__icontains=search_query) | 
-#             Q(category__icontains=search_query) |
-#             Q(summary__icontains=search_query)
-#         )
-    
-#     category_filter = request.GET.get('category')
-#     if category_filter:
-#         news_list = news_list.filter(category=category_filter)
-    
-#     paginator = Paginator(news_list, 6)
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-    
-#     categories = News.objects.values_list('category', flat=True).distinct()
-    
-#     context = {
-#         'page_obj': page_obj,
-#         'categories': categories,
-#         'search_query': search_query,
-#         'category_filter': category_filter,
-#     }
-#     return render(request, 'index-pages/news.html', context)
-
-
-# def news_detail(request, pk):
-#     """نمایش جزئیات یک خبر"""
-#     news = get_object_or_404(News, pk=pk)
-#     related_news = News.objects.filter(category=news.category).exclude(pk=pk)[:3]
-    
-#     context = {
-#         'news': news,
-#         'related_news': related_news,
-#     }
-#     return render(request, 'index-pages/details-pages/new.html', context)
-
 
 def all_events(request):
     """نمایش همه رویدادها با فیلتر و جستجو"""
     show_upcoming = request.GET.get('show', 'upcoming') == 'upcoming'
     
     if show_upcoming:
-        events = Event.objects.filter(is_upcoming=True)
+        events = Event.objects.filter(status='upcoming')  # ✅ تغییر
     else:
-        events = Event.objects.filter(is_upcoming=False)
+        events = Event.objects.filter(status='completed')  # ✅ تغییر
     
     search_query = request.GET.get('search')
     if search_query:
@@ -109,7 +68,6 @@ def event_detail(request, pk):
             event=event
         ).exists()
     
-    # تعداد ثبت‌نام‌ها
     registered_count = Registration.objects.filter(event=event).count()
     
     context = {
@@ -126,7 +84,7 @@ def register_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
     
     # بررسی اینکه رویداد آینده است
-    if not event.is_upcoming:
+    if event.status != 'upcoming':  # ✅ تغییر
         messages.error(request, 'این رویداد به پایان رسیده است.')
         return redirect('event_detail', pk=pk)
     
@@ -173,7 +131,7 @@ def cancel_registration(request, pk):
     event = registration.event
     
     # فقط رویدادهای آینده قابل لغو هستند
-    if not event.is_upcoming:
+    if event.status != 'upcoming':  # ✅ تغییر
         messages.error(request, 'این رویداد به پایان رسیده و قابل لغو نیست.')
         return redirect('event_detail', pk=pk)
     
@@ -188,11 +146,11 @@ def cancel_registration(request, pk):
     messages.success(request, f'ثبت‌نام شما در رویداد "{event.title}" با موفقیت لغو شد.')
     return redirect('event_detail', pk=pk)
 
+
 def all_resources(request):
     """نمایش همه منابع علمی با جستجو"""
     resources = Resource.objects.all()
     
-    # جستجو
     search_query = request.GET.get('search')
     if search_query:
         resources = resources.filter(
@@ -200,7 +158,6 @@ def all_resources(request):
             Q(description__icontains=search_query)
         )
     
-    # صفحه‌بندی (۹ منبع در هر صفحه)
     paginator = Paginator(resources, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -217,13 +174,10 @@ def download_resource(request, pk):
     """دانلود فایل منبع علمی (فقط کاربران لاگین شده)"""
     resource = get_object_or_404(Resource, pk=pk)
     
-    # بررسی وجود فایل
     if resource.file and resource.file.path:
-        # افزایش شمارش دانلود
         resource.download_count += 1
         resource.save()
         
-        # باز کردن و ارسال فایل
         file_path = resource.file.path
         if os.path.exists(file_path):
             with open(file_path, 'rb') as f:
@@ -233,11 +187,11 @@ def download_resource(request, pk):
     
     raise Http404("فایل مورد نظر یافت نشد")
 
+
 def honors(request):
     """صفحه افتخارات با صفحه‌بندی"""
     honors_list = Honor.objects.all()
     
-    # صفحه‌بندی (۶ افتخار در هر صفحه)
     paginator = Paginator(honors_list, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -247,6 +201,7 @@ def honors(request):
     }
     return render(request, 'index-pages/honors.html', context)
 
+
 def about(request):
     """صفحه درباره ما"""
     about_info = AboutInfo.objects.first()
@@ -254,6 +209,7 @@ def about(request):
         'about': about_info,
     }
     return render(request, 'index-pages/about.html', context)
+
 
 def contact(request):
     """صفحه تماس با ما"""
@@ -263,9 +219,11 @@ def contact(request):
     }
     return render(request, 'index-pages/call-us.html', context)
 
+
 def industry(request):
     """صفحه ارتباط با صنعت"""
     return render(request, 'index-pages/industry.html')
+
 
 def register(request):
     """صفحه ثبت‌نام کاربر"""
@@ -283,7 +241,6 @@ def register(request):
 
 def login_view(request):
     """صفحه ورود کاربر"""
-    # اگر کاربر لاگین است به صفحه اصلی برود
     if request.user.is_authenticated:
         return redirect('home')
     
@@ -299,12 +256,12 @@ def student_view(request):
     """صفحه دانشجویی (برای کاربران ویژه)"""
     return render(request, 'student.html')
 
+
 @login_required
 def user_dashboard(request):
     """پنل کاربری برای نمایش ثبت‌نام‌ها و فعالیت‌ها"""
     registrations = Registration.objects.filter(user=request.user).order_by('-registration_date')
     
-    # آمار کاربر
     stats = {
         'total_registrations': registrations.count(),
         'pending_registrations': registrations.filter(status='pending').count(),

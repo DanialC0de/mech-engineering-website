@@ -1,42 +1,42 @@
 from django.db import models
 from django.conf import settings
 
-class News(models.Model):
-    title = models.CharField(max_length=200, verbose_name="عنوان خبر")
-    category = models.CharField(max_length=100, verbose_name="دسته‌بندی")
-    summary = models.CharField(max_length=300, blank=True, verbose_name="خلاصه")
-    image = models.ImageField(upload_to='news/', blank=True, null=True, verbose_name="تصویر")
-    link = models.CharField(max_length=500, blank=True, verbose_name="لینک")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
+# class News(models.Model):
+#     title = models.CharField(max_length=200, verbose_name="عنوان خبر")
+#     category = models.CharField(max_length=100, verbose_name="دسته‌بندی")
+#     summary = models.CharField(max_length=300, blank=True, verbose_name="خلاصه")
+#     image = models.ImageField(upload_to='news/', blank=True, null=True, verbose_name="تصویر")
+#     link = models.CharField(max_length=500, blank=True, verbose_name="لینک")
+#     created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
 
-    class Meta:
-        verbose_name = "خبر"
-        verbose_name_plural = "اخبار"
-        ordering = ['-created_at']
+#     class Meta:
+#         verbose_name = "خبر"
+#         verbose_name_plural = "اخبار"
+#         ordering = ['-created_at']
 
-    def __str__(self):
-        return self.title
+#     def __str__(self):
+#         return self.title
 
 
 
-class Event(models.Model):
-    title = models.CharField(max_length=200, verbose_name="عنوان رویداد")
-    image = models.ImageField(upload_to='events/', blank=True, null=True, verbose_name="تصویر")
-    date_jalali = models.CharField(max_length=50, verbose_name="تاریخ شمسی")
-    time = models.CharField(max_length=20, verbose_name="ساعت")
-    short_description = models.TextField(verbose_name="توضیحات کوتاه")
-    is_upcoming = models.BooleanField(default=True, verbose_name="رویداد آینده")
-    capacity = models.PositiveIntegerField(default=0, verbose_name="ظرفیت")
-    registered_count = models.PositiveIntegerField(default=0, verbose_name="تعداد ثبت‌نام‌ها")  
-    is_full = models.BooleanField(default=False, verbose_name="تکمیل شده")
+# class Event(models.Model):
+#     title = models.CharField(max_length=200, verbose_name="عنوان رویداد")
+#     image = models.ImageField(upload_to='events/', blank=True, null=True, verbose_name="تصویر")
+#     date_jalali = models.CharField(max_length=50, verbose_name="تاریخ شمسی")
+#     time = models.CharField(max_length=20, verbose_name="ساعت")
+#     short_description = models.TextField(verbose_name="توضیحات کوتاه")
+#     is_upcoming = models.BooleanField(default=True, verbose_name="رویداد آینده")
+#     capacity = models.PositiveIntegerField(default=0, verbose_name="ظرفیت")
+#     registered_count = models.PositiveIntegerField(default=0, verbose_name="تعداد ثبت‌نام‌ها")  
+#     is_full = models.BooleanField(default=False, verbose_name="تکمیل شده")
     
-    class Meta:
-        verbose_name = "رویداد"
-        verbose_name_plural = "رویدادها"
-        ordering = ['date_jalali']
+#     class Meta:
+#         verbose_name = "رویداد"
+#         verbose_name_plural = "رویدادها"
+#         ordering = ['date_jalali']
 
-    def __str__(self):
-        return self.title
+#     def __str__(self):
+#         return self.title
 
 
 
@@ -140,43 +140,43 @@ class SocialLink(models.Model):
 
 
 
-REGISTRATION_STATUS_CHOICES = [ 
-    ('pending', 'در انتظار تایید'),
-    ('confirmed', 'تایید شده'),
-    ('cancelled', 'لغو شده'),
-    ('attended', 'حضور یافته'),
-]
+# REGISTRATION_STATUS_CHOICES = [ 
+#     ('pending', 'در انتظار تایید'),
+#     ('confirmed', 'تایید شده'),
+#     ('cancelled', 'لغو شده'),
+#     ('attended', 'حضور یافته'),
+# ]
 
 
 
-class Registration(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, 
-        on_delete=models.CASCADE, 
-        verbose_name="کاربر",
-        related_name='registrations'
-    )
-    event = models.ForeignKey(
-        Event, 
-        on_delete=models.CASCADE, 
-        verbose_name="رویداد",
-        related_name='registrations'
-    )
-    registration_date = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت‌نام")
-    status = models.CharField(
-        max_length=20, 
-        choices=REGISTRATION_STATUS_CHOICES,
-        default='pending', 
-        verbose_name="وضعیت"
-    )
-    phone = models.CharField(max_length=15, blank=True, verbose_name="شماره تماس")
-    notes = models.TextField(blank=True, verbose_name="توضیحات")
+# class Registration(models.Model):
+#     user = models.ForeignKey(
+#         settings.AUTH_USER_MODEL, 
+#         on_delete=models.CASCADE, 
+#         verbose_name="کاربر",
+#         related_name='registrations'
+#     )
+#     event = models.ForeignKey(
+#         Event, 
+#         on_delete=models.CASCADE, 
+#         verbose_name="رویداد",
+#         related_name='registrations'
+#     )
+#     registration_date = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت‌نام")
+#     status = models.CharField(
+#         max_length=20, 
+#         choices=REGISTRATION_STATUS_CHOICES,
+#         default='pending', 
+#         verbose_name="وضعیت"
+#     )
+#     phone = models.CharField(max_length=15, blank=True, verbose_name="شماره تماس")
+#     notes = models.TextField(blank=True, verbose_name="توضیحات")
     
-    class Meta: 
-        verbose_name = "ثبت‌نام"
-        verbose_name_plural = "ثبت‌نام‌ها"
-        unique_together = ['user', 'event']
-        ordering = ['-registration_date']
+#     class Meta: 
+#         verbose_name = "ثبت‌نام"
+#         verbose_name_plural = "ثبت‌نام‌ها"
+#         unique_together = ['user', 'event']
+#         ordering = ['-registration_date']
 
-    def __str__(self):
-        return f"{self.user.get_full_name()} - {self.event.title}"
+#     def __str__(self):
+#         return f"{self.user.get_full_name()} - {self.event.title}"

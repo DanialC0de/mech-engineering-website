@@ -19,7 +19,7 @@ def all_news(request):
             Q(content__icontains=search_query)
         )
     
-    paginator = Paginator(news_list, 6)
+    paginator = Paginator(news_list, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

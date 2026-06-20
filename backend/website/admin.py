@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (
-     Event, Resource, Honor, AboutInfo, GalleryItem, SocialLink
+     Resource, Honor, AboutInfo, GalleryItem, SocialLink
 )
 
 # @admin.register(News)
@@ -9,11 +9,11 @@ from .models import (
 #     search_fields = ['title', 'category']
 #     list_filter = ['category']
 
-@admin.register(Event)
-class EventAdmin(admin.ModelAdmin):
-    list_display = ['title', 'date_jalali', 'time', 'is_upcoming']
-    list_filter = ['is_upcoming']
-    search_fields = ['title']
+# @admin.register(Event)
+# class EventAdmin(admin.ModelAdmin):
+#     list_display = ['title', 'date_jalali', 'time', 'is_upcoming']
+#     list_filter = ['is_upcoming']
+#     search_fields = ['title']
 
 @admin.register(Resource)
 class ResourceAdmin(admin.ModelAdmin):
