@@ -1,63 +1,285 @@
-{% load static %} 
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/verify.css' %}">
-    <title>تایید هویت | انجمن علمی مکانیک</title>
-    
+    <title>تایید کد | انجمن علمی مکانیک</title>
 </head>
 <body>
     <div class="verify-container">
         <div class="verify-header">
             <div class="logo">⚙️ انجمن <span>مکانیک</span></div>
-            <p>تایید هویت</p>
+            <p>انجمن علمی مهندسی مکانیک</p>
         </div>
 
         <div class="verify-body">
+            <div class="verify-title">✅ تایید کد</div>
+            <div class="verify-subtitle">
+                کد ۶ رقمی ارسال شده به شماره زیر را وارد کنید
+            </div>
+
+            <div id="identifierDisplay" class="identifier-display">
+                📱 شماره موبایل: <strong dir="ltr">0912***6789</strong>
+            </div>
+
             <div class="error-message" id="errorMsg"></div>
 
-            <div class="status-banner" id="statusBanner">
-                <div class="status-icon" id="statusIcon">📱</div>
-                <div class="status-title" id="statusTitle">در حال بررسی...</div>
-                <div class="status-message" id="statusMessage">لطفاً منتظر بمانید</div>
+            <div class="otp-container">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autofocus>
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
             </div>
 
-            <div class="identifier-display" id="identifierDisplay"></div>
-
-            <div class="otp-container" id="otpContainer">
-                <input type="text" class="otp-input" maxlength="1" data-index="0" inputmode="numeric">
-                <input type="text" class="otp-input" maxlength="1" data-index="1" inputmode="numeric">
-                <input type="text" class="otp-input" maxlength="1" data-index="2" inputmode="numeric">
-                <input type="text" class="otp-input" maxlength="1" data-index="3" inputmode="numeric">
-                <input type="text" class="otp-input" maxlength="1" data-index="4" inputmode="numeric">
-                <input type="text" class="otp-input" maxlength="1" data-index="5" inputmode="numeric">
+            <div class="timer-section">
+                <span>زمان باقی‌مانده: <span id="timerSeconds">120</span> ثانیه</span>
+                <button id="resendBtn" disabled>ارسال مجدد کد</button>
             </div>
 
-            <div class="timer">
-                <span id="timerSeconds">۱۲۰</span> ثانیه تا ارسال مجدد کد
-                <button class="resend-btn" id="resendBtn" disabled>ارسال مجدد کد</button>
-            </div>
+            <button id="verifyBtn" class="verify-btn" disabled>
+                تایید کد →
+            </button>
 
-            <button class="verify-btn" id="verifyBtn" disabled>تایید و ورود →</button>
-
-            <div class="loading" id="loading">
+            <div class="loading" id="loading" style="display:none;">
                 <div class="loading-spinner"></div>
-                <p>در حال بررسی کد...</p>
+                <p>در حال تایید کد...</p>
             </div>
 
             <div class="back-link">
                 <a href="/accounts/login/">← بازگشت به صفحه ورود</a>
             </div>
         </div>
-
-        <footer>
-            <p>کد تایید به روش انتخابی شما ارسال شد</p>
-        </footer>
     </div>
 
-    <script src="{% static 'js/verify.js' %}"></script>
+    <script>
+        // ============================================
+        // دریافت شماره از session
+        // ============================================
+        const phoneNumber = localStorage.getItem("tempPhone") || "09123456789";
+        document.querySelector('#identifierDisplay strong').textContent = phoneNumber.slice(0, 4) + '***' + phoneNumber.slice(-4);
+
+        // ============================================
+        // مدیریت فیلدهای OTP
+        // ============================================
+        const inputs = document.querySelectorAll('.otp-input');
+        const verifyBtn = document.getElementById("verifyBtn");
+        const errorDiv = document.getElementById("errorMsg");
+        const loadingDiv = document.getElementById("loading");
+
+        // تبدیل اعداد فارسی به انگلیسی
+        function toEnglishDigits(str) {
+            if (!str) return '';
+            return str
+                .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+                .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+        }
+
+        // گرفتن CSRF Token
+        function getCSRFToken() {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                const [name, value] = cookie.trim().split('=');
+                if (name === 'csrftoken') {
+                    return value;
+                }
+            }
+            return '';
+        }
+
+        // دریافت کد کامل
+        function getCode() {
+            let code = '';
+            inputs.forEach(input => {
+                code += toEnglishDigits(input.value);
+            });
+            return code;
+        }
+
+        // بررسی کامل بودن کد
+        function checkComplete() {
+            const code = getCode();
+            verifyBtn.disabled = code.length !== 6;
+        }
+
+        // نمایش خطا
+        function showError(msg) {
+            errorDiv.textContent = msg;
+            errorDiv.style.display = "block";
+            setTimeout(() => errorDiv.style.display = "none", 4000);
+        }
+
+        // نمایش وضعیت بارگذاری
+        function setLoading(isLoading) {
+            verifyBtn.disabled = isLoading;
+            loadingDiv.style.display = isLoading ? "block" : "none";
+            if (isLoading) errorDiv.style.display = "none";
+        }
+
+        // ============================================
+        // رویدادهای فیلدهای OTP
+        // ============================================
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                let value = toEnglishDigits(e.target.value);
+                e.target.value = value;
+                if (value && !/^\d$/.test(value)) {
+                    e.target.value = '';
+                    return;
+                }
+                if (value && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+                checkComplete();
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace') {
+                    if (input.value === '' && index > 0) {
+                        inputs[index - 1].focus();
+                        inputs[index - 1].value = '';
+                    }
+                    checkComplete();
+                }
+            });
+
+            // چسباندن (Paste) کد
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pasted = (e.clipboardData || window.clipboardData).getData('text');
+                const digits = toEnglishDigits(pasted.replace(/\D/g, '')).slice(0, 6);
+                digits.split('').forEach((digit, i) => {
+                    if (i < inputs.length) {
+                        inputs[i].value = digit;
+                    }
+                });
+                if (digits.length < inputs.length) {
+                    inputs[digits.length].focus();
+                } else {
+                    inputs[inputs.length - 1].focus();
+                }
+                checkComplete();
+            });
+        });
+
+        // ============================================
+        // تایمر
+        // ============================================
+        let timerSeconds = 120;
+        let timerInterval = null;
+
+        function startTimer() {
+            const timerSpan = document.getElementById("timerSeconds");
+            const resendBtn = document.getElementById("resendBtn");
+
+            if (timerInterval) clearInterval(timerInterval);
+
+            timerSeconds = 120;
+            resendBtn.disabled = true;
+            resendBtn.style.opacity = "0.5";
+
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                timerSpan.textContent = timerSeconds;
+
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    resendBtn.disabled = false;
+                    resendBtn.style.opacity = "1";
+                    timerSpan.textContent = "۰";
+                }
+            }, 1000);
+        }
+
+        startTimer();
+
+        // ============================================
+        // ارسال مجدد کد
+        // ============================================
+        document.getElementById("resendBtn").addEventListener("click", async () => {
+            if (timerSeconds > 0) return;
+
+            try {
+                const response = await fetch("/accounts/send-otp/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCSRFToken()
+                    },
+                    body: JSON.stringify({
+                        phone: phoneNumber
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === "sent") {
+                    showError("📩 کد جدید ارسال شد!");
+                    startTimer();
+                    inputs.forEach(i => i.value = '');
+                    inputs[0].focus();
+                    verifyBtn.disabled = true;
+                } else {
+                    showError(data.message || "خطا در ارسال مجدد کد");
+                }
+            } catch (error) {
+                console.error("Error resending OTP:", error);
+                showError("خطا در ارتباط با سرور");
+            }
+        });
+
+        // ============================================
+        // ✅ تایید کد (ارسال به سرور جنگو)
+        // ============================================
+        verifyBtn.addEventListener("click", async () => {
+            const code = getCode();
+
+            if (code.length !== 6) {
+                showError("لطفاً کد ۶ رقمی را کامل وارد کنید");
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                const response = await fetch("/accounts/verify-otp/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCSRFToken()
+                    },
+                    body: JSON.stringify({ code: code })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // ریدایرکت موفق
+                    verifyBtn.textContent = "✓ تایید شد!";
+                    setTimeout(() => {
+                        window.location.href = data.redirect || "/panel/student/";
+                    }, 1000);
+                } else {
+                    showError(data.message || "کد وارد شده صحیح نیست");
+                    setLoading(false);
+                    inputs.forEach(i => i.value = '');
+                    inputs[0].focus();
+                    verifyBtn.disabled = true;
+                }
+            } catch (error) {
+                console.error("Error verifying OTP:", error);
+                showError("خطا در ارتباط با سرور");
+                setLoading(false);
+            }
+        });
+
+        // ============================================
+        // فوکوس اولیه
+        // ============================================
+        setTimeout(() => inputs[0].focus(), 200);
+    </script>
 </body>
 </html>

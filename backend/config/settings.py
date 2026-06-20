@@ -1,11 +1,12 @@
 from pathlib import Path
+import os
 
 # مسیر اصلی پروژه (backend)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-rc16xch(n6qz=#5=m8@p!x1k@&2s-g6cvkz^8#o1hn-p@76cje'
 DEBUG = True
-ALLOWED_HOSTS = ['*'] # اضافه شد برای جلوگیری از خطا در اجرا
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -19,6 +20,7 @@ INSTALLED_APPS = [
     'events',
     'accounts',
     'news',
+    'students',  # اپ جدید اضافه شد
 ]
 
 MIDDLEWARE = [
@@ -36,10 +38,11 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'], # اصلاح شد (خطای تمپلیت اینجا حل می‌شود)
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -57,7 +60,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'accounts.CustomUser' # اصلاح شد (فقط یک بار تعریف شد)
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -66,19 +69,25 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'fa-ir'  # تغییر به فارسی
+TIME_ZONE = 'Asia/Tehran'  # تغییر به ایران
 USE_I18N = True
 USE_TZ = True
 
 # تنظیمات فایل‌های استاتیک (CSS/JS)
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static'] # اضافه شد برای شناسایی فایل‌های CSS و JS
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+# تنظیمات فایل‌های مدیا (آپلود فایل)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # تنظیمات SMS
-IPPANEL_API_KEY = "your-new-key"
-IPPANEL_PATTERN_CODE = ""
-IPPANEL_SENDER = ""
+IPPANEL_API_KEY = "YTIxMWJhMzQtNjViMS00ZTA2LWI0MTEtMWYxODkwZTM4NjEyZDJiN2JhY2YxYmNkM2MyZTViNDcxMDAwMGY5MjMzZmQ="
+IPPANEL_PATTERN_CODE = "dj3v6rdzpofzk73"
+IPPANEL_SENDER = "+983000505"
 
 # اساتید
 PROFESSOR_PHONES = [
@@ -86,12 +95,7 @@ PROFESSOR_PHONES = [
     "09123334455",
 ]
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
-]
-
-
-import os
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# تنظیمات لاگین
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

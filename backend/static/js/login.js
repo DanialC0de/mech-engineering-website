@@ -1,27 +1,30 @@
-//دیتا بیس کاربران
+// ============================================
+// دیتابیس محلی (فقط برای تست)
+// ============================================
 function initDatabase() {
     let registeredUsers = localStorage.getItem("registeredUsers");
-
     if (!registeredUsers) {
-
         const defaultUsers = [
             { phone: "09123456789", email: "rezaei@eng.uk.ac.ir", name: "علی رضایی", role: "student", studentId: "40245636" },
             { phone: "09198765432", email: "karimi@eng.uk.ac.ir", name: "دکتر کریمی", role: "professor", studentId: "40198765" },
             { phone: "09111111111", email: "admin@eng.uk.ac.ir", name: "ادمین سیستم", role: "admin", studentId: "admin001" }
         ];
         localStorage.setItem("registeredUsers", JSON.stringify(defaultUsers));
-        console.log("Database initialized with default users");
+        console.log("✅ Database initialized with default users");
     }
 }
-
-// اجرای راه‌اندازی دیتابیس
 initDatabase();
 
+// ============================================
+// متغیرها
+// ============================================
 let activeTab = "phone";
 
+// ============================================
 // مدیریت تب‌ها
+// ============================================
 document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
+    btn.addEventListener('click', function() {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         activeTab = this.getAttribute('data-tab');
@@ -37,6 +40,9 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     });
 });
 
+// ============================================
+// توابع اعتبارسنجی
+// ============================================
 function validatePhoneNumber(phone) {
     phone = phone.trim();
     const phonePattern = /^09[0-9]{9}$/;
@@ -74,94 +80,94 @@ function showLoading(show) {
     }
 }
 
-document.getElementById("loginForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    let identifier, type;
-
-    if (activeTab === 'phone') {
-        let phone = document.getElementById("phoneNumber").value.trim();
-        if (phone.length === 10 && phone.startsWith("9")) phone = "0" + phone;
-        const validation = validatePhoneNumber(phone);
-        if (!validation.valid) { showError(validation.message); return; }
-        identifier = phone;
-        type = 'phone';
-    } else {
-        const email = document.getElementById("emailAddress").value.trim();
-        const validation = validateEmail(email);
-        if (!validation.valid) { showError(validation.message); return; }
-        identifier = email;
-        type = 'email';
-    }
-
-    showLoading(true);
-
-    setTimeout(() => {
-        localStorage.setItem("tempIdentifier", identifier);
-        localStorage.setItem("tempIdentifierType", type);
-        window.location.href = "/accounts/verify/";
-    }, 800);
-});
-
-document.getElementById("phoneNumber").addEventListener("input", function (e) {
+// ============================================
+// اعتبارسنجی ورودی شماره موبایل
+// ============================================
+document.getElementById("phoneNumber").addEventListener("input", function(e) {
     let value = this.value.replace(/\D/g, "");
     if (value.length > 11) value = value.slice(0, 11);
     this.value = value;
 });
 
-setTimeout(() => {
-    document.getElementById("phoneNumber").focus();
-}, 100);
+// ============================================
+// ✅ دریافت CSRF Token
+// ============================================
+function getCSRFToken() {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === 'csrftoken') {
+            return value;
+        }
+    }
+    return '';
+}
 
-
-// _______________________________________________________________________________________________________________
-//کد های مربوط به SMS
-
+// ============================================
+// ✅ ارسال فرم (فقط یک رویداد)
+// ============================================
 document.getElementById("loginForm").addEventListener("submit", async function(e) {
-
     e.preventDefault();
 
-    const phone = document.getElementById("phoneNumber").value.trim();
+    let identifier;
 
-    if (!phone) {
-        alert("شماره موبایل را وارد کنید");
+    if (activeTab === 'phone') {
+        let phone = document.getElementById("phoneNumber").value.trim();
+        if (phone.length === 10 && phone.startsWith("9")) phone = "0" + phone;
+        const validation = validatePhoneNumber(phone);
+        if (!validation.valid) {
+            showError(validation.message);
+            return;
+        }
+        identifier = phone;
+    } else {
+        const email = document.getElementById("emailAddress").value.trim();
+        const validation = validateEmail(email);
+        if (!validation.valid) {
+            showError(validation.message);
+            return;
+        }
+        identifier = email;
+        // ورود با ایمیل - فعلاً غیرفعال
+        showError("⏳ ورود با ایمیل در حال توسعه است");
         return;
     }
 
-    try {
+    showLoading(true);
 
+    try {
         const response = await fetch("/accounts/send-otp/", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCSRFToken()
             },
             body: JSON.stringify({
-                phone: phone
+                phone: identifier
             })
         });
 
         const data = await response.json();
-
-        console.log(data);
+        console.log("📡 پاسخ سرور:", data);
 
         if (data.status === "sent") {
-
-            localStorage.setItem("tempPhone", phone);
-
+            localStorage.setItem("tempPhone", identifier);
             window.location.href = "/accounts/verify/";
-
         } else {
-
-            alert(data.message || "خطا در ارسال کد");
-
+            showError(data.message || "خطا در ارسال کد");
+            showLoading(false);
         }
 
     } catch (error) {
-
-        console.error(error);
-
-        alert("ارتباط با سرور برقرار نشد");
-
+        console.error("❌ خطا:", error);
+        showError("ارتباط با سرور برقرار نشد");
+        showLoading(false);
     }
-
 });
+
+// ============================================
+// فوکوس اولیه
+// ============================================
+setTimeout(() => {
+    document.getElementById("phoneNumber").focus();
+}, 100);

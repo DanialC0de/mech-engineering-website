@@ -16,12 +16,24 @@
             <small>پنل دانشجو</small>
         </div>
         <ul class="menu">
-            <li class="active" data-tab="dashboard"><a href="#">📊 داشبورد</a></li>
-            <li data-tab="events"><a href="#">📅 اخبار و رویدادها</a></li>
-            <li data-tab="registrations"><a href="#">📝 ثبت‌نام‌های من</a></li>
-            <li data-tab="resources"><a href="#">📚 منابع و دانلودها</a></li>
-            <li data-tab="tickets"><a href="#">🎫 تیکت‌ها</a></li>
-            <li data-tab="profile"><a href="#">👤 پروفایل من</a></li>
+            <li class="active" data-tab="dashboard">
+                <a href="#" onclick="switchTab('dashboard'); return false;">📊 داشبورد</a>
+            </li>
+            <li data-tab="events">
+                <a href="#" onclick="switchTab('events'); return false;">📅 اخبار و رویدادها</a>
+            </li>
+            <li data-tab="registrations">
+                <a href="#" onclick="switchTab('registrations'); return false;">📝 ثبت‌نام‌های من</a>
+            </li>
+            <li data-tab="resources">
+                <a href="#" onclick="switchTab('resources'); return false;">📚 منابع و دانلودها</a>
+            </li>
+            <li data-tab="tickets">
+                <a href="#" onclick="switchTab('tickets'); return false;">🎫 تیکت‌ها</a>
+            </li>
+            <li data-tab="profile">
+                <a href="#" onclick="switchTab('profile'); return false;">👤 پروفایل من</a>
+            </li>
         </ul>
     </div>
     
@@ -34,26 +46,41 @@
         <!-- داشبورد -->
         <div id="dashboard" class="tab-content active">
             <div class="stats-grid">
-                <div class="stat-card"><div class="number" id="myRegistrations">۰</div><div class="label">رویدادهای ثبت‌نام شده</div></div>
-                <div class="stat-card"><div class="number" id="newResources">۰</div><div class="label">منابع جدید</div></div>
-                <div class="stat-card"><div class="number" id="myTickets">۰</div><div class="label">تیکت‌های من</div></div>
+                <div class="stat-card">
+                    <div class="number" id="myRegistrations">۰</div>
+                    <div class="label">رویدادهای ثبت‌نام شده</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="newResources">۰</div>
+                    <div class="label">منابع جدید</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="myTickets">۰</div>
+                    <div class="label">تیکت‌های من</div>
+                </div>
             </div>
 
             <div class="section-card">
                 <div class="section-title">📢 آخرین اطلاعیه‌ها</div>
-                <ul style="padding-right:20px;">
-                    <li>🔔 وبینار تخصصی سیستم‌های تعلیق - ۲۰ فروردین</li>
-                    <li>🔔 فراحوان مسابقه بزرگ سازه های ماکارونی-آخرین مهلت ثبت نام : 1404/02/20</li>
-                    <li>🔔 فراخوان ارسال مقاله به همایش ملی مکانیک</li>
-                    <li>🔔 جزوه ترمودینامیک پیشرفته بارگذاری شد</li>
+                <ul id="announcementsList" style="padding-right:20px;">
+                    <li>در حال بارگذاری...</li>
                 </ul>
             </div>
 
             <div class="section-card">
                 <div class="section-title">📅 رویدادهای قابل ثبت‌نام</div>
                 <table id="availableEventsTable">
-                    <thead><tr><th>عنوان رویداد</th><th>تاریخ</th><th>ظرفیت باقیمانده</th><th>عملیات</th></tr></thead>
-                    <tbody id="availableEventsBody"></tbody>
+                    <thead>
+                        <tr>
+                            <th>عنوان رویداد</th>
+                            <th>تاریخ</th>
+                            <th>ظرفیت باقیمانده</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="availableEventsBody">
+                        <tr><td colspan="4" style="text-align:center;">در حال بارگذاری...</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -62,9 +89,27 @@
         <div id="events" class="tab-content">
             <div class="section-card">
                 <div class="section-title">📅 همه رویدادها</div>
+                <div style="margin-bottom:15px;">
+                    <select id="eventStatusFilter" onchange="loadAllEvents()" style="padding:8px; border-radius:8px; border:1px solid #ddd;">
+                        <option value="all">همه</option>
+                        <option value="upcoming">در حال ثبت‌نام</option>
+                        <option value="ongoing">در حال برگزاری</option>
+                        <option value="completed">به پایان رسیده</option>
+                    </select>
+                </div>
                 <table id="allEventsTable">
-                    <thead><tr><th>عنوان</th><th>تاریخ</th><th>نوع</th><th>وضعیت</th><th>عملیات</th></tr></thead>
-                    <tbody id="allEventsBody"></tbody>
+                    <thead>
+                        <tr>
+                            <th>عنوان</th>
+                            <th>تاریخ</th>
+                            <th>نوع</th>
+                            <th>وضعیت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allEventsBody">
+                        <tr><td colspan="5" style="text-align:center;">در حال بارگذاری...</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -74,8 +119,17 @@
             <div class="section-card">
                 <div class="section-title">📝 رویدادهای ثبت‌نام شده من</div>
                 <table id="myRegistrationsTable">
-                    <thead><tr><th>عنوان رویداد</th><th>تاریخ</th><th>وضعیت</th><th>عملیات</th></tr></thead>
-                    <tbody id="myRegistrationsBody"></tbody>
+                    <thead>
+                        <tr>
+                            <th>عنوان رویداد</th>
+                            <th>تاریخ</th>
+                            <th>وضعیت</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myRegistrationsBody">
+                        <tr><td colspan="4" style="text-align:center;">در حال بارگذاری...</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -84,15 +138,24 @@
         <div id="resources" class="tab-content">
             <div class="section-card">
                 <div class="section-title">📚 منابع علمی</div>
-                <select id="resourceFilter" onchange="filterResources()" style="padding:8px; margin-bottom:15px; border-radius:8px;">
+                <select id="resourceFilter" onchange="filterResources()" style="padding:8px; margin-bottom:15px; border-radius:8px; border:1px solid #ddd;">
                     <option value="all">همه دسته‌ها</option>
                     <option value="آموزشی">آموزشی</option>
                     <option value="پژوهشی">پژوهشی</option>
                     <option value="صنعتی">صنعتی</option>
                 </select>
                 <table id="resourcesTable">
-                    <thead><tr><th>عنوان منبع</th><th>دسته‌بندی</th><th>توضیحات</th><th>عملیات</th></tr></thead>
-                    <tbody id="resourcesBody"></tbody>
+                    <thead>
+                        <tr>
+                            <th>عنوان منبع</th>
+                            <th>دسته‌بندی</th>
+                            <th>توضیحات</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resourcesBody">
+                        <tr><td colspan="4" style="text-align:center;">در حال بارگذاری...</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -101,10 +164,22 @@
         <div id="tickets" class="tab-content">
             <div class="section-card">
                 <div class="section-title">🎫 تیکت‌های من</div>
-                <button onclick="openNewTicketModal()" style="background:#0a2a44; color:white; padding:8px 15px; border:none; border-radius:8px; margin-bottom:15px;">+ تیکت جدید</button>
+                <button onclick="openNewTicketModal()" style="background:#0a2a44; color:white; padding:8px 15px; border:none; border-radius:8px; margin-bottom:15px; cursor:pointer;">
+                    + تیکت جدید
+                </button>
                 <table id="ticketsTable">
-                    <thead><tr><th>شناسه</th><th>موضوع</th><th>وضعیت</th><th>تاریخ</th><th>عملیات</th></tr></thead>
-                    <tbody id="ticketsBody"></tbody>
+                    <thead>
+                        <tr>
+                            <th>شناسه</th>
+                            <th>موضوع</th>
+                            <th>وضعیت</th>
+                            <th>تاریخ</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticketsBody">
+                        <tr><td colspan="5" style="text-align:center;">در حال بارگذاری...</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -115,24 +190,24 @@
                 <div class="section-title">👤 اطلاعات شخصی</div>
                 <div style="display:flex; gap:20px; flex-wrap:wrap;">
                     <div style="flex:1;">
-                        <p><strong>نام:</strong> علی رضایی</p>
-                        <p><strong>شماره دانشجویی:</strong> ۴۰۱۱۲۳۴۵</p>
-                        <p><strong>رشته:</strong> مهندسی مکانیک</p>
-                        <p><strong>مقطع:</strong> کارشناسی</p>
-                        <p><strong>ایمیل:</strong> rezaei@eng.uk.ac.ir</p>
+                        <p><strong>نام:</strong> <span id="profileName">علی رضایی</span></p>
+                        <p><strong>شماره دانشجویی:</strong> <span id="profileStudentId">۴۰۱۱۲۳۴۵</span></p>
+                        <p><strong>رشته:</strong> <span id="profileMajor">مهندسی مکانیک</span></p>
+                        <p><strong>مقطع:</strong> <span id="profileLevel">کارشناسی</span></p>
+                        <p><strong>ایمیل:</strong> <span id="profileEmail">rezaei@eng.uk.ac.ir</span></p>
                     </div>
                     <div style="text-align:center;">
                         <div style="width:100px; height:100px; background:#0a2a44; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:36px;">👨‍🎓</div>
-                        <button onclick="changeProfilePic()" style="margin-top:10px;">تغییر عکس</button>
+                        <button onclick="changeProfilePic()" style="margin-top:10px; padding:5px 15px; border-radius:5px; border:1px solid #0a2a44; background:white; color:#0a2a44; cursor:pointer;">تغییر عکس</button>
                     </div>
                 </div>
             </div>
 
             <div class="section-card">
                 <div class="section-title">🔒 تنظیمات حساب کاربری</div>
-                <input type="password" id="newPassword" placeholder="رمز عبور جدید" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px;">
-                <input type="password" id="confirmNewPassword" placeholder="تکرار رمز عبور" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px;">
-                <button onclick="changePassword()" style="background:#0a2a44; color:white; padding:10px 20px; border:none; border-radius:8px;">تغییر رمز عبور</button>
+                <input type="password" id="newPassword" placeholder="رمز عبور جدید" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
+                <input type="password" id="confirmNewPassword" placeholder="تکرار رمز عبور" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
+                <button onclick="changePassword()" style="background:#0a2a44; color:white; padding:10px 20px; border:none; border-radius:8px; cursor:pointer;">تغییر رمز عبور</button>
             </div>
 
             <div class="section-card">
@@ -147,16 +222,20 @@
     <div id="newTicketModal" class="modal">
         <div class="modal-content">
             <h3>🎫 تیکت جدید</h3>
-            <input type="text" id="ticketSubject" placeholder="موضوع">
-            <select id="ticketPriority"><option>کم</option><option>متوسط</option><option>فوری</option></select>
-            <textarea id="ticketMessage" rows="4" placeholder="متن تیکت..."></textarea>
-            <div class="modal-buttons">
-                <button onclick="closeTicketModal()" style="background:#999;">انصراف</button>
-                <button onclick="submitTicket()" style="background:#0a2a44;">ارسال تیکت</button>
+            <input type="text" id="ticketSubject" placeholder="موضوع" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
+            <select id="ticketPriority" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
+                <option>کم</option>
+                <option selected>متوسط</option>
+                <option>فوری</option>
+            </select>
+            <textarea id="ticketMessage" rows="4" placeholder="متن تیکت..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
+            <div class="modal-buttons" style="display:flex; gap:10px; margin-top:15px;">
+                <button onclick="closeTicketModal()" style="background:#999; color:white; padding:10px 20px; border:none; border-radius:8px; cursor:pointer;">انصراف</button>
+                <button onclick="submitTicket()" style="background:#0a2a44; color:white; padding:10px 20px; border:none; border-radius:8px; cursor:pointer;">ارسال تیکت</button>
             </div>
         </div>
     </div>
 
-    <script src="{% static  'js/student.js' %}"></script>
+    <script src="{% static 'js/student.js' %}"></script>
 </body>
 </html>

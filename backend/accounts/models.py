@@ -1,3 +1,4 @@
+# accounts/models.py
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
@@ -7,8 +8,9 @@ import random
 class CustomUser(AbstractUser):
 
     ROLE_CHOICES = (
-        ("student", "Student"),
-        ("professor", "Professor"),
+        ("student", "دانشجو"),      # مقدار دیتابیس -> نمایش در ادمین
+        ("professor", "استاد"),
+        ("member", "عضو انجمن"),    # ✅ اضافه شد
     )
 
     phone_number = models.CharField(max_length=15, unique=True)

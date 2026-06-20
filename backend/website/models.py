@@ -38,24 +38,45 @@ from django.conf import settings
 #     def __str__(self):
 #         return self.title
 
-
+#resources_______
+# website/models.py
 
 class Resource(models.Model):
+    # ✅ دسته‌بندی‌های ممکن
+    CATEGORY_CHOICES = [
+        ('آموزشی', 'آموزشی'),
+        ('پژوهشی', 'پژوهشی'),
+        ('صنعتی', 'صنعتی'),
+        ('فناوری', 'فناوری'),
+        ('بین‌الملل', 'بین‌الملل'),
+        ('سایر', 'سایر'),
+    ]
+    
     title = models.CharField(max_length=200, verbose_name="عنوان منبع")
     image = models.ImageField(upload_to='resources/', blank=True, null=True, verbose_name="تصویر")
     description = models.TextField(verbose_name="توضیحات")
     file = models.FileField(upload_to='resources/files/', blank=True, null=True, verbose_name="فایل")
     download_count = models.IntegerField(default=0, verbose_name="تعداد دانلود")
+    
+    # ✅ فیلد جدید: دسته‌بندی
+    category = models.CharField(
+        max_length=50, 
+        choices=CATEGORY_CHOICES, 
+        default='سایر', 
+        verbose_name="دسته‌بندی"
+    )
+    
+    # ✅ فیلد جدید: تاریخ ایجاد (برای مرتب‌سازی)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
 
     class Meta:
         verbose_name = "منبع علمی"
         verbose_name_plural = "منابع علمی"
+        ordering = ['-created_at']  # مرتب‌سازی بر اساس جدیدترین
 
     def __str__(self):
         return self.title
-
-
-
+    #___________
 class Honor(models.Model):
     competition_name = models.CharField(max_length=200, verbose_name="عنوان جشنواره یا مسابقه")
     rank = models.CharField(max_length=200, verbose_name="مقام")

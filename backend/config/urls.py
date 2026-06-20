@@ -7,4 +7,5 @@ urlpatterns = [
     path('', include('website.urls')),
     path('events/', include('events.urls')),
     path('news/', include('news.urls')),
+    path('panel/student/', include('students.urls')),
 ]
