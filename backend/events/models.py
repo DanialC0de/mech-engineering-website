@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from django_jalali.db import models as jmodels 
 class Event(models.Model):
     """مدل رویدادها و کارگاه‌ها"""
     
@@ -26,8 +25,9 @@ class Event(models.Model):
     instructor_image = models.ImageField(upload_to='instructors/', blank=True, null=True, verbose_name="تصویر مدرس")
     
     # زمان
-    jalali_date = jmodels.jDateField(verbose_name="تاریخ شمسی")
-    time = models.CharField(max_length=20, verbose_name="ساعت")
+    jalali_date = models.CharField(max_length=50,blank=True,
+    null=True, verbose_name="تاریخ شمسی", help_text="مثال: ۱۴۰۴/۰۱/۲۰")
+    time = models.CharField(max_length=20, verbose_name="ساعت", help_text="مثال: ۱۵:۰۰")
     
     # وضعیت و ظرفیت
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='upcoming', verbose_name="وضعیت")

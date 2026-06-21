@@ -3,7 +3,8 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import django_jalali.db.models
+# ❌ این خط رو حذف کن
+# import django_jalali.db.models
 
 
 class Migration(migrations.Migration):
@@ -71,9 +72,10 @@ class Migration(migrations.Migration):
                         verbose_name="تصویر مدرس",
                     ),
                 ),
+                # ✅ این رو تغییر بده
                 (
                     "jalali_date",
-                    django_jalali.db.models.jDateField(verbose_name="تاریخ شمسی"),
+                    models.CharField(max_length=50, verbose_name="تاریخ شمسی"),
                 ),
                 ("time", models.CharField(max_length=20, verbose_name="ساعت")),
                 (

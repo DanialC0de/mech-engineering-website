@@ -1,20 +1,8 @@
 from django.contrib import admin
-from django import forms
 from .models import Event, Registration
-
-# فرم سفارشی با ویجت تاریخ
-class EventForm(forms.ModelForm):
-    class Meta:
-        model = Event
-        fields = '__all__'
-        widgets = {
-            'jalali_date': forms.TextInput(attrs={'class': 'vDateField'}),  # ← ویجت تاریخ جنگو
-        }
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    form = EventForm  # ← استفاده از فرم سفارشی
-    
     list_display = ('title', 'jalali_date', 'time', 'status', 'capacity', 'registered_count')
     list_filter = ('status', 'is_full')
     search_fields = ('title',)
