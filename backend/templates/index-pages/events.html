@@ -21,15 +21,15 @@
                 <span class="user-welcome">خوش آمدی {{ user.get_full_name|default:user.username }}</span>
                 <a href="{% url 'logout' %}" class="logout-btn">خروج</a>
             {% else %}
-                <a href="{% url 'home' %}" class="login-btn">ورود / ثبت‌نام</a>
+                <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
             {% endif %}
         </div>
         <div class="nav-bar">
             <div class="logo">⚙️انجمن علمی مهندسی <span>مکانیک</span></div>
             <div class="nav-links">
                 <a href="{% url 'home' %}">صفحه اصلی</a>
-                <a href="#"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
-                <a href="#"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
+                <a href="{% url 'about' %}"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
+                <a href="{% url 'industry' %}"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
                 <a href="{% url 'all_events' %}" class="active">رویدادها</a>
                 <a href="{% url 'all_resources' %}">منابع علمی</a>
                 <a href="{% url 'honors' %}">افتخارات انجمن</a>
@@ -38,13 +38,13 @@
         </div>
     </header>
 
-    <!-- منوهای dropdown (همون کد خودت) -->
+    <!-- منوهای dropdown -->
     <ul id="ul-about">
-        <li><a href="about.html">معرفی دانشکده</a></li>
-        <li><a href="honors.html">دستاورد ها و افتخارات</a></li>
+        <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
+        <li><a href="{% url 'honors' %}">دستاورد ها و افتخارات</a></li>
     </ul>
     <ul id="ul-relation">
-        <li><a href="industry.html">خدمات دانشکده به صنعت</a></li>
+        <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
     </ul>
 
     <section class="hero">
@@ -106,6 +106,7 @@
                         ثبت‌نام →
                     </button>
                 {% endif %}
+            </div>
             {% empty %}
             <div class="event-card">
                 <h3>هیچ رویدادی وجود ندارد</h3>
@@ -167,7 +168,7 @@
         </a>
     </div>
 
-    <!-- اسکریپت dropdown (همون کد خودت) -->
+    <!-- اسکریپت dropdown -->
     <script>
         let aboutLink = document.querySelector('.nav-links a:nth-child(2)');
         let aboutUl = document.getElementById('ul-about');
@@ -205,4 +206,4 @@
     </script>
 </body>
 
-</html>                            
+</html>
