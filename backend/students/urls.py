@@ -16,5 +16,6 @@ urlpatterns = [
     path('api/resources/', views.get_resources_list, name='resources_list'),
     path('api/resources/<int:resource_id>/download/', views.download_resource, name='download_resource'),
     path('api/profile/', views.get_profile_data, name='profile_data'),
+    path('api/profile/update/', views.update_profile_data, name='update_profile_data'),
     path('api/change-password/', views.change_password, name='change_password'),
 ]

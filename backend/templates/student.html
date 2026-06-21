@@ -10,210 +10,302 @@
 </head>
 <body>
     <div class="sidebar">
-        <button id="toggleSidebar"><i class="fas fa-bars"></i></button>
+        <button id="toggleSidebar" aria-label="باز و بسته کردن منو"><i class="fas fa-bars"></i></button>
         <div class="logo">
-            ⚙️ انجمن <span>مکانیک</span>
+            <span class="logo-mark">⚙️</span> انجمن <span>مکانیک</span>
             <small>پنل دانشجو</small>
         </div>
         <ul class="menu">
             <li class="active" data-tab="dashboard">
-                <a href="#" onclick="switchTab('dashboard'); return false;">📊 داشبورد</a>
+                <a href="#" onclick="switchTab('dashboard'); return false;"><i class="fa-solid fa-chart-line"></i> داشبورد</a>
             </li>
             <li data-tab="events">
-                <a href="#" onclick="switchTab('events'); return false;">📅 اخبار و رویدادها</a>
+                <a href="#" onclick="switchTab('events'); return false;"><i class="fa-solid fa-calendar-days"></i> اخبار و رویدادها</a>
             </li>
             <li data-tab="registrations">
-                <a href="#" onclick="switchTab('registrations'); return false;">📝 ثبت‌نام‌های من</a>
+                <a href="#" onclick="switchTab('registrations'); return false;"><i class="fa-solid fa-clipboard-check"></i> ثبت‌نام‌های من</a>
             </li>
             <li data-tab="resources">
-                <a href="#" onclick="switchTab('resources'); return false;">📚 منابع و دانلودها</a>
+                <a href="#" onclick="switchTab('resources'); return false;"><i class="fa-solid fa-book-open"></i> منابع و دانلودها</a>
             </li>
             <li data-tab="tickets">
-                <a href="#" onclick="switchTab('tickets'); return false;">🎫 تیکت‌ها</a>
+                <a href="#" onclick="switchTab('tickets'); return false;"><i class="fa-solid fa-ticket"></i> تیکت‌ها</a>
             </li>
             <li data-tab="profile">
-                <a href="#" onclick="switchTab('profile'); return false;">👤 پروفایل من</a>
+                <a href="#" onclick="switchTab('profile'); return false;"><i class="fa-solid fa-user"></i> پروفایل من</a>
             </li>
         </ul>
     </div>
     
     <div class="main-content">
         <div class="top-bar">
-            <div class="page-title" id="pageTitle">داشبورد دانشجو</div>
-            <button class="logout-btn" onclick="logout()">خروج</button>
+            <div>
+                <div class="eyebrow">انجمن علمی مهندسی مکانیک</div>
+                <div class="page-title" id="pageTitle">داشبورد دانشجو</div>
+            </div>
+            <div class="top-actions">
+                <a class="site-link" href="/">مشاهده سایت</a>
+                <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
+            </div>
         </div>
 
         <!-- داشبورد -->
         <div id="dashboard" class="tab-content active">
             <div class="stats-grid">
                 <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
                     <div class="number" id="myRegistrations">۰</div>
                     <div class="label">رویدادهای ثبت‌نام شده</div>
                 </div>
                 <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-file-arrow-down"></i></div>
                     <div class="number" id="newResources">۰</div>
                     <div class="label">منابع جدید</div>
                 </div>
                 <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-headset"></i></div>
                     <div class="number" id="myTickets">۰</div>
                     <div class="label">تیکت‌های من</div>
                 </div>
             </div>
 
             <div class="section-card">
-                <div class="section-title">📢 آخرین اطلاعیه‌ها</div>
-                <ul id="announcementsList" style="padding-right:20px;">
+                <div class="section-title"><span><i class="fa-solid fa-bullhorn"></i> آخرین اطلاعیه‌ها</span></div>
+                <ul id="announcementsList" class="announcement-list">
                     <li>در حال بارگذاری...</li>
                 </ul>
             </div>
 
             <div class="section-card">
-                <div class="section-title">📅 رویدادهای قابل ثبت‌نام</div>
-                <table id="availableEventsTable">
-                    <thead>
-                        <tr>
-                            <th>عنوان رویداد</th>
-                            <th>تاریخ</th>
-                            <th>ظرفیت باقیمانده</th>
-                            <th>عملیات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="availableEventsBody">
-                        <tr><td colspan="4" style="text-align:center;">در حال بارگذاری...</td></tr>
-                    </tbody>
-                </table>
+                <div class="section-title"><span><i class="fa-solid fa-calendar-plus"></i> رویدادهای قابل ثبت‌نام</span></div>
+                <div class="table-wrap">
+                    <table id="availableEventsTable">
+                        <thead>
+                            <tr>
+                                <th>عنوان رویداد</th>
+                                <th>تاریخ</th>
+                                <th>ظرفیت باقیمانده</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="availableEventsBody">
+                            <tr><td colspan="4" class="empty-state">در حال بارگذاری...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <!-- اخبار و رویدادها -->
         <div id="events" class="tab-content">
             <div class="section-card">
-                <div class="section-title">📅 همه رویدادها</div>
-                <div style="margin-bottom:15px;">
-                    <select id="eventStatusFilter" onchange="loadAllEvents()" style="padding:8px; border-radius:8px; border:1px solid #ddd;">
+                <div class="section-title"><span><i class="fa-solid fa-calendar-days"></i> همه رویدادها</span></div>
+                <div class="toolbar">
+                    <select id="eventStatusFilter" onchange="loadAllEvents()">
                         <option value="all">همه</option>
                         <option value="upcoming">در حال ثبت‌نام</option>
                         <option value="ongoing">در حال برگزاری</option>
                         <option value="completed">به پایان رسیده</option>
                     </select>
                 </div>
-                <table id="allEventsTable">
-                    <thead>
-                        <tr>
-                            <th>عنوان</th>
-                            <th>تاریخ</th>
-                            <th>نوع</th>
-                            <th>وضعیت</th>
-                            <th>عملیات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="allEventsBody">
-                        <tr><td colspan="5" style="text-align:center;">در حال بارگذاری...</td></tr>
-                    </tbody>
-                </table>
+                <div class="table-wrap">
+                    <table id="allEventsTable">
+                        <thead>
+                            <tr>
+                                <th>عنوان</th>
+                                <th>تاریخ</th>
+                                <th>وضعیت رویداد</th>
+                                <th>وضعیت من</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allEventsBody">
+                            <tr><td colspan="5" class="empty-state">در حال بارگذاری...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <!-- ثبت‌نام‌های من -->
         <div id="registrations" class="tab-content">
             <div class="section-card">
-                <div class="section-title">📝 رویدادهای ثبت‌نام شده من</div>
-                <table id="myRegistrationsTable">
-                    <thead>
-                        <tr>
-                            <th>عنوان رویداد</th>
-                            <th>تاریخ</th>
-                            <th>وضعیت</th>
-                            <th>عملیات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="myRegistrationsBody">
-                        <tr><td colspan="4" style="text-align:center;">در حال بارگذاری...</td></tr>
-                    </tbody>
-                </table>
+                <div class="section-title"><span><i class="fa-solid fa-clipboard-check"></i> رویدادهای ثبت‌نام شده من</span></div>
+                <div class="table-wrap">
+                    <table id="myRegistrationsTable">
+                        <thead>
+                            <tr>
+                                <th>عنوان رویداد</th>
+                                <th>تاریخ</th>
+                                <th>وضعیت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myRegistrationsBody">
+                            <tr><td colspan="4" class="empty-state">در حال بارگذاری...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <!-- منابع و دانلودها -->
         <div id="resources" class="tab-content">
             <div class="section-card">
-                <div class="section-title">📚 منابع علمی</div>
-                <select id="resourceFilter" onchange="filterResources()" style="padding:8px; margin-bottom:15px; border-radius:8px; border:1px solid #ddd;">
-                    <option value="all">همه دسته‌ها</option>
-                    <option value="آموزشی">آموزشی</option>
-                    <option value="پژوهشی">پژوهشی</option>
-                    <option value="صنعتی">صنعتی</option>
-                </select>
-                <table id="resourcesTable">
-                    <thead>
-                        <tr>
-                            <th>عنوان منبع</th>
-                            <th>دسته‌بندی</th>
-                            <th>توضیحات</th>
-                            <th>عملیات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resourcesBody">
-                        <tr><td colspan="4" style="text-align:center;">در حال بارگذاری...</td></tr>
-                    </tbody>
-                </table>
+                <div class="section-title"><span><i class="fa-solid fa-book-open"></i> منابع علمی</span></div>
+                <div class="toolbar">
+                    <select id="resourceFilter" onchange="filterResources()">
+                        <option value="all">همه دسته‌ها</option>
+                        <option value="آموزشی">آموزشی</option>
+                        <option value="پژوهشی">پژوهشی</option>
+                        <option value="صنعتی">صنعتی</option>
+                        <option value="فناوری">فناوری</option>
+                        <option value="بین‌الملل">بین‌الملل</option>
+                        <option value="سایر">سایر</option>
+                    </select>
+                </div>
+                <div class="table-wrap">
+                    <table id="resourcesTable">
+                        <thead>
+                            <tr>
+                                <th>عنوان منبع</th>
+                                <th>دسته‌بندی</th>
+                                <th>توضیحات</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resourcesBody">
+                            <tr><td colspan="4" class="empty-state">در حال بارگذاری...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <!-- تیکت‌ها -->
         <div id="tickets" class="tab-content">
             <div class="section-card">
-                <div class="section-title">🎫 تیکت‌های من</div>
-                <button onclick="openNewTicketModal()" style="background:#0a2a44; color:white; padding:8px 15px; border:none; border-radius:8px; margin-bottom:15px; cursor:pointer;">
-                    + تیکت جدید
-                </button>
-                <table id="ticketsTable">
-                    <thead>
-                        <tr>
-                            <th>شناسه</th>
-                            <th>موضوع</th>
-                            <th>وضعیت</th>
-                            <th>تاریخ</th>
-                            <th>عملیات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ticketsBody">
-                        <tr><td colspan="5" style="text-align:center;">در حال بارگذاری...</td></tr>
-                    </tbody>
-                </table>
+                <div class="section-title">
+                    <span><i class="fa-solid fa-ticket"></i> تیکت‌های من</span>
+                    <button class="primary-btn" onclick="openNewTicketModal()"><i class="fa-solid fa-plus"></i> تیکت جدید</button>
+                </div>
+                <div class="table-wrap">
+                    <table id="ticketsTable">
+                        <thead>
+                            <tr>
+                                <th>شناسه</th>
+                                <th>موضوع</th>
+                                <th>اولویت</th>
+                                <th>وضعیت</th>
+                                <th>تاریخ</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ticketsBody">
+                            <tr><td colspan="6" class="empty-state">در حال بارگذاری...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <!-- پروفایل -->
         <div id="profile" class="tab-content">
             <div class="section-card">
-                <div class="section-title">👤 اطلاعات شخصی</div>
-                <div style="display:flex; gap:20px; flex-wrap:wrap;">
-                    <div style="flex:1;">
+                <div class="section-title">
+                    <span><i class="fa-solid fa-user-graduate"></i> اطلاعات شخصی</span>
+                    <button class="outline-btn" id="editProfileBtn" onclick="toggleProfileEdit(true)">
+                        <i class="fa-solid fa-pen"></i> ویرایش اطلاعات
+                    </button>
+                </div>
+                <div class="profile-grid">
+                    <div class="profile-info">
                         <p><strong>نام:</strong> <span id="profileName">علی رضایی</span></p>
                         <p><strong>شماره دانشجویی:</strong> <span id="profileStudentId">۴۰۱۱۲۳۴۵</span></p>
+                        <p><strong>شماره تماس:</strong> <span id="profilePhone">ثبت نشده</span></p>
                         <p><strong>رشته:</strong> <span id="profileMajor">مهندسی مکانیک</span></p>
                         <p><strong>مقطع:</strong> <span id="profileLevel">کارشناسی</span></p>
                         <p><strong>ایمیل:</strong> <span id="profileEmail">rezaei@eng.uk.ac.ir</span></p>
+                        <p><strong>سال ورود:</strong> <span id="profileEntryYear">ثبت نشده</span></p>
+                        <p><strong>ترم:</strong> <span id="profileTerm">ثبت نشده</span></p>
+                        <p><strong>کمیته:</strong> <span id="profileCommittee">ثبت نشده</span></p>
+                        <p><strong>علاقه‌مندی:</strong> <span id="profileInterest">ثبت نشده</span></p>
                     </div>
-                    <div style="text-align:center;">
-                        <div style="width:100px; height:100px; background:#0a2a44; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:36px;">👨‍🎓</div>
-                        <button onclick="changeProfilePic()" style="margin-top:10px; padding:5px 15px; border-radius:5px; border:1px solid #0a2a44; background:white; color:#0a2a44; cursor:pointer;">تغییر عکس</button>
+                    <div class="profile-avatar">
+                        <div class="avatar-circle" id="profileAvatar"><i class="fa-solid fa-user-graduate"></i></div>
+                        <button class="outline-btn" onclick="changeProfilePic()">تغییر عکس</button>
                     </div>
                 </div>
+                <p class="profile-bio"><strong>درباره من:</strong> <span id="profileBio">ثبت نشده</span></p>
+
+                <form id="profileEditForm" class="profile-edit-form" onsubmit="saveProfile(event)">
+                    <div class="form-grid">
+                        <label>نام
+                            <input type="text" id="editFirstName" required>
+                        </label>
+                        <label>نام خانوادگی
+                            <input type="text" id="editLastName" required>
+                        </label>
+                        <label>شماره تماس
+                            <input type="tel" id="editPhoneNumber" required>
+                        </label>
+                        <label>ایمیل
+                            <input type="email" id="editEmail">
+                        </label>
+                        <label>شماره دانشجویی
+                            <input type="text" id="editStudentId">
+                        </label>
+                        <label>رشته تحصیلی
+                            <input type="text" id="editMajor">
+                        </label>
+                        <label>مقطع تحصیلی
+                            <select id="editLevel">
+                                <option value="">انتخاب مقطع</option>
+                                <option value="کارشناسی">کارشناسی</option>
+                                <option value="کارشناسی ارشد">کارشناسی ارشد</option>
+                                <option value="دکتری">دکتری</option>
+                            </select>
+                        </label>
+                        <label>سال ورود
+                            <input type="number" id="editEntryYear" min="1390" max="1410">
+                        </label>
+                        <label>ترم
+                            <input type="text" id="editTerm">
+                        </label>
+                        <label>کمیته
+                            <input type="text" id="editCommittee">
+                        </label>
+                        <label>علاقه‌مندی
+                            <input type="text" id="editInterest">
+                        </label>
+                    </div>
+                    <label class="full-field">درباره من
+                        <textarea id="editBio" rows="4"></textarea>
+                    </label>
+                    <div class="form-actions">
+                        <button type="button" class="secondary-btn" onclick="toggleProfileEdit(false)">انصراف</button>
+                        <button type="submit" class="primary-btn" id="saveProfileBtn">
+                            <i class="fa-solid fa-floppy-disk"></i> ذخیره اطلاعات
+                        </button>
+                    </div>
+                </form>
             </div>
 
             <div class="section-card">
-                <div class="section-title">🔒 تنظیمات حساب کاربری</div>
-                <input type="password" id="newPassword" placeholder="رمز عبور جدید" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
-                <input type="password" id="confirmNewPassword" placeholder="تکرار رمز عبور" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
-                <button onclick="changePassword()" style="background:#0a2a44; color:white; padding:10px 20px; border:none; border-radius:8px; cursor:pointer;">تغییر رمز عبور</button>
+                <div class="section-title"><span><i class="fa-solid fa-lock"></i> تنظیمات حساب کاربری</span></div>
+                <div class="form-grid">
+                    <input type="password" id="newPassword" placeholder="رمز عبور جدید">
+                    <input type="password" id="confirmNewPassword" placeholder="تکرار رمز عبور">
+                </div>
+                <button class="primary-btn" onclick="changePassword()">تغییر رمز عبور</button>
             </div>
 
             <div class="section-card">
-                <div class="section-title">📊 فعالیت‌های من</div>
-                <p>📅 تعداد رویدادهای شرکت کرده: <span id="eventCount">۰</span></p>
-                <p>📚 تعداد فایل‌های دانلود شده: <span id="downloadCount">۰</span></p>
+                <div class="section-title"><span><i class="fa-solid fa-chart-simple"></i> فعالیت‌های من</span></div>
+                <div class="activity-grid">
+                    <p><i class="fa-solid fa-calendar-check"></i> تعداد رویدادهای شرکت کرده: <span id="eventCount">۰</span></p>
+                    <p><i class="fa-solid fa-download"></i> تعداد فایل‌های دانلود شده: <span id="downloadCount">۰</span></p>
+                </div>
             </div>
         </div>
     </div>
@@ -221,17 +313,17 @@
     <!-- مودال تیکت جدید -->
     <div id="newTicketModal" class="modal">
         <div class="modal-content">
-            <h3>🎫 تیکت جدید</h3>
-            <input type="text" id="ticketSubject" placeholder="موضوع" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
-            <select id="ticketPriority" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd;">
+            <h3><i class="fa-solid fa-ticket"></i> تیکت جدید</h3>
+            <input type="text" id="ticketSubject" placeholder="موضوع">
+            <select id="ticketPriority">
                 <option>کم</option>
                 <option selected>متوسط</option>
                 <option>فوری</option>
             </select>
-            <textarea id="ticketMessage" rows="4" placeholder="متن تیکت..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
-            <div class="modal-buttons" style="display:flex; gap:10px; margin-top:15px;">
-                <button onclick="closeTicketModal()" style="background:#999; color:white; padding:10px 20px; border:none; border-radius:8px; cursor:pointer;">انصراف</button>
-                <button onclick="submitTicket()" style="background:#0a2a44; color:white; padding:10px 20px; border:none; border-radius:8px; cursor:pointer;">ارسال تیکت</button>
+            <textarea id="ticketMessage" rows="4" placeholder="متن تیکت..."></textarea>
+            <div class="modal-buttons">
+                <button class="secondary-btn" onclick="closeTicketModal()">انصراف</button>
+                <button class="primary-btn" onclick="submitTicket()">ارسال تیکت</button>
             </div>
         </div>
     </div>

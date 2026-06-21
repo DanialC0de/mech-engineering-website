@@ -62,7 +62,9 @@ class Event(models.Model):
     
     def update_registration_count(self):
         """به‌روزرسانی تعداد ثبت‌نام‌ها"""
-        self.registered_count = self.registrations.count()  # ⭐ بهتر شد
+        self.registered_count = self.registrations.filter(
+            status__in=['pending', 'confirmed']
+        ).count()
         
         if self.capacity > 0 and self.registered_count >= self.capacity:
             self.is_full = True

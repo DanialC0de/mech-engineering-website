@@ -46,7 +46,7 @@ def get_dashboard_data(request):
     ).count()
     
     # تعداد منابع جدید
-    from events.models import Resource
+    from website.models import Resource
     new_resources = Resource.objects.count()
     
     # تعداد تیکت‌ها (اگر مدل تیکت دارید)
@@ -63,7 +63,8 @@ def get_dashboard_data(request):
         status='upcoming',
         is_full=False
     ).exclude(
-        registrations__user=request.user
+        registrations__user=request.user,
+        registrations__status__in=['pending', 'confirmed']
     )[:5]
     
     # رویدادهای ثبت‌نام شده من
@@ -155,6 +156,7 @@ def get_events_list(request):
             'title': event.title,
             'date': event.jalali_date,
             'time': event.time,
+            'status_code': event.status,
             'status': dict(Event.STATUS_CHOICES).get(event.status, ''),
             'status_class': {
                 'upcoming': 'primary',
@@ -188,19 +190,23 @@ def register_event(request, event_id):
             'error': 'امکان ثبت‌نام در این رویداد وجود ندارد'
         }, status=400)
     
-    # بررسی ثبت‌نام قبلی
-    if Registration.objects.filter(event=event, user=request.user).exists():
+    existing_registration = Registration.objects.filter(event=event, user=request.user).first()
+    if existing_registration and existing_registration.status != 'cancelled':
         return JsonResponse({
             'success': False,
             'error': 'شما قبلاً در این رویداد ثبت‌نام کرده‌اید'
         }, status=400)
     
-    # ایجاد ثبت‌نام
-    registration = Registration.objects.create(
-        event=event,
-        user=request.user,
-        status='confirmed'
-    )
+    if existing_registration:
+        existing_registration.status = 'confirmed'
+        existing_registration.save(update_fields=['status'])
+        registration = existing_registration
+    else:
+        registration = Registration.objects.create(
+            event=event,
+            user=request.user,
+            status='confirmed'
+        )
     
     # به‌روزرسانی تعداد ثبت‌نام‌ها
     event.update_registration_count()
@@ -254,7 +260,10 @@ def get_resources_list(request):
         
         print("=== شروع get_resources_list ===")
         
-        resources = Resource.objects.all().order_by('-id')
+        category = request.GET.get('category', 'all')
+        resources = Resource.objects.all().order_by('-created_at')
+        if category != 'all':
+            resources = resources.filter(category=category)
         print(f"تعداد منابع: {resources.count()}")
         
         data = []
@@ -262,6 +271,7 @@ def get_resources_list(request):
             data.append({
                 'id': resource.id,
                 'title': resource.title,
+                'category': resource.category,
                 'description': resource.description[:150] + '...' if len(resource.description) > 150 else resource.description,
                 'download_count': resource.download_count,
                 'has_file': bool(resource.file),
@@ -311,6 +321,7 @@ def get_profile_data(request):
         return JsonResponse({'error': 'دسترسی غیرمجاز'}, status=403)
     
     user = request.user
+    student = getattr(user, 'student_profile', None)
     
     # تعداد رویدادهای شرکت کرده
     event_count = Registration.objects.filter(
@@ -327,6 +338,15 @@ def get_profile_data(request):
         'username': user.username,
         'phone_number': user.phone_number,
         'email': user.email,
+        'student_id': student.student_id if student else '',
+        'major': student.major if student else '',
+        'level': student.level if student else '',
+        'entry_year': student.entry_year if student else '',
+        'term': student.term if student else '',
+        'committee': student.committee if student else '',
+        'interest': student.interest if student else '',
+        'bio': student.bio if student else '',
+        'avatar_url': student.avatar.url if student and student.avatar else '',
         'role': dict(CustomUser.ROLE_CHOICES).get(user.role, ''),
         'event_count': event_count,
         'download_count': download_count,
@@ -334,6 +354,66 @@ def get_profile_data(request):
     }
     
     return JsonResponse(data)
+
+
+@login_required
+@require_http_methods(["POST"])
+def update_profile_data(request):
+    """به‌روزرسانی اطلاعات پروفایل دانشجو"""
+    if request.user.role != 'student':
+        return JsonResponse({'error': 'دسترسی غیرمجاز'}, status=403)
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'داده‌های ارسال شده معتبر نیست'}, status=400)
+
+    user = request.user
+    student, _ = StudentProfile.objects.get_or_create(user=user)
+
+    first_name = str(data.get('first_name', '')).strip()
+    last_name = str(data.get('last_name', '')).strip()
+    email = str(data.get('email', '')).strip()
+    phone_number = str(data.get('phone_number', '')).strip()
+    student_id = str(data.get('student_id', '')).strip()
+    entry_year = str(data.get('entry_year', '')).strip()
+
+    if not first_name or not last_name:
+        return JsonResponse({'success': False, 'error': 'نام و نام خانوادگی الزامی است'}, status=400)
+
+    if not phone_number:
+        return JsonResponse({'success': False, 'error': 'شماره تماس الزامی است'}, status=400)
+
+    if CustomUser.objects.filter(phone_number=phone_number).exclude(id=user.id).exists():
+        return JsonResponse({'success': False, 'error': 'این شماره تماس قبلاً ثبت شده است'}, status=400)
+
+    if student_id and StudentProfile.objects.filter(student_id=student_id).exclude(user=user).exists():
+        return JsonResponse({'success': False, 'error': 'این شماره دانشجویی قبلاً ثبت شده است'}, status=400)
+
+    parsed_entry_year = None
+    if entry_year:
+        try:
+            parsed_entry_year = int(entry_year)
+        except ValueError:
+            return JsonResponse({'success': False, 'error': 'سال ورود باید عددی باشد'}, status=400)
+
+    user.first_name = first_name
+    user.last_name = last_name
+    user.email = email
+    user.phone_number = phone_number
+    user.save(update_fields=['first_name', 'last_name', 'email', 'phone_number'])
+
+    student.student_id = student_id or None
+    student.major = str(data.get('major', '')).strip()
+    student.level = str(data.get('level', '')).strip()
+    student.entry_year = parsed_entry_year
+    student.term = str(data.get('term', '')).strip()
+    student.committee = str(data.get('committee', '')).strip()
+    student.interest = str(data.get('interest', '')).strip()
+    student.bio = str(data.get('bio', '')).strip()
+    student.save()
+
+    return JsonResponse({'success': True, 'message': 'اطلاعات پروفایل با موفقیت ذخیره شد'})
 
 
 @login_required
