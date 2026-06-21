@@ -987,3 +987,474 @@ table tbody tr td {
     width: 100%;
 }
 
+
+
+
+/*کدهای ریسپانسیو تا خط 1460*
+
+/* ۱. اصلاح استایل دکمه‌های ثبت‌نام و دانلود که تگ a یا دکمه هستند */
+.event-card .btn-register, 
+.event-card .btn-download,
+.event-card button {
+    background: #0a2a44;
+    color: white !important;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.5s ease;
+    max-width: 200px;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.event-card .btn-register:hover, 
+.event-card .btn-download:hover,
+.event-card button:hover {
+    transform: scale(1.1);
+    background: #ffaa00;
+    color: #0a2a44 !important;
+}
+
+/*  رفع تداخل گالری در حلقه داینامیک جنگو  */
+.css-slider input[type="radio"]:checked + .slide {
+    opacity: 1;
+    visibility: visible;
+    z-index: 10;
+}
+
+/* ۳. اصلاح چیدمان دکمه‌های "مشاهده همه" در بخش اخبار و رویدادها */
+.news-grid, .events-grid {
+    position: relative;
+}
+
+.all-container {
+    grid-column: 1 / -1; /* قرارگیری خودکار در ردیف آخر و تمام‌عرض کردن باکس دکمه */
+    text-align: center;
+    padding: 30px 0;
+}
+
+.all-btn {
+    background-color: #fa3c52;
+    color: white !important;
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.all-btn i {
+    font-size: 14px;
+    transition: transform 0.3s ease;
+}
+
+.all-btn:hover {
+    transform: scale(1.05);
+    background-color: #d93246;
+}
+
+.all-btn:hover i {
+    transform: translateX(-5px); /* حرکت فلش آیکون به سمت چپ در حالت هوور */
+}
+
+
+/* ۴. دستورات ریسپانسیو اختصاصی (Media Queries) */
+
+/* حالت تبلت و لپ‌تاپ‌های کوچک (زیر 1024 پیکسل) */
+@media (max-width: 1024px) {
+    #hero-items {
+        width: 100%;
+        padding: 0 20px;
+    }
+    .hero-item {
+        margin-bottom: 80px;
+    }
+    .gallery-slider {
+        padding: 40px 20px;
+        margin-bottom: 50px;
+    }
+    .about-text {
+        margin-left: 0;
+        max-width: 100%;
+        padding: 20px;
+        text-align: center;
+    }
+    .about-text p {
+        text-align: center;
+    }
+    .honors-container {
+        width: 100%;
+        padding: 40px 20px;
+        gap: 30px 20px;
+    }
+    .footer-up {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        padding: 40px 20px;
+        height: auto;
+    }
+    .footer-up .content {
+        width: 100%;
+        max-width: 550px;
+        text-align: center;
+    }
+    .footer-up .content p {
+        margin: 15px 0;
+    }
+    .footer-up .map iframe {
+        width: 100% !important;
+        max-width: 550px;
+    }
+    #ul-about { right: auto; left: 50%; transform: translateX(-50%) translateY(-10px); }
+    #ul-relation { right: auto; left: 50%; transform: translateX(-50%) translateY(-10px); }
+    #ul-about.show, #ul-relation.show { transform: translateX(-50%) translateY(0); }
+}
+
+/* حالت موبایل (زیر 768 پیکسل) */
+@media (max-width: 768px) {
+    /* هدر و بخش بالایی */
+    .header-top {
+        height: auto;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        text-align: center;
+    }
+    header #logo {
+        float: none;
+        margin: 10px auto 0;
+        display: block;
+    }
+    .header-top a:first-child {
+        margin-right: 0;
+        font-size: 22px;
+    }
+    .login-btn {
+        position: static;
+        display: inline-block;
+        margin-top: 5px;
+    }
+
+    /* نوار ناوبری موبایل (تبدیل به منوی ریسپانسیو کپسولی شیک) */
+    .nav-bar {
+        height: auto;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 0;
+    }
+    .nav-bar .logo {
+        font-size: 18px;
+        padding-left: 0;
+        margin-bottom: 10px;
+    }
+    .nav-links {
+        height: auto;
+        margin-right: 0;
+        border-bottom: none;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 5px 10px;
+    }
+    .nav-links a {
+        margin-right: 0;
+        padding: 8px 12px;
+        font-size: 14px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
+    }
+    .nav-links a::after {
+        display: none; /* حذف خط زیرین متحرک قدیمی در موبایل برای زیبایی بیشتر */
+    }
+    .nav-links a:hover {
+        background: #ffaa00;
+        color: #012e71 !important;
+    }
+
+    /* منوهای کشویی در موبایل */
+    #ul-about, #ul-relation {
+        position: static;
+        width: 90%;
+        margin: 5px auto;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* بخش Hero */
+    .hero {
+        height: auto;
+        min-height: 600px;
+    }
+    #hero-items {
+        align-items: center;
+        justify-content: center;
+        padding: 40px 10px;
+        gap: 20px;
+    }
+    .hero-item {
+        width: 140px;
+        height: 140px;
+        margin-bottom: 0;
+        border-width: 4px;
+        border-radius: 20px;
+    }
+    .hero-item:hover {
+        border-width: 4px;
+    }
+    .hero-item a i {
+        font-size: 35px;
+        padding: 15px 10px 5px;
+    }
+    .hero-item a span {
+        font-size: 14px;
+        bottom: 15px;
+    }
+    #after-hero p {
+        font-size: 14px;
+        padding: 10px;
+        line-height: 1.6;
+    }
+
+    /* اسلایدر گالری هوشمند  روی موبایل */
+    .slider-container {
+        width: 100%;
+        border-width: 8px; /* ظریف‌تر شدن قاب مشکی در موبایل */
+    }
+    .css-slider {
+        height: 380px; /* متناسب شدن ارتفاع اسلایدر برای نمایشگر موبایل */
+    }
+    .slide-caption {
+        padding: 20px 15px 35px;
+    }
+    .slide-caption h3 {
+        font-size: 18px;
+    }
+    .slide-caption p {
+        font-size: 13px;
+    }
+    .control {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    .slider-nav {
+        bottom: 12px;
+    }
+    .nav-btn {
+        width: 8px;
+        height: 8px;
+    }
+
+    /* آمار و اطلاعات دانشکده */
+    .about-stats {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+        padding: 0 20px;
+    }
+    .stat {
+        padding: 15px;
+    }
+    .stat .number {
+        font-size: 28px;
+    }
+
+    /* بخش عناوین و گریدها (اخبار، رویدادها، منابع) */
+    .section-title, .honors h2 {
+        font-size: 24px;
+        margin-bottom: 40px;
+    }
+    .news-grid, .events-grid {
+        grid-template-columns: 1fr !important; /* تک ستونه شدن کارت‌ها روی موبایل */
+        gap: 20px;
+    }
+    .news-card, .event-card {
+        max-width: 400px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    /* بخش افتخارات */
+    .honors {
+        margin: 60px auto;
+    }
+    .honors-container {
+        grid-template-columns: 1fr; /* تک ستونه شدن افتخارات در موبایل */
+        grid-template-rows: auto;
+        padding: 20px 10px;
+        gap: 25px;
+    }
+    .one {
+        grid-row: auto;
+    }
+    .tree {
+        grid-column: auto;
+    }
+    .honor-card {
+        min-height: 250px;
+        max-width: 450px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    /* فوتر و دکمه‌های شناور */
+    .footer-up .content p {
+        line-height: 1.6;
+    }
+    .footer-up .map iframe {
+        height: 220px;
+    }
+    #icons {
+        bottom: 15px;
+        left: 15px;
+    }
+    #icons a {
+        width: 45px; /* کوچک‌تر شدن دکمه‌های شناور در موبایل */
+    }
+    #icons a:last-child {
+        width: 40px;
+    }
+}
+
+/* حالت موبایل‌های خیلی کوچک (زیر 480 پیکسل) */
+@media (max-width: 480px) {
+    .nav-links a {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+    .hero-item {
+        width: 125px;
+        height: 125px;
+    }
+    .hero-item a i {
+        font-size: 30px;
+    }
+    .hero-item a span {
+        font-size: 12px;
+        bottom: 10px;
+    }
+    .css-slider {
+        height: 280px;
+    }
+    .slide-caption h3 {
+        font-size: 15px;
+    }
+    .slide-caption p {
+        font-size: 11px;
+    }
+}
+
+/* ======================================================================= */
+/* رفع باگ خط عمودی گالری و جلوگیری از حرکت چپ و راست صفحه (اصلاح OverFlow) */
+/* ======================================================================= */
+
+/* ۱. حل مشکل حرکت چپ و راست کل صفحه در موبایل */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden; /* جلوگیر‌ی از هرگونه اسکرول افقی و ایجاد فضای خالی */
+}
+
+/* ۲. اصلاح پدینگ بخش گالری در موبایل که باعث بیرون‌زدگی می‌شد */
+@media (max-width: 768px) {
+    .gallery-slider {
+        padding: 40px 10px !important; /* کم کردن فاصله دور اسلایدر در موبایل */
+        margin-bottom: 40px !important;
+        overflow: hidden;
+    }
+}
+
+/* ۳. حل باگ خط عمودی و اصلاح قاب (Border) اسلایدر در موبایل */
+@media (max-width: 768px) {
+    .slider-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        /* تبدیل قاب دوبل ضخیم به یک قاب تک‌خطی شیک تا در موبایل تبدیل به خط عمودی نشود */
+        border: 4px solid #000000 !important; 
+        border-radius: 15px !important;
+    }
+    
+    .css-slider {
+        width: 100% !important;
+        height: 350px !important; /* تنظیم ارتفاع استاندارد برای موبایل */
+        overflow: hidden;
+    }
+
+    .slide img, .slide video {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important; /* پر کردن کامل کادر بدون به هم ریختگی */
+    }
+}
+
+/* ۴. اصلاح موقعیت پوزیشن رادیو باتن‌ها و المان‌های مخفی اسلایدر */
+.css-slider input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+/* ======================================================================= */
+/* رفع باگ مچاله شدن و عدم نمایش گالری در حالت موبایل */
+/* ======================================================================= */
+/*این تکه را زدم چون قبل از این گالری تصاویر نمایش داده نمیشد*/
+
+@media (max-width: 768px) {
+    /* ۱. تغییر چیدمان والد اصلی آمار و گالری به حالت عمودی برای باز شدن فضا */
+    .about-stats {
+        display: flex !important;
+        flex-direction: column !important; /* قرارگیری باکس‌ها به صورت زیر هم */
+        align-items: center !important;
+        width: 100% !important;
+        gap: 20px !important;
+        margin: 20px auto !important;
+        padding: 0 10px !important;
+    }
+
+    /* ۲. اصلاح باکس دربرگیرنده اسلایدر برای جلوگیری از مچاله شدن */
+    .gallery-slider {
+        display: block !important; /* خارج کردن از حالت فلکس پیش‌فرض */
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 10px !important;
+        margin: 20px auto !important;
+        clear: both; /* پاکسازی فلوت‌های احتمالی */
+    }
+
+    /* ۳. تزریق ابعاد واقعی به کانتینر اسلایدر برای باز شدن و رفع حالت خطی */
+    .slider-container {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 300px !important; /* دادن یک حداقل ارتفاع تا حتماً باکس باز شود */
+        height: auto !important;
+        border: 4px solid #000000 !important;
+        border-radius: 15px !important;
+        margin: 0 auto !important;
+    }
+
+    /* ۴. اطمینان از باز شدن کامل فضای داخلی اسلایدر */
+    .css-slider {
+        width: 100% !important;
+        height: 350px !important; /* ارتفاع مناسب برای نمایش تصاویر در موبایل */
+        position: relative !important;
+    }
+
+    .slide {
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
