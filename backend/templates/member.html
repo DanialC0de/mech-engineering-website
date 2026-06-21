@@ -18,43 +18,52 @@
             <small>پنل عضو انجمن</small>
         </div>
         <ul class="menu">
-            <li class="active" data-tab="dashboard"><a href="#">📊 داشبورد</a></li>
-            <li data-tab="community"><a href="#">👥 مدیریت انجمن</a></li>
-            <li data-tab="events"><a href="#">📅 مدیریت رویدادها</a></li>
-            <li data-tab="gallery"><a href="#">🖼️ گالری و رسانه</a></li>
-            <li data-tab="resources"><a href="#">📚 منابع و دانلودها</a></li>
-            <li data-tab="profile"><a href="#">👤 پروفایل من</a></li>
+            <li class="active" data-tab="dashboard"><a href="#dashboard"><i class="fas fa-chart-pie"></i> 📊 داشبورد</a></li>
+            <li data-tab="community"><a href="#community"><i class="fas fa-users"></i> 👥 مدیریت انجمن</a></li>
+            <li data-tab="events"><a href="#events"><i class="fas fa-calendar"></i> 📅 مدیریت رویدادها</a></li>
+            <li data-tab="gallery"><a href="#gallery"><i class="fas fa-images"></i> 🖼️ گالری و رسانه</a></li>
+            <li data-tab="resources"><a href="#resources"><i class="fas fa-book"></i> 📚 منابع و دانلودها</a></li>
+            <li data-tab="profile"><a href="#profile"><i class="fas fa-user"></i> 👤 پروفایل من</a></li>
         </ul>
     </div>
 
     <div class="main-content">
         <div class="top-bar">
             <div class="page-title" id="pageTitle">داشبورد عضو انجمن</div>
-            <button class="logout-btn" onclick="logout()">خروج</button>
+            <a href="{% url 'logout' %}" class="logout-btn">خروج</a>
         </div>
 
+        <!-- ======================================== -->
         <!-- داشبورد -->
+        <!-- ======================================== -->
         <div id="dashboard" class="tab-content active">
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="number" id="myEvents">۰</div>
-                    <div class="label">رویدادهای تحت مسئولیت</div>
+                    <div class="number">{{ member.role|default:"-" }}</div>
+                    <div class="label">نقش شما</div>
                 </div>
                 <div class="stat-card">
-                    <div class="number" id="pendingRequests">۰</div>
+                    <div class="number">{{ pending_requests }}</div>
                     <div class="label">درخواست عضویت</div>
                 </div>
                 <div class="stat-card">
-                    <div class="number" id="newMessages">۰</div>
-                    <div class="label">پیام‌های جدید</div>
+                    <div class="number">{{ members|length }}</div>
+                    <div class="label">تعداد اعضا</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">{{ all_my_events|length }}</div>
+                    <div class="label">رویدادهای من</div>
                 </div>
             </div>
 
             <div class="section-card">
                 <div class="section-title">📢 آخرین اطلاعیه‌های انجمن</div>
                 <ul>
-                    <li>جلسه کمیته آموزش - ۲۵ فروردین</li>
-                    <li>فراخوان ثبت‌نام در مسابقه سالیدورک</li>
+                    {% for committee in committees %}
+                        <li>کمیته {{ committee.name }} - فعال</li>
+                    {% empty %}
+                        <li>هیچ اطلاعیه‌ای وجود ندارد</li>
+                    {% endfor %}
                 </ul>
             </div>
 
@@ -69,12 +78,29 @@
                             <th>عملیات</th>
                         </tr>
                     </thead>
-                    <tbody id="myManagedEventsBody"></tbody>
+                    <tbody>
+                        {% for event in my_events %}
+                        <tr>
+                            <td>{{ event.title }}</td>
+                            <td>{{ event.jalali_date }}</td>
+                            <td>{{ event.registered_count }}</td>
+                            <td>
+                                <a href="{% url 'event_detail' event.id %}" class="btn-view">👁️ مشاهده</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">هیچ رویدادی یافت نشد.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- ======================================== -->
         <!-- مدیریت انجمن -->
+        <!-- ======================================== -->
         <div id="community" class="tab-content">
             <div class="section-card">
                 <div class="section-title">👥 درخواست‌های عضویت</div>
@@ -87,9 +113,26 @@
                             <th>عملیات</th>
                         </tr>
                     </thead>
-                    <tbody id="memberRequestsBody"></tbody>
+                    <tbody>
+                        {% for req in member_requests %}
+                        <tr>
+                            <td>{{ req.user.get_full_name|default:req.user.username }}</td>
+                            <td>{{ req.student_id }}</td>
+                            <td>{{ req.committee.name|default:"نامشخص" }}</td>
+                            <td>
+                                <a href="{% url 'members:approve_request' req.id %}" class="btn-approve" onclick="return confirm('تأیید شود؟')">✅ تأیید</a>
+                                <a href="{% url 'members:reject_request' req.id %}" class="btn-reject" onclick="return confirm('رد شود؟')">❌ رد</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">هیچ درخواستی وجود ندارد.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
+
             <div class="section-card">
                 <div class="section-title">📋 اعضای انجمن</div>
                 <table id="membersListTable">
@@ -101,16 +144,53 @@
                             <th>عملیات</th>
                         </tr>
                     </thead>
-                    <tbody id="membersListBody"></tbody>
+                    <tbody>
+                        {% for member_item in members %}
+                        <tr>
+                            <td>{{ member_item.user.get_full_name|default:member_item.user.username }}</td>
+                            <td>{{ member_item.get_role_display }}</td>
+                            <td>{{ member_item.committee.name|default:"نامشخص" }}</td>
+                            <td>
+                                <a href="#" class="btn-edit">✏️ ویرایش</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">هیچ عضوی یافت نشد.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- ======================================== -->
         <!-- مدیریت رویدادها -->
+        <!-- ======================================== -->
         <div id="events" class="tab-content">
             <div class="section-card">
                 <div class="section-title">📅 رویدادهای من</div>
-                <button onclick="openCreateEventModal()" style="margin-bottom:15px;">+ ایجاد رویداد جدید</button>
+                
+                <!-- فرم ایجاد رویداد جدید -->
+                <form method="POST" action="{% url 'members:create_event' %}" style="margin-bottom:20px; padding:20px; background:#f5f5f5; border-radius:10px;">
+                    {% csrf_token %}
+                    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:15px;">
+                        <input type="text" name="title" placeholder="عنوان رویداد" required>
+                        <input type="text" name="date" placeholder="تاریخ شمسی (مثال: ۱۴۰۴/۰۱/۲۰)" required>
+                        <input type="text" name="time" placeholder="ساعت (مثال: ۱۵:۰۰)" required>
+                        <input type="text" name="short_description" placeholder="توضیحات کوتاه">
+                        <input type="number" name="capacity" placeholder="ظرفیت (۰=نامحدود)">
+                        <select name="event_type">
+                            <option value="workshop">کارگاه</option>
+                            <option value="seminar">سمینار</option>
+                            <option value="conference">کنفرانس</option>
+                            <option value="other">سایر</option>
+                        </select>
+                    </div>
+                    <button type="submit" style="margin-top:15px; padding:10px 30px; background:#ffaa00; color:#0a2a44; border:none; border-radius:25px; font-weight:bold; cursor:pointer;">+ ایجاد رویداد جدید</button>
+                </form>
+
+                <!-- جدول رویدادها -->
                 <table id="allManagedEventsTable">
                     <thead>
                         <tr>
@@ -120,23 +200,43 @@
                             <th>عملیات</th>
                         </tr>
                     </thead>
-                    <tbody id="allManagedEventsBody"></tbody>
+                    <tbody>
+                        {% for event in all_my_events %}
+                        <tr>
+                            <td>{{ event.title }}</td>
+                            <td>{{ event.jalali_date }}</td>
+                            <td>{{ event.get_status_display }}</td>
+                            <td>
+                                <a href="{% url 'event_detail' event.id %}" class="btn-view">👁️ مشاهده</a>
+                                <a href="{% url 'members:delete_event' event.id %}" class="btn-delete" onclick="return confirm('حذف شود؟')">🗑️ حذف</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">هیچ رویدادی یافت نشد.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- ======================================== -->
         <!-- گالری -->
+        <!-- ======================================== -->
         <div id="gallery" class="tab-content">
             <div class="section-card">
                 <div class="section-title">🖼️ گالری تصاویر</div>
-                <button onclick="openUploadImageModal()">+ بارگذاری تصویر جدید</button>
-                <div id="galleryGrid"
-                    style="display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:15px; margin-top:20px;">
+                <button onclick="alert('در حال توسعه...')">+ بارگذاری تصویر جدید</button>
+                <div id="galleryGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:15px; margin-top:20px;">
+                    <p>هیچ تصویری وجود ندارد.</p>
                 </div>
             </div>
         </div>
 
-        <!-- منابع -->
+        <!-- ======================================== -->
+        <!-- منابع داخلی -->
+        <!-- ======================================== -->
         <div id="resources" class="tab-content">
             <div class="section-card">
                 <div class="section-title">📚 منابع داخلی انجمن</div>
@@ -148,44 +248,46 @@
                             <th>عملیات</th>
                         </tr>
                     </thead>
-                    <tbody id="internalResourcesBody"></tbody>
+                    <tbody>
+                        {% for resource in internal_resources %}
+                        <tr>
+                            <td>{{ resource.title }}</td>
+                            <td>{{ resource.get_category_display }}</td>
+                            <td>
+                                {% if resource.file %}
+                                    <a href="{{ resource.file.url }}" class="btn-download">📥 دانلود</a>
+                                {% else %}
+                                    <span>بدون فایل</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3">هیچ منبعی یافت نشد.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- ======================================== -->
         <!-- پروفایل -->
+        <!-- ======================================== -->
         <div id="profile" class="tab-content">
             <div class="section-card">
                 <div class="section-title">👤 اطلاعات من</div>
-                <p><strong>نام:</strong> رضا کریمی</p>
-                <p><strong>نقش:</strong> مسئول کمیته آموزش</p>
-                <p><strong>کمیته:</strong> آموزش</p>
-                <button onclick="changePassword()">تغییر رمز عبور</button>
+                <p><strong>نام:</strong> {{ user.get_full_name|default:user.username }}</p>
+                <p><strong>نقش:</strong> {{ member.get_role_display|default:"عضو" }}</p>
+                <p><strong>کمیته:</strong> {{ member.committee.name|default:"نامشخص" }}</p>
+                <p><strong>شماره دانشجویی:</strong> {{ member.student_id|default:"ثبت نشده" }}</p>
+                <p><strong>تاریخ عضویت:</strong> {{ member.joined_at|date:"Y/m/d" }}</p>
+                <button onclick="alert('در حال توسعه...')">تغییر رمز عبور</button>
             </div>
         </div>
     </div>
 
-    <!-- مودال‌ها -->
-    <div id="createEventModal" class="modal">
-        <div class="modal-content">
-            <h3>رویداد جدید</h3><input type="text" id="newEventTitle" placeholder="عنوان"><input type="date"
-                id="newEventDate"><select id="newEventType">
-                <option>کارگاه</option>
-                <option>سمینار</option>
-            </select>
-            <div class="modal-buttons"><button onclick="closeCreateEventModal()">انصراف</button><button
-                    onclick="createEvent()">ایجاد</button></div>
-        </div>
-    </div>
-    <div id="uploadImageModal" class="modal">
-        <div class="modal-content">
-            <h3>بارگذاری تصویر</h3><input type="file" accept="image/*">
-            <div class="modal-buttons"><button onclick="closeUploadImageModal()">انصراف</button><button
-                    onclick="uploadImage()">بارگذاری</button></div>
-        </div>
-    </div>
-
-    <script src="member.js"></script>
+    <script src="{% static 'js/member.js' %}"></script>
 </body>
 
 </html>

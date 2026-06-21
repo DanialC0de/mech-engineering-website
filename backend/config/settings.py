@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'events',
     'accounts',
     'news',
+    'members',
     'students',  # اپ جدید اضافه شد
 ]
 
