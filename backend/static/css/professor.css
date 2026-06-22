@@ -1,10 +1,7 @@
 @font-face {
-    font-family: 'A Hamase';
-    src: url('../assets/fonts/transfonter.org-Hemase/AHamase.eot');
-    src: url('../assets/fonts/transfonter.org-Hemase/AHamase.eot?#iefix') format('embedded-opentype'),
-        url('../assets/fonts/transfonter.org-Hemase/AHamase.woff2') format('woff2'),
-        url('../assets/fonts/transfonter.org-Hemase/AHamase.woff') format('woff'),
-        url('../assets/fonts/transfonter.org-Hemase/AHamase.ttf') format('truetype');
+    font-family: 'Arad';
+    src: url('../assets/fonts/arad/AradVF.woff2') format('woff2'),
+         url('../assets/fonts/arad/AradVF.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -30,7 +27,7 @@
 }
 
 * {
-    font-family: "A Hamase", Tahoma, sans-serif;
+    font-family: 'Arad', 'Tahoma', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;

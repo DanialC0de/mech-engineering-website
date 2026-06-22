@@ -4,39 +4,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- CSS -->
+    
+    <!-- لینک اصلی FontAwesome (نسخه 6.4.2 که در صفحه اصلی کار می‌کند) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- لینک پشتیبان (در صورت عدم دسترسی به اولی) -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.2/css/all.css">
+    
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
-
     <title>ورود | انجمن علمی مکانیک</title>
+
+    <!-- استایل اضطراری برای اطمینان از نمایش آیکون‌ها -->
+    <style>
+        /* این استایل تضمین می‌کند آیکون‌ها در هر شرایطی نمایش داده شوند */
+        i, .fa, .fas, .far, .fab {
+            display: inline-block !important;
+            font-style: normal !important;
+            font-variant: normal !important;
+            text-rendering: auto !important;
+            -webkit-font-smoothing: antialiased !important;
+        }
+        /* رنگ پیش‌فرض برای آیکون‌ها (اختیاری) */
+        .login-tabs .tab-btn i,
+        .input-group label i,
+        .hint-text i,
+        .login-btn i,
+        .back-link i {
+            color: inherit;
+            margin-left: 6px;
+        }
+        /* اگر آیکون‌ها سفید بودند، این رنگ را اعمال کن */
+        .login-tabs .tab-btn i {
+            color: #555;
+        }
+        .login-tabs .tab-btn.active i {
+            color: #012e71;
+        }
+    </style>
 </head>
 <body>
-    <div class="login-container">
+
+    <div class="login-wrapper">
+        <!-- هدر کوچک (لوگو و نام انجمن) -->
         <div class="login-header">
-            <div class="logo">⚙️ انجمن <span>مکانیک</span></div>
-            <p>انجمن علمی مهندسی مکانیک</p>
+            <div class="brand">
+                <span class="brand-icon">⚙️</span>
+                <span class="brand-name">انجمن علمی <span>مکانیک</span></span>
+            </div>
+            <p class="brand-sub">دانشگاه شهید باهنر کرمان</p>
         </div>
 
-        <div class="login-body">
-            <div class="login-title">خوش آمدید</div>
-            <div class="login-subtitle">
-                لطفاً شماره موبایل یا ایمیل خود را وارد کنید<br>
-                کد تأیید برای شما ارسال خواهد شد
+        <!-- باکس اصلی ورود -->
+        <div class="login-box">
+            <div class="login-title">
+                <h1>خوش آمدید</h1>
+                <p>لطفاً شماره موبایل یا ایمیل خود را وارد کنید<br>کد تأیید برای شما ارسال خواهد شد</p>
             </div>
 
             <div class="error-message" id="errorMsg"></div>
 
+            <!-- تب‌ها -->
             <div class="login-tabs">
-                <button type="button" class="tab-btn active" data-tab="phone">📱 شماره موبایل</button>
-                <button type="button" class="tab-btn" data-tab="email">✉️ ایمیل</button>
+                <button type="button" class="tab-btn active" data-tab="phone">
+                    <i class="fas fa-mobile-alt"></i> شماره موبایل
+                </button>
+                <button type="button" class="tab-btn" data-tab="email">
+                    <i class="fas fa-envelope"></i> ایمیل
+                </button>
             </div>
 
+            <!-- فرم -->
             <form id="loginForm" method="POST">
                 {% csrf_token %}
 
                 <div id="phoneTab">
                     <div class="input-group">
-                        <label>شماره موبایل</label>
+                        <label for="phoneNumber"><i class="fas fa-phone"></i> شماره موبایل</label>
                         <input type="tel"
                                id="phoneNumber"
                                name="phone"
@@ -44,24 +87,24 @@
                                maxlength="11"
                                autocomplete="off"
                                inputmode="numeric">
-                        <div class="hint-text">کد تأیید ۶ رقمی به این شماره پیامک می‌شود</div>
+                        <span class="hint-text"><i class="fas fa-info-circle"></i> کد تأیید ۶ رقمی به این شماره پیامک می‌شود</span>
                     </div>
                 </div>
 
                 <div id="emailTab" style="display: none;">
                     <div class="input-group">
-                        <label>آدرس ایمیل</label>
+                        <label for="emailAddress"><i class="fas fa-envelope"></i> آدرس ایمیل</label>
                         <input type="email"
                                id="emailAddress"
                                name="email"
                                placeholder="example@university.ac.ir"
                                autocomplete="off">
-                        <div class="hint-text">کد تأیید ۶ رقمی به این ایمیل ارسال می‌شود</div>
+                        <span class="hint-text"><i class="fas fa-info-circle"></i> کد تأیید ۶ رقمی به این ایمیل ارسال می‌شود</span>
                     </div>
                 </div>
 
                 <button type="submit" class="login-btn" id="loginBtn">
-                    دریافت کد تأیید →
+                    دریافت کد تأیید <i class="fas fa-arrow-left"></i>
                 </button>
 
                 <div class="loading" id="loading" style="display:none;">
@@ -70,13 +113,16 @@
                 </div>
             </form>
 
-            <div class="divider"><span>ورود برای اعضای انجمن</span></div>
+            <!-- تغییر متن به "ورود برای همه" -->
+            <div class="divider"><span>ورود برای همه</span></div>
+
             <div class="back-link">
-                <a href="index-pages/index.html">← بازگشت به صفحه اصلی</a>
+                <a href="{% url 'home' %}"><i class="fas fa-arrow-right"></i> بازگشت به صفحه اصلی</a>
             </div>
         </div>
 
-        <footer>
+        <!-- فوتر -->
+        <footer class="login-footer">
             <p>با ورود، قوانین و شرایط استفاده را می‌پذیرید</p>
         </footer>
     </div>

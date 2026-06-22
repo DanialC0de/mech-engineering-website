@@ -295,3 +295,13 @@ def user_dashboard(request):
         'stats': stats,
     }
     return render(request, 'index-pages/dashboard.html', context)
+
+
+
+
+
+#------membership
+from django.shortcuts import render
+
+def membership_page(request):
+    return render(request, 'membership.html')

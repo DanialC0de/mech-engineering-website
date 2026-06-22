@@ -1,0 +1,259 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome 6.4.2 (پایدار) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/membership.css' %}">
+    <title>عضویت در انجمن | انجمن علمی مکانیک</title>
+</head>
+
+<body>
+
+    <!-- ==================== هدر ==================== -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="brand">
+                <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}" alt="لوگو دانشگاه">
+                <span class="brand-name">مهندسی مکانیک</span>
+            </div>
+            <nav class="nav-menu" id="navMenu">
+                <ul class="nav-list">
+                    <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
+                    <li class="dropdown">
+                        <a href="{% url 'about' %}">درباره دانشکده <i class="fa-solid fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu" id="ul-about">
+                            <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
+                            <li><a href="{% url 'honors' %}">دستاوردها و افتخارات</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="{% url 'industry' %}">ارتباط با صنعت <i class="fa-solid fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu" id="ul-relation">
+                            <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="https://uk.ac.ir/" target="_blank" class="university-link">
+                    <i class="fa-solid fa-graduation-cap"></i> دانشگاه
+                </a>
+                <span class="user-greeting">خوش آمدی مهمان</span>
+                <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
+            </div>
+            <button class="menu-toggle" id="menuToggle" aria-label="منو">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ==================== محتوای اصلی ==================== -->
+    <main class="membership-page-main">
+        <div class="membership-container">
+
+            <div class="page-header">
+                <h1>عضویت در انجمن علمی مکانیک</h1>
+                <p>لطفاً اطلاعات خود را بررسی کرده و قوانین را مطالعه کنید، سپس درخواست خود را ثبت نمایید.</p>
+            </div>
+
+            <!-- فرم عضویت -->
+            <form id="membershipForm" method="post" action="#">
+                {% csrf_token %}
+
+                <!-- کارت اطلاعات شخصی با داده‌های فیک -->
+                <div class="info-card">
+                    <h2><i class="fa-solid fa-user"></i> اطلاعات شخصی</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">نام:</span>
+                            <span class="value">مهدی</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">نام خانوادگی:</span>
+                            <span class="value">اسلامی‌خواه</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">شماره دانشجویی:</span>
+                            <span class="value">۴۰۳۴۰۵۰۰۵</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">شماره تماس:</span>
+                            <span class="value">۰۹۳۸۶۲۸۹۸۳۲</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">رشته تحصیلی:</span>
+                            <span class="value">مهندسی مکانیک</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">ترم تحصیلی:</span>
+                            <span class="value">ترم ۶</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">مقطع تحصیلی:</span>
+                            <span class="value">کارشناسی</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">ایمیل:</span>
+                            <span class="value">m.eslami@uk.ac.ir</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">سال ورود:</span>
+                            <span class="value">۱۴۰۰</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">کمیته مورد نظر:</span>
+                            <span class="value">آموزش</span>
+                        </div>
+                        <div class="info-item full-width">
+                            <span class="label">درباره من:</span>
+                            <span class="value">دانشجوی مهندسی مکانیک، علاقه‌مند به حوزه‌های طراحی و ساخت.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- قوانین و مقررات -->
+                <div class="rules-card">
+                    <h2><i class="fa-solid fa-scale-balanced"></i> قوانین و مقررات عضویت</h2>
+                    <div class="rules-content">
+                        <ol>
+                            <li>عضویت در انجمن علمی مکانیک برای تمامی دانشجویان رشته مهندسی مکانیک آزاد است.</li>
+                            <li>اعضا موظف به رعایت اخلاق حرفه‌ای و حفظ شأن انجمن در تمامی فعالیت‌ها هستند.</li>
+                            <li>شرکت در رویدادها و کارگاه‌های انجمن با اولویت اعضای رسمی است.</li>
+                            <li>اطلاعات شخصی اعضا صرفاً برای امور اداری انجمن استفاده خواهد شد و محرمانه باقی می‌ماند.</li>
+                            <li>عضویت فعال نیازمند شرکت حداقل در ۲ رویداد در هر ترم تحصیلی است.</li>
+                            <li>هرگونه تخلف از قوانین توسط شورای انضباطی انجمن بررسی و تصمیم‌گیری خواهد شد.</li>
+                            <li>اعضا می‌توانند با ارائه درخواست کتبی، عضویت خود را لغو نمایند.</li>
+                            <li>انجمن علمی مکانیک حق استفاده از نظرات و پیشنهادات اعضا را برای بهبود فعالیت‌ها دارد.</li>
+                        </ol>
+                    </div>
+                    <div class="rules-check">
+                        <input type="checkbox" id="rulesAgree" name="rules_agreed" required>
+                        <label for="rulesAgree">قوانین و مقررات را مطالعه کرده و می‌پذیرم.</label>
+                    </div>
+                </div>
+
+                <!-- دکمه ثبت‌نام (غیرفعال موقت) -->
+                <div class="form-actions">
+                    <button type="button" class="submit-btn" id="tempBtn" style="background:#9ca3af; cursor:not-allowed;">
+                        <i class="fa-solid fa-clock"></i> عضویت غیرفعال (در حال توسعه)
+                    </button>
+                </div>
+
+            </form>
+
+            <!-- پیام جایگزین -->
+            <div style="text-align:center; margin-top:20px; padding:16px; background:#fef3c7; border-radius:14px; border:1px solid #fcd34d;">
+                <p style="color:#92400e; font-weight:600; font-size:0.95rem;">
+                    <i class="fa-solid fa-info-circle"></i> 
+                    این صفحه فعلاً با داده‌های نمونه نمایش داده می‌شود. پس از راه‌اندازی کامل، اطلاعات شما از حساب کاربری نمایش داده خواهد شد.
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ==================== فوتر ==================== -->
+    <footer class="modern-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>مهندسی مکانیک</h3>
+                <p>انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان</p>
+                <div class="footer-social">
+                    <a href="https://t.me/ukmechanics" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="https://instagram.com/ukmechanics" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div>
+                    <h4>دسترسی سریع</h4>
+                    <ul>
+                        <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
+                        <li><a href="{% url 'about' %}">درباره دانشکده</a></li>
+                        <li><a href="{% url 'industry' %}">ارتباط با صنعت</a></li>
+                        <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>بخش‌های سایت</h4>
+                    <ul>
+                        <li><a href="{% url 'all_events' %}">رویدادها</a></li>
+                        <li><a href="{% url 'all_resources' %}">منابع علمی</a></li>
+                        <li><a href="{% url 'honors' %}">افتخارات</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>اطلاعات تماس</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-location-dot"></i> کرمان - بلوار جمهوری - دانشکده مکانیک</li>
+                        <li><i class="fa-solid fa-phone"></i> ۰۳۴-۳۱۳۲۱۲۳۴</li>
+                        <li><i class="fa-solid fa-envelope"></i> info@mech-uk.ac.ir</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; ۲۰۲۵ تمامی حقوق برای انجمن علمی مهندسی مکانیک دانشگاه شهید باهنر کرمان محفوظ است.</p>
+        </div>
+    </footer>
+
+    <!-- ==================== آیکون‌های شناور ==================== -->
+    <div id="icons">
+        <a href="https://t.me/ukmechanics" target="_blank">
+            <img src="{% static 'assets/icons/15.png' %}">
+        </a>
+        <a href="https://instagram.com/ukmechanics?igshid=14gmuy96orpnd" target="_blank">
+            <img src="{% static 'assets/icons/2.png' %}">
+        </a>
+    </div>
+
+    <!-- ==================== اسکریپت ==================== -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // منوی همبرگری
+            const toggleBtn = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            if (toggleBtn && navMenu) {
+                toggleBtn.addEventListener('click', function () {
+                    navMenu.classList.toggle('active');
+                });
+            }
+
+            // دراپ‌داون
+            const aboutUrl = "{% url 'about' %}";
+            const industryUrl = "{% url 'industry' %}";
+
+            const aboutLink = document.querySelector('.nav-list a[href="' + aboutUrl + '"]');
+            const ulAbout = document.getElementById('ul-about');
+            const relationLink = document.querySelector('.nav-list a[href="' + industryUrl + '"]');
+            const ulRelation = document.getElementById('ul-relation');
+
+            function setupDropdown(link, dropdown) {
+                if (!link || !dropdown) return;
+                const parent = link.closest('.dropdown');
+                function show() { dropdown.style.display = 'block'; }
+                function hide() { dropdown.style.display = 'none'; }
+                if (parent) {
+                    parent.addEventListener('mouseenter', show);
+                    parent.addEventListener('mouseleave', hide);
+                } else {
+                    link.addEventListener('mouseover', show);
+                    link.addEventListener('mouseout', hide);
+                }
+                dropdown.addEventListener('mouseover', show);
+                dropdown.addEventListener('mouseout', hide);
+            }
+            setupDropdown(aboutLink, ulAbout);
+            setupDropdown(relationLink, ulRelation);
+        });
+    </script>
+
+</body>
+
+</html>

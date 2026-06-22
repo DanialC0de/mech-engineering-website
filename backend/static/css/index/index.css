@@ -1,399 +1,565 @@
 @font-face {
-    font-family: 'A Hamase';
-    src: url('../../assets/fonts/transfonter.org-Hemase/AHamase.eot');
-    src: url('../../assets/fonts/transfonter.org-Hemase/AHamase.eot?#iefix') format('embedded-opentype'),
-        url('../../assets/fonts/transfonter.org-Hemase/AHamase.woff2') format('woff2'),
-        url('../../assets/fonts/transfonter.org-Hemase/AHamase.woff') format('woff'),
-        url('../../assets/fonts/transfonter.org-Hemase/AHamase.ttf') format('truetype');
+    font-family: 'Arad';
+    src: url('../../assets/fonts/arad/AradVF.woff2') format('woff2'),
+         url('../../assets/fonts/arad/AradVF.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
 }
 
+/* ============================== */
+/* تنظیمات پایه و ریست */
+/* ============================== */
 * {
-    font-family: "A Hamase";
-    scroll-padding-top: 300px;
+    font-family: 'Arad', 'Tahoma', sans-serif;
+    scroll-padding-top: 100px;
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html {
     scroll-behavior: smooth;
+    font-size: 16px;
 }
 
 body {
     margin: 0;
-    font-family: 'Tahoma', sans-serif;
     background-color: #edecf3;
+    font-family: 'Arad', 'Tahoma', sans-serif;
 }
 
 a {
     text-decoration: none;
 }
-
 ul {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-/* ===== هدر و نویگیشن (ثابت) ===== */
-header {
+/* ============================== */
+/* هدر مدرن */
+/* ============================== */
+.main-header {
     background: #012e71;
     color: white;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
-header #logo {
-    background-color: #002051;
-    width: 100px;
-    height: 90px;
-    float: right;
-}
-header #logo img {
-    width: 100%;
-    height: 100%;
-}
-.header-top {
-    width: 100%;
-    height: 90px;
-    background-color: #002051;
-    padding: 25px;
-}
-.header-top a:first-child {
-    font-weight: bold;
-    font-size: 30px;
-    color: white;
-    margin-right: 25px;
-}
-.container-modern {
-    max-width: 1200px;
-    margin: 0 auto;
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 0 20px;
-}
-.nav-bar {
-    height: 65px;
-    font-size: 16px;
-    display: flex;
-    justify-content: right;
-    flex-wrap: wrap;
-}
-.nav-bar .logo {
-    padding: 10px 0;
-    padding-left: 10px;
-    font-size: 23px;
-}
-.logo span {
-    color: #ffaa00;
-}
-.nav-links {
-    height: 60px;
-    margin-right: 50px;
-    border-bottom: 3px solid #938c8c3f;
-}
-.nav-links a {
-    display: inline-block;
-    height: 100%;
-    position: relative;
-    padding: 12px 0 0 0;
-    color: rgb(201, 196, 196);
-    text-decoration: none;
-    margin-right: 25px;
-    transition: 0.5s;
-}
-.nav-links a:first-child {
-    margin-right: 0px;
-}
-.nav-links a::after {
-    margin-bottom: 0px;
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -3px;
-    width: 100%;
-    height: 2px;
-    background: #ffaa00;
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.6s ease;
-}
-.nav-links a:hover::after {
-    transform: scaleX(1);
-}
-.nav-links a:hover {
-    color: #ffaa00;
-}
-.login-btn {
-    background: #ffaa00;
-    color: #0a2a44 !important;
-    padding: 8px 20px;
-    border-radius: 25px;
-    font-weight: bold;
-    font-size: 16px;
-    position: absolute;
-    left: 120px;
-    top: 25px;
-}
-.login-btn:hover {
-    background: #ffcc44;
-}
-
-/* ===== منوهای کشویی (ثابت) ===== */
-#ul-about {
-    z-index: 101;
-    background-color: #73d0e8;
-    width: 250px;
-    position: fixed;
-    right: 510px;
-    top: 155px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-}
-#ul-about.show {
-    opacity: 5;
-    visibility: visible;
-    transform: translateY(0);
-}
-#ul-about li a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    padding: 10px 20px;
-    font-weight: 700;
-    color: #012e71;
-}
-#ul-about li:last-child a {
-    padding-bottom: 15px;
-}
-#ul-about li:last-child a:hover {
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-}
-#ul-about li a:hover {
-    color: rgb(196, 65, 65);
-    background-color: #09357d2e;
-}
-#ul-relation {
-    z-index: 101;
-    background-color: #73d0e8;
-    width: 250px;
-    position: fixed;
-    right: 670px;
-    top: 155px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-}
-#ul-relation.show {
-    opacity: 5;
-    visibility: visible;
-    transform: translateY(0);
-}
-#ul-relation li a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    padding: 10px 20px;
-    font-weight: 700;
-    color: #012e71;
-}
-#ul-relation li:last-child a {
-    padding-bottom: 15px;
-}
-#ul-relation li:last-child a:hover {
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-}
-#ul-relation li a:hover {
-    color: rgb(196, 65, 65);
-    background-color: #09357d2e;
-}
-
-/* ===== هیرو (ثابت) ===== */
-.hero {
-    background: url('../../assets/images/fani.jpg') no-repeat center center/cover;
-    color: white;
-    height: 950px;
-    text-align: center;
-}
-.hero #seudo {
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-#hero-items {
+    height: 80px;
+    max-width: 1400px;
     margin: 0 auto;
-    height: 100%;
+    gap: 15px;
+}
+
+.brand {
     display: flex;
-    flex-wrap: wrap;
-    width: 1100px;
-    justify-content: space-around;
-    align-items: end;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
 }
-.hero-item {
-    background: url('../../assets/images/bc-heroitems.jpg') no-repeat center center/cover;
-    width: 200px;
-    height: 200px;
-    margin-bottom: 130px;
-    border: 7px solid #ffaa00;
-    border-radius: 30px;
-    transition: 0.5s;
+
+.brand img {
+    height: 50px;
+    width: auto;
 }
-.hero-item:hover {
-    transform: scale(1.05);
-    border: 7px solid #012e71;
+
+.brand-name {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
 }
-.hero-item a {
-    color: #005689;
-    display: block;
-    width: 100%;
-    height: 100%;
+
+.nav-menu {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-list > li > a {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 16px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    transition: 0.3s ease;
+    white-space: nowrap;
+}
+
+.nav-list > li > a:hover {
+    color: #ffaa00;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-list > li > a i {
+    font-size: 0.7rem;
+}
+
+.dropdown {
     position: relative;
 }
-.hero-item a i {
-    padding: 20px;
-    font-size: 60px;
-}
-.hero-item a span {
+
+.dropdown-menu {
+    display: none;
     position: absolute;
-    bottom: 40px;
-    left: 0;
+    top: 100%;
     right: 0;
-    font-weight: bold;
-    font-size: 20px;
+    background: #fff;
+    min-width: 200px;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    padding: 8px 0;
+    z-index: 999;
 }
-#after-hero {
-    text-align: center;
-    padding: 1px;
-    color: white;
-    background-color: #012e71;
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 10px 20px;
+    color: #012e71;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: 0.2s;
+}
+
+.dropdown-menu li a:hover {
+    background: #f0f4ff;
+    color: #ffaa00;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.university-link {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 30px;
+    transition: 0.3s;
+}
+.university-link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.user-greeting {
+    color: #fff;
+    font-size: 0.9rem;
     font-weight: 600;
 }
 
-/* ============================================================ */
-/* ========== اسلایدر مدرن (نسخه دوم) ========== */
-/* ============================================================ */
-.gallery-modern {
-    padding: 80px 0;
-    background: linear-gradient(180deg, #f0f4ff 0%, #ffffff 100%);
-}
-.slider-wrapper-modern {
-    max-width: 1100px;
-    margin: 0 auto;
+.login-btn {
+    background: #ffaa00;
+    color: #012e71 !important;
+    padding: 8px 22px;
     border-radius: 30px;
-    overflow: hidden;
-    box-shadow: 0 30px 80px rgba(1, 46, 113, 0.15);
-    border: 3px solid rgba(255, 170, 0, 0.2);
-    position: relative;
-    background: #0a0a1a;
+    font-weight: 800;
+    font-size: 0.9rem;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
 }
-.slider-modern {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%; /* نسبت 16:9 */
-    height: 0;
-    overflow: hidden;
+.login-btn:hover {
+    background: #ffcc44;
+    transform: scale(1.02);
 }
-.slider-modern input[type="radio"] {
+
+.menu-toggle {
     display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    padding: 5px 10px;
 }
-.slide-modern {
+
+/* ============================== */
+/* هیرو با اسلایدر محو شونده (Fade) */
+/* ============================== */
+.hero {
+    position: relative;
+    height: 550px;
+    overflow: hidden;
+}
+
+.hero-slides {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
+}
+
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.7s ease-in-out, visibility 0.7s ease-in-out;
+    animation: fadeAnimation 12s infinite;
+}
+
+/* زمان‌بندی هر اسلاید */
+.hero-slide:nth-child(1) {
+    animation-delay: 0s;
+}
+.hero-slide:nth-child(2) {
+    animation-delay: 4s;
+}
+.hero-slide:nth-child(3) {
+    animation-delay: 8s;
+}
+
+/* انیمیشن محو شدن */
+@keyframes fadeAnimation {
+    0%   { opacity: 0; }
+    8%   { opacity: 1; }   /* ۱ ثانیه محو شدن */
+    25%  { opacity: 1; }   /* ۳ ثانیه نمایش کامل */
+    33%  { opacity: 0; }   /* ۱ ثانیه محو شدن */
+    100% { opacity: 0; }
+}
+
+.hero-overlay {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #0a0a1a;
+    text-align: center;
+    padding: 20px;
 }
-#slide-m1:checked ~ .slide-modern:nth-of-type(1),
-#slide-m2:checked ~ .slide-modern:nth-of-type(2),
-#slide-m3:checked ~ .slide-modern:nth-of-type(3),
-#slide-m4:checked ~ .slide-modern:nth-of-type(4),
-#slide-m5:checked ~ .slide-modern:nth-of-type(5) {
-    opacity: 1;
-    visibility: visible;
-    z-index: 10;
+
+.hero-text h1 {
+    color: #fff;
+    font-size: 3.2rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
-.slide-modern img,
-.slide-modern video {
+
+.hero-text p {
+    color: #eee;
+    font-size: 1.4rem;
+    font-weight: 600;
+    opacity: 0.95;
+}
+
+/* متن زیر هیرو */
+#after-hero {
+    text-align: center;
+    padding: 12px;
+    color: white;
+    background-color: #012e71;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+}
+
+/* ============================== */
+/* بخش اصلی */
+/* ============================== */
+.home-main {
+    width: 100%;
+    padding: 50px 15px 80px;
+    background:
+        radial-gradient(circle at top right, rgba(255, 170, 0, 0.07), transparent 320px),
+        radial-gradient(circle at 10% 20%, rgba(1, 46, 113, 0.05), transparent 280px),
+        #f8fafc;
+}
+
+.modern-section {
+    max-width: 1380px;
+    margin: 0 auto 70px;
+    padding: 0 10px;
+}
+
+.two-column-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    max-width: 1380px;
+    margin: 0 auto 70px;
+    padding: 0 10px;
+}
+
+.section-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.section-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: rgba(255, 170, 0, 0.15);
+    color: #9a6500;
+    font-size: 0.85rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.section-head h2,
+.about-content h2,
+.membership-card h2 {
+    color: #0f1f46;
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1.5;
+}
+
+.section-head p,
+.about-content p,
+.membership-card p {
+    color: #667085;
+    font-size: 0.95rem;
+    line-height: 2;
+    max-width: 650px;
+}
+
+.view-all {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: #fff;
+    color: #012e71;
+    border: 1px solid rgba(1, 46, 113, 0.12);
+    font-weight: 800;
+    font-size: 0.9rem;
+    transition: 0.25s ease;
+    white-space: nowrap;
+}
+.view-all:hover {
+    background: #012e71;
+    color: #fff;
+}
+
+/* ============================== */
+/* تمایز بخش‌ها با کلاس alt-bg */
+/* ============================== */
+.alt-bg {
+    background: #f4f5f9;
+    border-radius: 32px;
+    padding: 40px 30px !important;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+}
+
+/* ============================== */
+/* کارت درباره */
+/* ============================== */
+.about-card {
+    background: #fff;
+    border: 1px solid rgba(1, 46, 113, 0.08);
+    border-radius: 30px;
+    padding: 35px;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+    height: 100%;
+}
+
+.about-content p {
+    margin-top: 12px;
+    text-align: justify;
+}
+
+.about-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.primary-action,
+.secondary-action,
+.card-button,
+.membership-button,
+.download-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-weight: 800;
+    transition: 0.25s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.primary-action,
+.card-button,
+.membership-button,
+.download-link {
+    background: #012e71;
+    color: #fff;
+    padding: 12px 26px;
+}
+
+.secondary-action {
+    background: rgba(1, 46, 113, 0.08);
+    color: #012e71;
+    padding: 12px 26px;
+}
+
+.primary-action:hover,
+.card-button:hover,
+.membership-button:hover,
+.download-link:hover {
+    background: #ffaa00;
+    color: #01213d;
+}
+.secondary-action:hover {
+    background: #012e71;
+    color: #fff;
+}
+
+/* ============================== */
+/* گالری اسلایدر */
+/* ============================== */
+.featured-gallery .slider-container {
+    width: 100%;
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
+}
+
+.css-slider {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.5s ease;
+}
+
+.slide img,
+.slide video {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    background: #0a0a1a;
+    object-fit: cover;
 }
-.slide-caption-modern {
+
+input[name="slider"] {
+    display: none;
+}
+
+input[name="slider"]:nth-of-type(1):checked ~ .slide:nth-of-type(1),
+input[name="slider"]:nth-of-type(2):checked ~ .slide:nth-of-type(2),
+input[name="slider"]:nth-of-type(3):checked ~ .slide:nth-of-type(3),
+input[name="slider"]:nth-of-type(4):checked ~ .slide:nth-of-type(4),
+input[name="slider"]:nth-of-type(5):checked ~ .slide:nth-of-type(5) {
+    opacity: 1;
+    visibility: visible;
+}
+
+.slide::after {
+    content: "";
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
-    color: white;
-    padding: 40px 50px 30px;
-    text-align: right;
-    direction: rtl;
-    z-index: 12;
-    pointer-events: none;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 32, 81, 0.78), transparent 58%);
 }
-.slide-caption-modern h3 {
-    font-size: 26px;
-    margin-bottom: 8px;
-    color: #ffaa00;
-    font-weight: 700;
+
+.slide-caption {
+    position: absolute;
+    right: 30px;
+    bottom: 34px;
+    z-index: 3;
+    max-width: 520px;
+    color: #fff;
 }
-.slide-caption-modern p {
-    font-size: 17px;
+
+.slide-caption span {
+    display: inline-block;
+    background: rgba(255, 170, 0, 0.95);
+    color: #01213d;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+.slide-caption h3 {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 6px;
+}
+.slide-caption p {
+    font-size: 0.9rem;
     opacity: 0.9;
 }
 
-/* ناوبری دایره‌ای مدرن */
-.slider-nav-modern {
+.slider-nav {
     position: absolute;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 14px;
-    z-index: 20;
+    gap: 12px;
+    z-index: 5;
 }
-.nav-dot-modern {
-    width: 13px;
-    height: 13px;
+
+.nav-btn {
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.5);
     cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
+    transition: 0.3s;
+    display: inline-block;
 }
-.nav-dot-modern:hover {
+
+input[name="slider"]:nth-of-type(1):checked ~ .slider-nav label:nth-of-type(1),
+input[name="slider"]:nth-of-type(2):checked ~ .slider-nav label:nth-of-type(2),
+input[name="slider"]:nth-of-type(3):checked ~ .slider-nav label:nth-of-type(3),
+input[name="slider"]:nth-of-type(4):checked ~ .slider-nav label:nth-of-type(4),
+input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5) {
     background: #ffaa00;
     transform: scale(1.2);
 }
-#slide-m1:checked ~ .slider-nav-modern label:nth-of-type(1),
-#slide-m2:checked ~ .slider-nav-modern label:nth-of-type(2),
-#slide-m3:checked ~ .slider-nav-modern label:nth-of-type(3),
-#slide-m4:checked ~ .slider-nav-modern label:nth-of-type(4),
-#slide-m5:checked ~ .slider-nav-modern label:nth-of-type(5) {
-    background: #ffaa00;
-    width: 35px;
-    border-radius: 8px;
-    border-color: white;
-}
 
-/* دکمه‌های قبلی/بعدی */
-.slider-controls-modern {
+.slider-controls {
     position: absolute;
     top: 50%;
     left: 0;
@@ -401,921 +567,663 @@ header #logo img {
     transform: translateY(-50%);
     display: flex;
     justify-content: space-between;
-    padding: 0 20px;
-    z-index: 30;
+    padding: 0 15px;
+    z-index: 5;
     pointer-events: none;
 }
-.control-modern {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(8px);
-    color: white;
-    width: 50px;
-    height: 50px;
+
+.control {
+    pointer-events: auto;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
+    font-size: 1.5rem;
     cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255,255,255,0.15);
-    pointer-events: auto;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    transition: 0.3s;
 }
-.control-modern:hover {
+.control:hover {
     background: #ffaa00;
     color: #012e71;
-    transform: scale(1.12);
-    border-color: #ffaa00;
 }
 
-/* ============================================================ */
-/* ========== درباره ما (شیشه‌ای، بدون آمار) ========== */
-/* ============================================================ */
-.about-section-modern {
-    padding: 80px 0;
-    background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
-}
-.about-card-glass {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(20px);
-    border-radius: 40px;
-    padding: 50px 55px;
-    box-shadow: 0 20px 60px rgba(1, 46, 113, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    transition: all 0.4s ease;
-}
-.about-card-glass:hover {
-    box-shadow: 0 30px 80px rgba(1, 46, 113, 0.12);
-    transform: translateY(-5px);
-}
-.about-header-glass {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 30px;
-}
-.about-icon-glass {
-    width: 75px;
-    height: 75px;
-    background: linear-gradient(135deg, #012e71, #1a5aa0);
-    border-radius: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 36px;
-    color: #ffaa00;
-    box-shadow: 0 10px 30px rgba(1, 46, 113, 0.25);
-}
-.about-header-glass h2 {
-    font-size: 34px;
-    color: #012e71;
-    margin: 0;
-    font-weight: 700;
-}
-.about-body-glass p {
-    font-size: 19px;
-    line-height: 2.1;
-    color: #2c2c2c;
-    text-align: justify;
-    margin-bottom: 30px;
-}
-.about-cta-glass {
-    display: inline-block;
-    background: linear-gradient(135deg, #ffaa00, #f7b731);
-    color: #012e71;
-    padding: 16px 45px;
-    border-radius: 60px;
-    font-weight: 700;
-    font-size: 19px;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 30px rgba(255, 170, 0, 0.3);
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-}
-.about-cta-glass:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 12px 40px rgba(255, 170, 0, 0.45);
-}
-
-/* ============================================================ */
-/* ========== هدر بخش‌ها (شیشه‌ای) ========== */
-/* ============================================================ */
-.section-header-glass {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 50px 0 35px 0;
-    flex-wrap: wrap;
-}
-.section-header-glass h2 {
-    font-size: 32px;
-    color: #012e71;
-    margin: 0;
-    font-weight: 700;
-    position: relative;
-    padding-right: 25px;
-}
-.section-header-glass h2::before {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 7px;
-    height: 65%;
-    background: linear-gradient(to bottom, #ffaa00, #f7b731);
-    border-radius: 10px;
-}
-.view-all-glass {
-    color: #012e71;
-    font-weight: 600;
-    font-size: 16px;
-    transition: 0.3s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(1, 46, 113, 0.06);
-    padding: 10px 24px;
-    border-radius: 40px;
-    text-decoration: none;
-    border: 1px solid rgba(1, 46, 113, 0.05);
-}
-.view-all-glass:hover {
-    background: #012e71;
-    color: white;
-    transform: translateX(-5px);
-}
-
-/* ============================================================ */
-/* ========== کارت‌های اخبار (شیشه‌ای) ========== */
-/* ============================================================ */
-.news-section-modern {
-    padding: 30px 0 70px;
-}
-.news-grid-glass {
+/* ============================== */
+/* شبکه‌ها (اخبار، رویدادها، افتخارات) */
+/* ============================== */
+.modern-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-    gap: 35px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
 }
-.news-card-glass {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(12px);
-    border-radius: 30px;
+
+.modern-card {
+    background: #fff;
+    border: 1px solid rgba(1, 46, 113, 0.08);
+    border-radius: 28px;
     overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 16px 38px rgba(15, 23, 42, 0.07);
+    transition: 0.3s ease;
 }
-.news-card-glass:hover {
-    transform: translateY(-15px) scale(1.01);
-    box-shadow: 0 25px 60px rgba(1, 46, 113, 0.12);
-    border-color: rgba(255, 170, 0, 0.2);
+.modern-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 24px 52px rgba(15, 23, 42, 0.14);
 }
-.news-image-glass {
-    position: relative;
-    height: 210px;
+
+.card-image {
+    height: 220px;
     overflow: hidden;
+    background: #e5e7eb;
 }
-.news-image-glass img {
+.card-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s ease;
+    transition: 0.4s ease;
 }
-.news-card-glass:hover .news-image-glass img {
-    transform: scale(1.08);
-}
-.news-badge-glass {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    background: rgba(1, 46, 113, 0.85);
-    backdrop-filter: blur(4px);
-    color: white;
-    padding: 6px 20px;
-    border-radius: 40px;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-}
-.news-content-glass {
-    padding: 25px 28px 30px;
-}
-.news-content-glass h3 {
-    font-size: 21px;
-    color: #012e71;
-    margin: 0 0 12px 0;
-    font-weight: 700;
-    line-height: 1.4;
-}
-.news-content-glass p {
-    font-size: 16px;
-    color: #444;
-    line-height: 1.8;
-    margin: 0 0 18px 0;
-}
-.read-more-glass {
-    color: #ffaa00;
-    font-weight: 600;
-    text-decoration: none;
-    transition: 0.3s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 15px;
-}
-.read-more-glass:hover {
-    color: #012e71;
-    gap: 14px;
-}
-
-/* ============================================================ */
-/* ========== کارت‌های رویدادها (شیشه‌ای با نور) ========== */
-/* ============================================================ */
-.events-section-modern {
-    padding: 30px 0 70px;
-    background: linear-gradient(180deg, #f8faff 0%, #ffffff 100%);
-}
-.events-grid-glass {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-    gap: 35px;
-}
-.event-card-glass {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(12px);
-    border-radius: 30px;
-    overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    position: relative;
-}
-.event-card-glass::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(135deg, transparent 40%, rgba(255, 170, 0, 0.2) 100%);
-    border-radius: 32px;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-.event-card-glass:hover::before {
-    opacity: 1;
-}
-.event-card-glass:hover {
-    transform: translateY(-15px) scale(1.01);
-    box-shadow: 0 25px 60px rgba(1, 46, 113, 0.12);
-}
-.event-image-glass {
-    position: relative;
-    height: 210px;
-    overflow: hidden;
-}
-.event-image-glass img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-}
-.event-card-glass:hover .event-image-glass img {
-    transform: scale(1.08);
-}
-.event-date-glass {
-    position: absolute;
-    bottom: 18px;
-    right: 18px;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(6px);
-    color: white;
-    padding: 6px 18px;
-    border-radius: 40px;
-    font-size: 14px;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-.event-content-glass {
-    padding: 25px 28px 30px;
-}
-.event-content-glass h3 {
-    font-size: 21px;
-    color: #012e71;
-    margin: 0 0 6px 0;
-    font-weight: 700;
-}
-.event-time-glass {
-    font-size: 15px;
-    color: #888;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-.event-content-glass p {
-    font-size: 16px;
-    color: #444;
-    line-height: 1.7;
-    margin: 0 0 18px 0;
-}
-.btn-register-glass {
-    display: inline-block;
-    background: linear-gradient(135deg, #012e71, #1a5aa0);
-    color: white;
-    padding: 12px 32px;
-    border-radius: 60px;
-    font-weight: 600;
-    font-size: 15px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    box-shadow: 0 6px 25px rgba(1, 46, 113, 0.2);
-}
-.btn-register-glass:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 35px rgba(1, 46, 113, 0.3);
-    background: linear-gradient(135deg, #1a5aa0, #012e71);
-}
-
-/* ============================================================ */
-/* ========== کارت‌های منابع علمی (شیشه‌ای) ========== */
-/* ============================================================ */
-.resources-section-modern {
-    padding: 30px 0 70px;
-}
-.resources-grid-glass {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 35px;
-}
-.resource-card-glass {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(12px);
-    border-radius: 30px;
-    overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-}
-.resource-card-glass:hover {
-    transform: translateY(-15px) scale(1.01);
-    box-shadow: 0 25px 60px rgba(1, 46, 113, 0.12);
-}
-.resource-image-glass {
-    position: relative;
-    height: 190px;
-    overflow: hidden;
-}
-.resource-image-glass img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-}
-.resource-card-glass:hover .resource-image-glass img {
-    transform: scale(1.08);
-}
-.resource-type-glass {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    background: #e74c3c;
-    color: white;
-    padding: 4px 18px;
-    border-radius: 40px;
-    font-size: 13px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-.resource-content-glass {
-    padding: 22px 25px 28px;
-}
-.resource-content-glass h3 {
-    font-size: 20px;
-    color: #012e71;
-    margin: 0 0 8px 0;
-    font-weight: 700;
-}
-.resource-content-glass p {
-    font-size: 15px;
-    color: #444;
-    line-height: 1.7;
-    margin: 0 0 18px 0;
-}
-.btn-download-glass {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: linear-gradient(135deg, #27ae60, #2ecc71);
-    color: white;
-    padding: 12px 30px;
-    border-radius: 60px;
-    font-weight: 600;
-    font-size: 15px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    box-shadow: 0 6px 25px rgba(39, 174, 96, 0.25);
-}
-.btn-download-glass:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 35px rgba(39, 174, 96, 0.35);
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-}
-
-/* ============================================================ */
-/* ========== کارت‌های افتخارات (شیشه‌ای با حاشیه طلایی) ========== */
-/* ============================================================ */
-.honors-section-modern {
-    padding: 30px 0 80px;
-    background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
-}
-.honors-grid-glass {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-    gap: 35px;
-}
-.honor-card-glass {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(12px);
-    border-radius: 30px;
-    overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    border: 2px solid rgba(255, 170, 0, 0.15);
-}
-.honor-card-glass:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 25px 60px rgba(1, 46, 113, 0.12);
-    border-color: #ffaa00;
-}
-.honor-card-glass.featured-glass {
-    grid-column: span 2;
-    border-color: #ffaa00;
-    border-width: 3px;
-}
-@media (max-width: 768px) {
-    .honor-card-glass.featured-glass {
-        grid-column: span 1;
-    }
-}
-.honor-image-glass {
-    height: 230px;
-    overflow: hidden;
-}
-.honor-image-glass img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-}
-.honor-card-glass:hover .honor-image-glass img {
+.modern-card:hover .card-image img {
     transform: scale(1.06);
 }
-.honor-content-glass {
-    padding: 25px 28px 30px;
+
+.card-body {
+    padding: 22px;
 }
-.honor-rank-glass {
-    font-size: 24px;
-    font-weight: 800;
+.card-tag {
+    display: inline-flex;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(1, 46, 113, 0.08);
     color: #012e71;
-    margin-bottom: 6px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    margin-bottom: 12px;
 }
-.honor-competition-glass {
-    font-size: 17px;
-    color: #802222;
-    font-weight: 500;
+.card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: #667085;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+}
+.card-meta i {
+    color: #ffaa00;
+}
+.card-body h3 {
+    color: #0f1f46;
+    font-size: 1.2rem;
+    font-weight: 900;
+    line-height: 1.7;
+    margin-bottom: 10px;
+}
+.card-body p {
+    color: #667085;
+    font-size: 0.9rem;
+    line-height: 1.9;
+    margin-bottom: 16px;
 }
 
-/* ===== کارت خالی ===== */
-.empty-glass {
+/* ========== استایل جدید برای لینک "مشاهده جزئیات" ========== */
+.card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: #012e71;  /* آبی */
+    color: #ffffff !important;  /* متن سفید */
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: 0.3s ease;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+.card-link:hover {
+    background: #012e71;  /* آبی تیره‌تر در هاور */
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 102, 204, 0.35);
+}
+.card-link i {
+    margin-right: 6px;
+}
+/* ======================================================== */
+
+/* ============================== */
+/* لیست منابع */
+/* ============================== */
+.modern-list {
+    display: grid;
+    gap: 16px;
+}
+
+.resource-item {
+    background: #fff;
+    border: 1px solid rgba(1, 46, 113, 0.08);
+    border-radius: 24px;
+    padding: 22px;
+    display: grid;
+    grid-template-columns: 62px 1fr auto;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+    transition: 0.3s ease;
+}
+.resource-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.1);
+}
+.resource-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    background: rgba(255, 170, 0, 0.14);
+    color: #9a6500;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 200px;
-    background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(8px);
-    color: #999;
-    font-size: 18px;
-    border: 2px dashed #ccc;
+    font-size: 1.5rem;
+}
+.resource-content h3 {
+    color: #0f1f46;
+    font-size: 1.1rem;
+    font-weight: 900;
+    margin-bottom: 4px;
+}
+.resource-content p {
+    color: #667085;
+    font-size: 0.9rem;
+}
+
+/* ============================== */
+/* افتخارات */
+/* ============================== */
+.honors-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.honor-card {
+    min-height: 320px;
     border-radius: 30px;
-    padding: 30px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+    transition: 0.3s ease;
+}
+.honor-card:hover {
+    transform: translateY(-8px);
+}
+.honor-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 32, 81, 0.86), rgba(0, 32, 81, 0.08));
+}
+.honor-image,
+.honor-image img {
+    width: 100%;
+    height: 100%;
+}
+.honor-image img {
+    object-fit: cover;
+}
+.honor-content {
+    position: absolute;
+    right: 22px;
+    left: 22px;
+    bottom: 22px;
+    z-index: 2;
+    color: #fff;
+}
+.honor-content span {
+    display: inline-flex;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: #ffaa00;
+    color: #01213d;
+    font-size: 0.8rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+.honor-title {
+    font-size: 1.6rem;
+    font-weight: 900;
+    margin-bottom: 4px;
+}
+.honor-festival {
+    font-size: 0.95rem;
+    opacity: 0.9;
 }
 
-/* ============================================================ */
-/* ========== فوتر (ثابت) ========== */
-/* ============================================================ */
-.footer-up {
-    background: url('../../assets/images/bc-footer1-c.jpg') center center/cover;
-    height: 400px;
-    color: white;
-    text-align: center;
-    padding: 50px 200px;
+.empty-state {
+    grid-column: 1 / -1;
+    min-height: 160px;
+    background: #fff;
+    border: 1px dashed rgba(1, 46, 113, 0.22);
+    border-radius: 24px;
     display: flex;
-    justify-content: space-around;
-    margin-top: 60px;
-}
-.footer-down {
-    height: 50px;
-    color: white;
-    background-color: #002051;
-}
-.footer-down p {
-    margin: 0;
-    padding: 10px;
-    text-align: center;
-}
-.map iframe {
-    border: 10px double #0a2a44;
-}
-.footer-up .content {
-    width: 550px;
-    padding: 25px;
-    text-align: right;
-}
-.footer-up .content p {
-    margin: 25px;
+    align-items: center;
+    justify-content: center;
+    color: #667085;
+    font-weight: 700;
+    gap: 12px;
 }
 
-/* ===== آیکون‌های شناور (ثابت) ===== */
+/* ============================== */
+/* باکس آبی عضویت (کشیده) */
+/* ============================== */
+.membership-cta {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+.membership-card {
+    text-align: center;
+    background:
+        radial-gradient(circle at top right, rgba(255, 170, 0, 0.25), transparent 280px),
+        linear-gradient(135deg, #012e71, #001f4d);
+    border-radius: 28px;
+    padding: 50px 20px;
+    color: #fff;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
+    width: 100%;
+}
+.membership-card span {
+    display: inline-flex;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+}
+.membership-card h2 {
+    color: #fff;
+    font-size: 2.2rem;
+}
+.membership-card p {
+    color: rgba(255, 255, 255, 0.85);
+    margin: 14px auto 28px;
+    max-width: 600px;
+}
+.membership-button {
+    background: #ffaa00;
+    color: #01213d;
+    padding: 14px 34px;
+    font-size: 1rem;
+}
+.membership-button:hover {
+    background: #fff;
+    color: #01213d;
+}
+
+/* ============================== */
+/* فوتر مدرن */
+/* ============================== */
+.modern-footer {
+    background: #0a1e3a;
+    color: rgba(255,255,255,0.8);
+    padding: 50px 20px 0;
+    margin-top: 80px;
+}
+
+.footer-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-brand h3 {
+    color: #fff;
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 12px;
+}
+.footer-brand p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    max-width: 350px;
+}
+
+.footer-social {
+    display: flex;
+    gap: 14px;
+    margin-top: 18px;
+}
+.footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    font-size: 1.2rem;
+    transition: 0.3s;
+}
+.footer-social a:hover {
+    background: #ffaa00;
+    color: #012e71;
+    transform: translateY(-4px);
+}
+
+.footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.footer-links h4 {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+.footer-links ul li {
+    margin-bottom: 10px;
+}
+.footer-links ul li a {
+    color: rgba(255,255,255,0.7);
+    transition: 0.3s;
+    font-size: 0.95rem;
+}
+.footer-links ul li a:hover {
+    color: #ffaa00;
+}
+.footer-links ul li i {
+    margin-left: 8px;
+    color: #ffaa00;
+    width: 18px;
+}
+
+.footer-bottom {
+    max-width: 1380px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px 0 25px;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.5);
+}
+
+/* ============================== */
+/* آیکون‌های شناور */
+/* ============================== */
 #icons {
     position: fixed;
-    left: 7px;
+    left: 10px;
     bottom: 150px;
-    z-index: 200;
+    z-index: 999;
 }
 #icons a {
     display: block;
-    width: 60px;
+    width: 55px;
     cursor: pointer;
-    transition: 0.5s;
+    transition: 0.4s;
 }
 #icons a:hover {
     transform: scale(1.1);
 }
 #icons a:last-child {
-    width: 55px;
-    margin-top: 7px;
+    width: 48px;
+    margin-top: 8px;
 }
 #icons a img {
     border-radius: 100%;
     width: 100%;
 }
 
-/* ============================================================ */
-/* ========== ریسپانسیو کامل ========== */
-/* ============================================================ */
-@media (max-width: 1200px) {
-    #hero-items {
-        width: 100%;
-        justify-content: center;
-        gap: 20px;
+/* ============================== */
+/* ریسپانسیو */
+/* ============================== */
+
+/* تبلت */
+@media (max-width: 1024px) {
+    .two-column-section {
+        grid-template-columns: 1fr;
+        gap: 40px;
     }
-    .hero-item {
-        width: 170px;
-        height: 170px;
-        margin-bottom: 80px;
+    .modern-grid,
+    .honors-container {
+        grid-template-columns: repeat(2, 1fr);
     }
-    .hero-item a i {
-        font-size: 45px;
-        padding: 15px;
+    .header-container {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px 15px;
     }
-    .hero-item a span {
-        font-size: 17px;
-        bottom: 30px;
+    .brand-name {
+        font-size: 1rem;
+    }
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    .footer-links {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (max-width: 992px) {
-    .footer-up {
-        flex-direction: column;
-        height: auto;
-        padding: 30px 20px;
-    }
-    .footer-up .content {
-        width: 100%;
-        text-align: center;
-    }
-    .map iframe {
-        width: 100%;
-        height: 250px;
-    }
-    .hero {
-        height: 700px;
-    }
-    .hero-item {
-        width: 150px;
-        height: 150px;
-        margin-bottom: 50px;
-    }
-    .slider-wrapper-modern {
-        max-width: 95%;
-    }
-    .slide-caption-modern h3 {
-        font-size: 22px;
-    }
-    .slide-caption-modern p {
+/* موبایل */
+@media (max-width: 768px) {
+    html {
         font-size: 15px;
     }
-    .slide-caption-modern {
-        padding: 30px 30px 20px;
-    }
-    .about-card-glass {
-        padding: 35px 30px;
-    }
-    .about-header-glass h2 {
-        font-size: 28px;
-    }
-    .about-body-glass p {
-        font-size: 17px;
-    }
-    .section-header-glass h2 {
-        font-size: 26px;
-    }
-}
 
-@media (max-width: 768px) {
-    /* هدر */
-    .header-top a:first-child {
-        font-size: 18px;
+    .menu-toggle {
+        display: block;
     }
-    .login-btn {
+
+    .nav-menu {
+        display: none;
+        width: 100%;
+        order: 3;
+        background: #012e71;
+        padding: 15px 0;
+        border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .nav-menu.active {
+        display: block;
+    }
+
+    .nav-list {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+    }
+    .nav-list > li > a {
+        padding: 12px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        font-size: 1rem;
+    }
+    .dropdown-menu {
         position: static;
-        padding: 5px 15px;
-        font-size: 14px;
-        margin-right: 10px;
-    }
-    .nav-links {
-        margin-right: 0;
-        height: auto;
-        border-bottom: none;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 5px;
-        padding: 5px 0;
-    }
-    .nav-links a {
-        font-size: 13px;
-        padding: 6px 8px;
-        margin-right: 5px;
-    }
-    .nav-bar .logo {
-        font-size: 18px;
-        padding: 5px 0;
-    }
-    .nav-bar {
-        height: auto;
-    }
-    #ul-about,
-    #ul-relation {
+        background: rgba(255,255,255,0.05);
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
         display: none;
     }
-    
-    /* هیرو */
-    .hero {
-        height: 500px;
+    .dropdown.active .dropdown-menu {
+        display: block;
     }
-    #hero-items {
+    .dropdown-menu li a {
+        color: #fff;
+        padding: 10px 30px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .dropdown-menu li a:hover {
+        background: rgba(255,255,255,0.1);
+        color: #ffaa00;
+    }
+
+    .header-actions {
+        gap: 8px;
+    }
+    .university-link {
+        display: none;
+    }
+    .user-greeting {
+        font-size: 0.8rem;
+    }
+    .login-btn {
+        padding: 6px 14px;
+        font-size: 0.8rem;
+    }
+
+    .hero {
+        height: 300px;
+    }
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+    .hero-text p {
+        font-size: 1rem;
+    }
+
+    .home-main {
+        padding: 30px 10px 50px;
+    }
+    .modern-section {
+        margin-bottom: 40px;
+        padding: 0;
+    }
+    .alt-bg {
+        padding: 25px 15px !important;
+    }
+    .two-column-section {
+        gap: 30px;
+        margin-bottom: 40px;
+        padding: 0;
+    }
+
+    .section-head {
+        flex-direction: column;
+        align-items: flex-start;
         gap: 10px;
     }
-    .hero-item {
-        width: 120px;
-        height: 120px;
-        margin-bottom: 30px;
-        border-width: 4px;
+    .section-head h2,
+    .about-content h2,
+    .membership-card h2 {
+        font-size: 1.6rem;
     }
-    .hero-item a i {
-        font-size: 32px;
-        padding: 10px;
+
+    .modern-grid,
+    .honors-container {
+        grid-template-columns: 1fr;
     }
-    .hero-item a span {
-        font-size: 14px;
-        bottom: 20px;
+
+    .resource-item {
+        grid-template-columns: 1fr;
+        text-align: center;
     }
-    
-    /* اسلایدر */
-    .slider-wrapper-modern {
-        max-width: 100%;
+    .resource-icon {
+        margin: 0 auto;
+    }
+    .resource-action {
+        width: 100%;
+    }
+
+    .about-actions {
+        flex-direction: column;
+    }
+    .primary-action,
+    .secondary-action,
+    .card-button,
+    .membership-button,
+    .download-link,
+    .view-all {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .membership-card {
+        padding: 30px 15px;
         border-radius: 20px;
     }
-    .slide-caption-modern h3 {
-        font-size: 18px;
+    .membership-card h2 {
+        font-size: 1.6rem;
     }
-    .slide-caption-modern p {
-        font-size: 13px;
-    }
-    .slide-caption-modern {
-        padding: 20px 20px 15px;
-    }
-    .control-modern {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-    }
-    .slider-controls-modern {
-        padding: 0 12px;
-    }
-    .nav-dot-modern {
-        width: 10px;
-        height: 10px;
-    }
-    #slide-m1:checked ~ .slider-nav-modern label:nth-of-type(1),
-    #slide-m2:checked ~ .slider-nav-modern label:nth-of-type(2),
-    #slide-m3:checked ~ .slider-nav-modern label:nth-of-type(3),
-    #slide-m4:checked ~ .slider-nav-modern label:nth-of-type(4),
-    #slide-m5:checked ~ .slider-nav-modern label:nth-of-type(5) {
-        width: 25px;
-    }
-    
-    /* درباره */
-    .about-card-glass {
-        padding: 25px 20px;
-        border-radius: 28px;
-    }
-    .about-header-glass {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-    .about-icon-glass {
-        width: 60px;
-        height: 60px;
-        font-size: 28px;
-    }
-    .about-header-glass h2 {
-        font-size: 24px;
-    }
-    .about-body-glass p {
-        font-size: 16px;
-        line-height: 1.9;
-    }
-    .about-cta-glass {
-        font-size: 16px;
-        padding: 14px 30px;
-    }
-    
-    /* بخش‌ها */
-    .section-header-glass {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-        margin: 30px 0 25px 0;
-    }
-    .section-header-glass h2 {
-        font-size: 22px;
-        padding-right: 16px;
-    }
-    .section-header-glass h2::before {
-        width: 5px;
-    }
-    .view-all-glass {
-        font-size: 14px;
-        padding: 8px 18px;
-    }
-    
-    /* کارت‌ها */
-    .news-grid-glass,
-    .events-grid-glass,
-    .resources-grid-glass,
-    .honors-grid-glass {
+
+    .footer-links {
         grid-template-columns: 1fr;
-        gap: 25px;
+        gap: 20px;
     }
-    .news-card-glass,
-    .event-card-glass,
-    .resource-card-glass,
-    .honor-card-glass {
-        border-radius: 24px;
+    .modern-footer {
+        padding: 30px 15px 0;
+        margin-top: 40px;
     }
-    .news-image-glass,
-    .event-image-glass {
-        height: 180px;
+    .footer-brand p {
+        max-width: 100%;
     }
-    .resource-image-glass {
-        height: 160px;
+
+    .slide-caption h3 {
+        font-size: 1.2rem;
     }
-    .honor-image-glass {
-        height: 190px;
+    .slide-caption p {
+        font-size: 0.8rem;
     }
-    .news-content-glass h3,
-    .event-content-glass h3,
-    .resource-content-glass h3 {
-        font-size: 19px;
+    .slider-controls .control {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
     }
-    .honor-rank-glass {
-        font-size: 20px;
+    .honor-card {
+        min-height: 250px;
     }
-    
-    /* فوتر */
-    .footer-up {
-        padding: 20px 15px;
-    }
-    .footer-up .content p {
-        font-size: 14px;
-        margin: 15px 0;
-    }
-    .map iframe {
-        height: 200px;
-    }
-    
-    /* آیکون‌ها */
-    #icons a {
-        width: 50px;
-    }
-    #icons a:last-child {
-        width: 45px;
+    .honor-title {
+        font-size: 1.2rem;
     }
 }
 
-@media (max-width: 480px) {
+/* دسکتاپ بزرگ (فونت‌ها بزرگتر) */
+@media (min-width: 1400px) {
+    html {
+        font-size: 18px;
+    }
     .hero {
-        height: 400px;
+        height: 650px;
     }
-    .hero-item {
-        width: 90px;
-        height: 90px;
-        border-width: 3px;
-        border-radius: 20px;
+    .hero-text h1 {
+        font-size: 3.8rem;
     }
-    .hero-item a i {
-        font-size: 24px;
-        padding: 8px;
+    .hero-text p {
+        font-size: 1.6rem;
     }
-    .hero-item a span {
-        font-size: 11px;
-        bottom: 12px;
+    .brand-name {
+        font-size: 1.5rem;
     }
-    .control-modern {
-        width: 34px;
-        height: 34px;
-        font-size: 16px;
+    .section-head h2 {
+        font-size: 2.4rem;
     }
-    .slider-controls-modern {
-        padding: 0 8px;
+    .membership-card h2 {
+        font-size: 2.6rem;
     }
-    .slide-caption-modern h3 {
-        font-size: 15px;
+    .nav-list > li > a {
+        font-size: 1.05rem;
+        padding: 10px 20px;
     }
-    .slide-caption-modern p {
-        font-size: 11px;
+}
+
+/* دسکتاپ با فاصله کم از دو طرف */
+@media (min-width: 1200px) {
+    .home-main {
+        padding: 50px 20px 80px;
     }
-    .slide-caption-modern {
-        padding: 15px 15px 10px;
-    }
-    .about-card-glass {
-        padding: 20px 15px;
-        border-radius: 22px;
-    }
-    .about-header-glass h2 {
-        font-size: 20px;
-    }
-    .about-body-glass p {
-        font-size: 15px;
-    }
-    .about-cta-glass {
-        font-size: 14px;
-        padding: 12px 24px;
-    }
-    .section-header-glass h2 {
-        font-size: 19px;
-    }
-    .news-content-glass,
-    .event-content-glass,
-    .resource-content-glass,
-    .honor-content-glass {
-        padding: 18px 18px 22px;
-    }
-    .news-image-glass,
-    .event-image-glass {
-        height: 150px;
-    }
-    .resource-image-glass {
-        height: 140px;
-    }
-    .honor-image-glass {
-        height: 160px;
-    }
-    .btn-register-glass,
-    .btn-download-glass {
-        font-size: 13px;
-        padding: 10px 22px;
-    }
-    #icons a {
-        width: 42px;
-    }
-    #icons a:last-child {
-        width: 38px;
+    .modern-section,
+    .two-column-section,
+    .membership-cta {
+        padding: 0 10px;
     }
 }

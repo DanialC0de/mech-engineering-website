@@ -27,7 +27,6 @@ body {
     margin: 0;
     background-color: #edecf3;
     font-family: 'Arad', 'Tahoma', sans-serif;
-    min-height: 100vh;
 }
 
 a {
@@ -206,218 +205,175 @@ ul {
 }
 
 /* ============================== */
-/* محتوای اصلی (تکمیل ثبت‌نام) */
+/* محتوای اصلی (عضویت) */
 /* ============================== */
-.register-page-main {
+.membership-page-main {
     max-width: 1380px;
     margin: 40px auto 60px;
     padding: 0 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 200px);
 }
 
-.register-container {
-    width: 100%;
-    max-width: 620px;
+.membership-container {
+    max-width: 900px;
+    margin: 0 auto;
 }
 
-.register-box {
-    background: #fff;
-    border-radius: 32px;
-    padding: 40px 35px 35px;
-    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.10);
-    border: 1px solid rgba(1, 46, 113, 0.06);
-}
-
-/* هدر باکس */
-.register-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    margin-bottom: 28px;
+.page-header {
     text-align: center;
+    margin-bottom: 32px;
 }
 
-.logo-icon {
-    font-size: 2.2rem;
-}
-
-.logo-text h2 {
-    font-size: 1.6rem;
-    font-weight: 900;
-    color: #012e71;
-    margin: 0;
-}
-
-.logo-text h2 span {
-    color: #ffaa00;
-}
-
-.logo-text p {
-    color: #667085;
-    font-size: 0.85rem;
-    margin: 2px 0 0;
-}
-
-/* عنوان */
-.register-title {
-    text-align: center;
-    margin-bottom: 24px;
-}
-
-.register-title h1 {
+.page-header h1 {
     color: #0f1f46;
-    font-size: 1.6rem;
+    font-size: 2rem;
     font-weight: 900;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
-.register-title p {
+.page-header p {
     color: #667085;
-    font-size: 0.95rem;
-    line-height: 1.8;
-}
-
-/* پیام‌ها */
-.error-message {
-    background: #fee2e2;
-    color: #991b1b;
-    padding: 10px 16px;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 18px;
-    display: none;
-}
-
-.success-message {
-    background: #dcfce7;
-    color: #166534;
-    padding: 10px 16px;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 18px;
-    display: none;
-}
-
-.error-message.show,
-.success-message.show {
-    display: block;
-}
-
-/* کارت اطلاعات */
-.info-card {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    background: #f8fafc;
-    padding: 12px 18px;
-    border-radius: 14px;
-    border: 1px solid #e5e7eb;
-    margin-bottom: 22px;
-}
-
-.info-label {
-    color: #667085;
-    font-size: 0.9rem;
-}
-
-.info-value {
-    font-weight: 700;
-    color: #0f1f46;
     font-size: 1rem;
-    flex: 1;
 }
 
-.edit-link {
-    color: #012e71;
-    font-weight: 600;
-    font-size: 0.85rem;
-    transition: 0.3s;
-    display: inline-flex;
+/* ============================== */
+/* کارت اطلاعات شخصی */
+/* ============================== */
+.info-card {
+    background: #fff;
+    border-radius: 28px;
+    padding: 30px 35px 35px;
+    box-shadow: 0 16px 48px rgba(15, 23, 42, 0.08);
+    margin-bottom: 28px;
+}
+
+.info-card h2 {
+    color: #0f1f46;
+    font-size: 1.3rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 10px;
 }
 
-.edit-link:hover {
+.info-card h2 i {
     color: #ffaa00;
 }
 
-/* فرم */
-#registerForm {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.form-row {
+.info-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 14px 30px;
 }
 
-.input-group {
+.info-item {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    align-items: baseline;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid #f1f4f9;
 }
 
-.input-group.full-width {
+.info-item.full-width {
     grid-column: 1 / -1;
 }
 
-.input-group label {
-    font-weight: 700;
-    color: #0f1f46;
+.info-item .label {
+    color: #667085;
     font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 110px;
 }
 
-.input-group label i {
-    color: #ffaa00;
-    margin-left: 4px;
-}
-
-.input-group input,
-.input-group select,
-.input-group textarea {
-    padding: 10px 14px;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
+.info-item .value {
+    color: #0f1f46;
     font-size: 0.95rem;
-    outline: none;
-    transition: 0.3s;
-    background: #f8fafc;
-    font-family: 'Arad', 'Tahoma', sans-serif;
-    width: 100%;
+    font-weight: 700;
+    word-break: break-word;
 }
 
-.input-group input:focus,
-.input-group select:focus,
-.input-group textarea:focus {
-    border-color: #012e71;
+/* ============================== */
+/* قوانین و مقررات */
+/* ============================== */
+.rules-card {
     background: #fff;
-    box-shadow: 0 0 0 4px rgba(1, 46, 113, 0.06);
+    border-radius: 28px;
+    padding: 30px 35px 35px;
+    box-shadow: 0 16px 48px rgba(15, 23, 42, 0.08);
+    margin-bottom: 28px;
 }
 
-.input-group input::placeholder,
-.input-group textarea::placeholder {
-    color: #b0b8c4;
+.rules-card h2 {
+    color: #0f1f46;
+    font-size: 1.3rem;
+    font-weight: 900;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.input-group textarea {
-    resize: vertical;
-    min-height: 80px;
+.rules-card h2 i {
+    color: #ffaa00;
 }
 
+.rules-content {
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 18px;
+}
+
+.rules-content ol {
+    padding-right: 20px;
+    margin: 0;
+}
+
+.rules-content ol li {
+    color: #374151;
+    font-size: 0.9rem;
+    line-height: 1.9;
+    padding: 4px 0;
+    border-bottom: 1px dashed #e5e7eb;
+}
+
+.rules-content ol li:last-child {
+    border-bottom: none;
+}
+
+.rules-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rules-check input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #012e71;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.rules-check label {
+    color: #0f1f46;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+/* ============================== */
 /* دکمه ثبت‌نام */
-.register-btn {
-    width: 100%;
-    padding: 14px;
+/* ============================== */
+.form-actions {
+    text-align: center;
+}
+
+.submit-btn {
+    padding: 14px 40px;
     border: none;
     border-radius: 14px;
     background: #012e71;
@@ -427,52 +383,103 @@ ul {
     cursor: pointer;
     transition: 0.3s;
     font-family: 'Arad', 'Tahoma', sans-serif;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-top: 4px;
 }
 
-.register-btn:hover {
+.submit-btn:hover {
     background: #ffaa00;
     color: #01213d;
 }
 
-.register-btn:disabled {
+.submit-btn:disabled {
     background: #9ca3af;
     cursor: not-allowed;
 }
 
-.register-btn i {
+.submit-btn i {
     font-size: 1.1rem;
 }
 
-/* لینک بازگشت */
-.back-link {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.back-link a {
-    display: inline-flex;
+/* ============================== */
+/* مودال */
+/* ============================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: none;
     align-items: center;
-    gap: 8px;
-    color: #667085;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: 0.3s;
-    padding: 8px 16px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-box {
+    background: #fff;
     border-radius: 30px;
+    padding: 40px 35px 30px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+    animation: modalFadeIn 0.3s ease;
 }
 
-.back-link a:hover {
-    color: #012e71;
-    background: #f0f4ff;
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
-.back-link a i {
-    font-size: 0.85rem;
+.modal-icon {
+    font-size: 3.5rem;
+    margin-bottom: 12px;
+    color: #22c55e;
+}
+
+.modal-box h3 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #0f1f46;
+    margin-bottom: 8px;
+}
+
+.modal-box p {
+    color: #667085;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    margin-bottom: 24px;
+}
+
+.modal-btn {
+    background: #012e71;
+    color: #fff;
+    border: none;
+    padding: 10px 32px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: 'Arad', 'Tahoma', sans-serif;
+}
+
+.modal-btn:hover {
+    background: #ffaa00;
+    color: #01213d;
 }
 
 /* ============================== */
@@ -615,6 +622,9 @@ ul {
     .footer-links {
         grid-template-columns: repeat(2, 1fr);
     }
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 768px) {
@@ -683,41 +693,61 @@ ul {
         font-size: 0.8rem;
     }
 
-    .register-page-main {
-        margin: 20px auto 40px;
+    .membership-page-main {
         padding: 0 12px;
-        min-height: calc(100vh - 160px);
+        margin: 20px auto 40px;
     }
 
-    .register-box {
-        padding: 28px 20px 24px;
-        border-radius: 24px;
+    .page-header h1 {
+        font-size: 1.5rem;
     }
 
-    .register-title h1 {
-        font-size: 1.3rem;
+    .info-card,
+    .rules-card {
+        padding: 20px 18px 24px;
+        border-radius: 20px;
     }
 
-    .form-row {
-        grid-template-columns: 1fr;
-        gap: 12px;
+    .info-card h2,
+    .rules-card h2 {
+        font-size: 1.1rem;
     }
 
-    .input-group input,
-    .input-group select,
-    .input-group textarea {
-        font-size: 0.9rem;
-        padding: 8px 12px;
-    }
-
-    .register-btn {
-        font-size: 0.95rem;
-        padding: 12px;
-    }
-
-    .info-card {
+    .info-item {
         flex-wrap: wrap;
-        gap: 6px;
+        gap: 4px;
+    }
+    .info-item .label {
+        min-width: auto;
+        font-size: 0.85rem;
+    }
+    .info-item .value {
+        font-size: 0.9rem;
+    }
+
+    .rules-content {
+        max-height: 160px;
+        padding: 10px 12px;
+    }
+    .rules-content ol li {
+        font-size: 0.85rem;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+
+    .modal-box {
+        padding: 30px 20px 25px;
+        max-width: 360px;
+    }
+    .modal-icon {
+        font-size: 2.8rem;
+    }
+    .modal-box h3 {
+        font-size: 1.2rem;
     }
 
     .footer-links {
@@ -746,5 +776,17 @@ ul {
     .nav-list > li > a {
         font-size: 1.05rem;
         padding: 10px 20px;
+    }
+    .page-header h1 {
+        font-size: 2.4rem;
+    }
+    .membership-container {
+        max-width: 1000px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .membership-page-main {
+        padding: 0 30px;
     }
 }

@@ -5,346 +5,534 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/index/index.css' %}">
     <title>خانه | انجمن علمی مکانیک</title>
 </head>
 
 <body>
-    <header>
-        <div id="logo">
-            <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}">
-        </div>
-        <div class="header-top">
-            <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
-            {% if user.is_authenticated %}
-                <div style="display: inline-block;">
-                    <span style="color: white; margin-left: 10px;">خوش آمدی {{ user.first_name|default:user.username }}</span>
-                    <a href="{% url 'logout' %}" class="login-btn">خروج</a>
-                </div>
-            {% else %}
-                <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
-            {% endif %}
-        </div>
-        <div class="nav-bar">
-            <div class="logo">⚙️انجمن علمی مهندسی <span>مکانیک</span></div>
-            <div class="nav-links">
-                <a href="{% url 'home' %}">صفحه اصلی</a>
-                <a href="{% url 'about' %}"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
-                <a href="{% url 'industry' %}"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
-                <a href="{% url 'all_events' %}">رویدادها</a>
-                <a href="{% url 'all_resources' %}">منابع علمی</a>
-                <a href="{% url 'honors' %}">افتخارات انجمن</a>
-                <a href="{% url 'contact' %}">تماس با ما</a>
+
+    <!-- ========================================================= -->
+    <!-- هدر مدرن -->
+    <!-- ========================================================= -->
+    <header class="main-header">
+        <div class="header-container">
+
+            <div class="brand">
+                <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}" alt="لوگو دانشگاه">
+                <span class="brand-name">مهندسی مکانیک</span>
             </div>
+
+            <nav class="nav-menu" id="navMenu">
+                <ul class="nav-list">
+                    <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
+
+                    <li class="dropdown">
+                        <a href="{% url 'about' %}">
+                            درباره دانشکده <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" id="ul-about">
+                            <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
+                            <li><a href="{% url 'honors' %}">دستاوردها و افتخارات</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="{% url 'industry' %}">
+                            ارتباط با صنعت <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" id="ul-relation">
+                            <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <a href="https://uk.ac.ir/" target="_blank" class="university-link">
+                    <i class="fa-solid fa-graduation-cap"></i> دانشگاه
+                </a>
+
+                {% if user.is_authenticated %}
+                    <span class="user-greeting">خوش آمدی {{ user.first_name|default:user.username }}</span>
+                    <a href="{% url 'logout' %}" class="login-btn">خروج</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
+                {% endif %}
+            </div>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="منو">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
     </header>
 
-    <!-- منوهای کشویی -->
-    <ul id="ul-about">
-        <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
-        <li><a href="{% url 'honors' %}">دستاورد ها و افتخارات</a></li>
-    </ul>
-    <ul id="ul-relation">
-        <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
-    </ul>
-
-    <!-- بخش Hero -->
+    <!-- ========================================================= -->
+    <!-- هیرو با اسلایدر محو شونده (تصاویر fani، fani2، fani3) -->
+    <!-- ========================================================= -->
     <section class="hero">
-        <div id="seudo">
-            <div id="hero-items">
-                <div class="hero-item">
-                    <a href="{% url 'about' %}"><i class="fa-solid fa-building-columns"></i><span>معرفی دانشکده</span></a>
-                </div>
-                <div class="hero-item">
-                    <a href="{% url 'all_events' %}"><i class="fa-solid fa-calendar-days"></i><span>کارگاه ها و رویدادها</span></a>
-                </div>
-                <div class="hero-item">
-                    <a href="{% url 'all_resources' %}"><i class="fa-solid fa-book"></i><span>منابع علمی</span></a>
-                </div>
-                <div class="hero-item">
-                    <a href="{% url 'honors' %}"><i class="fa-solid fa-award"></i><span>دستاوردها</span></a>
-                </div>
+        <div class="hero-slides">
+            <div class="hero-slide" style="background-image: url('{% static 'assets/images/fani.jpg' %}');"></div>
+            <div class="hero-slide" style="background-image: url('{% static 'assets/images/fani2.jpg' %}');"></div>
+            <div class="hero-slide" style="background-image: url('{% static 'assets/images/fani3.jpg' %}');"></div>
+        </div>
+        <div class="hero-overlay">
+            <div class="hero-text">
+                <h1>انجمن علمی مهندسی مکانیک</h1>
+                <p>همراه شما در مسیر یادگیری، پژوهش و نوآوری</p>
             </div>
         </div>
     </section>
 
+    <!-- ========================================================= -->
+    <!-- متن زیر هیرو -->
+    <!-- ========================================================= -->
     <div id="after-hero">
-        <p>انجمن علمی مکانیک | همراه شما در مسیر یادگیری، پژوهش و نوآوری</p>
+        <p>در کنار خانواده انجمن باشید و با انجمن در تعامل باشیم</p>
     </div>
 
-    <!-- ============================================ -->
-    <!-- بخش گالری تصاویر و ویدیوها (اسلایدر مدرن) -->
-    <!-- ============================================ -->
-    <section class="gallery-modern">
-        <div class="container-modern">
-            <div class="slider-wrapper-modern">
-                <div class="slider-modern">
-                    {% for item in gallery_items %}
-                    <input type="radio" name="slider-modern" id="slide-m{{ forloop.counter }}" {% if forloop.first %}checked{% endif %}>
-                    <div class="slide-modern {% if item.media_type == 'video' %}video-slide-modern{% endif %}">
-                        {% if item.media_type == 'image' and item.image %}
-                            <img src="{{ item.image.url }}" alt="{{ item.caption_title }}" loading="lazy">
-                        {% elif item.media_type == 'video' and item.video_file %}
-                            <video controls preload="metadata" playsinline muted>
-                                <source src="{{ item.video_file.url }}" type="video/mp4">
-                                مرورگر شما ویدیو را پشتیبانی نمی‌کند.
-                            </video>
-                        {% else %}
-                            <img src="https://via.placeholder.com/800x400" alt="گالری" loading="lazy">
-                        {% endif %}
-                        <div class="slide-caption-modern">
-                            <h3>{{ item.caption_title }}</h3>
-                            <p>{{ item.caption_text }}</p>
+    <!-- ========================================================= -->
+    <!-- بخش اصلی -->
+    <!-- ========================================================= -->
+    <main class="home-main">
+
+        <!-- ========================================================= -->
+        <!-- ردیف دو ستونه: گالری + درباره -->
+        <!-- ========================================================= -->
+        <div class="two-column-section">
+
+            <!-- گالری انجمن -->
+            <section class="modern-section featured-gallery" id="gallery">
+                <div class="section-head">
+                    <div>
+                        <span class="section-badge">گالری انجمن</span>
+                        <h2>لحظه‌هایی از فعالیت‌های ما</h2>
+                        <p>تصاویر و ویدیوهایی از رویدادها، کارگاه‌ها و برنامه‌های انجمن علمی مکانیک.</p>
+                    </div>
+                </div>
+
+                <div class="gallery-slider">
+                    <div class="container-s">
+                        <div class="slider-container">
+                            <div class="css-slider">
+                                {% for item in gallery_items %}
+                                <input type="radio" name="slider" id="slide{{ forloop.counter }}" {% if forloop.first %}checked{% endif %}>
+
+                                <div class="slide {% if item.media_type == 'video' %}video-slide{% endif %}">
+                                    {% if item.media_type == 'image' and item.image %}
+                                        <img src="{{ item.image.url }}" alt="{{ item.caption_title }}">
+                                    {% elif item.media_type == 'video' and item.video_file %}
+                                        <video controls preload="auto" playsinline muted>
+                                            <source src="{{ item.video_file.url }}" type="video/mp4">
+                                            مرورگر شما ویدیو را پشتیبانی نمی‌کند.
+                                        </video>
+                                    {% else %}
+                                        <img src="https://via.placeholder.com/900x480" alt="گالری انجمن">
+                                    {% endif %}
+
+                                    <div class="slide-caption">
+                                        <span>انجمن علمی مکانیک</span>
+                                        <h3>{{ item.caption_title }}</h3>
+                                        <p>{{ item.caption_text }}</p>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <div class="slide">
+                                    <img src="https://via.placeholder.com/900x480" alt="گالری انجمن">
+                                    <div class="slide-caption">
+                                        <span>گالری انجمن</span>
+                                        <h3>گالری در حال به‌روزرسانی</h3>
+                                        <p>به‌زودی تصاویر و ویدیوهای فعالیت‌های انجمن در این بخش قرار می‌گیرد.</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+
+                                <div class="slider-nav">
+                                    {% for item in gallery_items %}
+                                    <label for="slide{{ forloop.counter }}" class="nav-btn"></label>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="slider-controls">
+                                    <span class="control prev">❮</span>
+                                    <span class="control next">❯</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    {% empty %}
-                    <div class="slide-modern">
-                        <img src="https://via.placeholder.com/800x400" alt="گالری" loading="lazy">
-                        <div class="slide-caption-modern">
-                            <h3>گالری در حال به‌روزرسانی</h3>
-                            <p>به زودی...</p>
+                </div>
+            </section>
+
+            <!-- درباره انجمن -->
+            <section class="modern-section about-association">
+                <div class="about-card">
+                    <div class="about-content">
+                        <span class="section-badge">درباره ما</span>
+                        <h2>انجمن علمی مکانیک؛ جایی برای رشد، تجربه و ساخت آینده</h2>
+                        <p>
+                            انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان در سال ۱۳۸۶ با هدف ارتقای دانش،
+                            مهارت و تجربه دانشجویان این رشته فعالیت خود را آغاز کرد. این انجمن با برگزاری کارگاه‌های آموزشی،
+                            رویدادهای تخصصی، برنامه‌های علمی و فعالیت‌های پژوهشی تلاش می‌کند بستری پویا برای رشد دانشجویان
+                            مهندسی مکانیک فراهم کند.
+                        </p>
+
+                        <div class="about-actions">
+                            <a href="{% url 'membership_page' %}" class="primary-action">عضویت در انجمن</a>
+                            <a href="{% url 'about' %}" class="secondary-action">آشنایی بیشتر</a>
                         </div>
                     </div>
-                    {% endfor %}
-
-                    <!-- ناوبری دایره‌ای مدرن -->
-                    <div class="slider-nav-modern">
-                        {% for item in gallery_items %}
-                        <label for="slide-m{{ forloop.counter }}" class="nav-dot-modern"></label>
-                        {% endfor %}
-                    </div>
-
-                    <!-- دکمه‌های قبلی/بعدی -->
-                    <div class="slider-controls-modern">
-                        <label for="slide-m{{ gallery_items|length }}" class="control-modern prev-modern">❮</label>
-                        <label for="slide-m2" class="control-modern next-modern">❯</label>
-                    </div>
                 </div>
-            </div>
-        </div>
-    </section>
+            </section>
 
-    <!-- ============================================ -->
-    <!-- بخش درباره ما (مدرن، بدون آمار) -->
-    <!-- ============================================ -->
-    <section class="about-section-modern">
-        <div class="container-modern">
-            <div class="about-card-glass">
-                <div class="about-header-glass">
-                    <div class="about-icon-glass">
-                        <i class="fas fa-users-gear"></i>
-                    </div>
-                    <h2>درباره انجمن علمی مکانیک</h2>
-                </div>
-                <div class="about-body-glass">
-                    <p>
-                        انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان در سال ۱۳۸۶ با هدف ارتقا دانش و تخصص دانشجویان و پژوهشگران این رشته تاسیس شد. انجمن علمی دانشجویی مهندسی مکانیک مفتخر است که در طول بیش از یک دهه از فعالیت خود، گام‌های تاثیرگذار و مفیدی را جهت ارتقاء کیفی و کمی سطح علمی دانشجویان این رشته بردارد؛ که میتوان به برگزاری کارگاه‌های آموزشی متعدد پیرامون نرم‌افزارهای کاربردی این رشته که جزء لاینفک عوامل لازم برای موفقیت مهندسان و دانشجویان مکانیک است اشاره کرد.
-                    </p>
-                    {% if user.is_authenticated %}
-                        <a href="#" class="about-cta-glass">همین حالا به خانواده بزرگ انجمن علمی مکانیک بپیوندید</a>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="about-cta-glass">برای دسترسی به امکانات، وارد شوید</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </section>
+        </div> <!-- پایان دو ستونه -->
 
-    <!-- ============================================ -->
-    <!-- بخش اخبار (کارت‌های مدرن با گرادیانت) -->
-    <!-- ============================================ -->
-    <section class="news-section-modern">
-        <div class="container-modern">
-            <div class="section-header-glass">
-                <h2>📰 اخبار و اطلاعیه‌ها</h2>
-                <a href="{% url 'all_news' %}" class="view-all-glass">مشاهده همه <i class="fa-solid fa-arrow-left"></i></a>
+        <!-- ========================================================= -->
+        <!-- بخش اخبار -->
+        <!-- ========================================================= -->
+        <section class="modern-section news-section alt-bg">
+            <div class="section-head">
+                <div>
+                    <span class="section-badge">تازه‌ها</span>
+                    <h2>اخبار و اطلاعیه‌ها</h2>
+                    <p>آخرین اطلاعیه‌ها، خبرهای آموزشی و برنامه‌های انجمن علمی مکانیک.</p>
+                </div>
+
+                <a href="{% url 'all_news' %}" class="view-all">همه اخبار ←</a>
             </div>
-            <div class="news-grid-glass">
+
+            <div class="modern-grid news-grid">
                 {% for item in news %}
-                <div class="news-card-glass">
-                    <div class="news-image-glass">
+                <article class="modern-card news-card">
+                    <div class="card-image">
                         {% if item.image %}
-                            <img src="{{ item.image.url }}" alt="{{ item.title }}" loading="lazy">
+                            <img src="{{ item.image.url }}" alt="{{ item.title }}">
                         {% else %}
-                            <img src="https://via.placeholder.com/400x200" alt="خبر" loading="lazy">
+                            <img src="https://via.placeholder.com/500x320" alt="خبر">
                         {% endif %}
-                        <span class="news-badge-glass">{{ item.category }}</span>
                     </div>
-                    <div class="news-content-glass">
+
+                    <div class="card-body">
+                        <span class="card-tag">{{ item.category }}</span>
                         <h3>{{ item.title }}</h3>
-                        <p>{{ item.summary|default:item.title|truncatechars:80 }}</p>
-                        <a href="{% url 'news_detail' item.id %}" class="read-more-glass">مشاهده جزئیات →</a>
+                        <p>{{ item.summary|default:item.title|truncatechars:95 }}</p>
+                        <a href="{% url 'news_detail' item.id %}" class="card-link">مشاهده جزئیات ←</a>
                     </div>
-                </div>
+                </article>
                 {% empty %}
-                <div class="news-card-glass empty-glass">
-                    <p>هیچ خبری یافت نشد.</p>
+                <div class="empty-state">
+                    <i class="fa-regular fa-newspaper"></i>
+                    <p>فعلاً خبری برای نمایش وجود ندارد.</p>
                 </div>
                 {% endfor %}
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ============================================ -->
-    <!-- بخش رویدادها (کارت‌های مدرن با افکت نور) -->
-    <!-- ============================================ -->
-    <section class="events-section-modern">
-        <div class="container-modern">
-            <div class="section-header-glass">
-                <h2>📅 رویدادها و کارگاه‌ها</h2>
-                <a href="{% url 'all_events' %}" class="view-all-glass">مشاهده همه <i class="fa-solid fa-arrow-left"></i></a>
+        <!-- ========================================================= -->
+        <!-- بخش رویدادها (با لینک مشاهده جزئیات) -->
+        <!-- ========================================================= -->
+        <section class="modern-section events-section">
+            <div class="section-head">
+                <div>
+                    <span class="section-badge">رویدادها</span>
+                    <h2>رویدادها و کارگاه‌ها</h2>
+                    <p>فرصت‌هایی برای یادگیری عملی، ارتباط با صنعت و تجربه فعالیت تخصصی.</p>
+                </div>
+
+                <a href="{% url 'all_events' %}" class="view-all">همه رویدادها ←</a>
             </div>
-            <div class="events-grid-glass">
+
+            <div class="modern-grid events-grid">
                 {% for event in events %}
-                <div class="event-card-glass">
-                    <div class="event-image-glass">
+                <article class="modern-card event-card">
+                    <div class="card-image">
                         {% if event.image %}
-                            <img src="{{ event.image.url }}" alt="{{ event.title }}" loading="lazy">
+                            <img src="{{ event.image.url }}" alt="{{ event.title }}">
                         {% else %}
-                            <img src="https://via.placeholder.com/400x200" alt="رویداد" loading="lazy">
+                            <img src="https://via.placeholder.com/500x320" alt="رویداد">
                         {% endif %}
-                        <div class="event-date-glass">
-                            <i class="fa-regular fa-calendar"></i> {{ event.jalali_date }}
-                        </div>
                     </div>
-                    <div class="event-content-glass">
+
+                    <div class="card-body">
+                        <span class="card-tag">
+                            {% if event.status == 'upcoming' %}
+                                در حال ثبت‌نام
+                            {% elif event.status == 'ongoing' %}
+                                در حال برگزاری
+                            {% else %}
+                                به پایان رسیده
+                            {% endif %}
+                        </span>
                         <h3>{{ event.title }}</h3>
-                        <div class="event-time-glass">
-                            <i class="fa-regular fa-clock"></i> {{ event.time }}
+
+                        <div class="card-meta">
+                            <span><i class="fa-regular fa-calendar"></i> {{ event.jalali_date }}</span>
+                            <span><i class="fa-regular fa-clock"></i> {{ event.time }}</span>
+                            {% if event.instructor_name %}
+                            <span><i class="fa-regular fa-user"></i> {{ event.instructor_name }}</span>
+                            {% endif %}
                         </div>
+
                         <p>{{ event.short_description|truncatechars:80 }}</p>
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'register_event' event.id %}" class="btn-register-glass">ثبت‌نام →</a>
-                        {% else %}
-                            <button class="btn-register-glass" onclick="alert('لطفاً ابتدا وارد حساب کاربری شوید')">ثبت‌نام →</button>
-                        {% endif %}
+
+                        <a href="{% url 'event_detail' event.id %}" class="card-link">مشاهده جزئیات ←</a>
                     </div>
-                </div>
+                </article>
                 {% empty %}
-                <div class="event-card-glass empty-glass">
-                    <p>هیچ رویدادی وجود ندارد</p>
+                <div class="empty-state">
+                    <i class="fa-regular fa-calendar-xmark"></i>
+                    <p>فعلاً رویداد جدیدی ثبت نشده است.</p>
                 </div>
                 {% endfor %}
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ============================================ -->
-    <!-- بخش منابع علمی (کارت‌های مدرن با آیکون) -->
-    <!-- ============================================ -->
-    <section class="resources-section-modern">
-        <div class="container-modern">
-            <div class="section-header-glass">
-                <h2>📚 جدیدترین منابع علمی</h2>
-                <a href="{% url 'all_resources' %}" class="view-all-glass">مشاهده همه <i class="fa-solid fa-arrow-left"></i></a>
+        <!-- ========================================================= -->
+        <!-- بخش منابع علمی (دانلود بدون نیاز به لاگین) -->
+        <!-- ========================================================= -->
+        <section class="modern-section resources-section alt-bg">
+            <div class="section-head">
+                <div>
+                    <span class="section-badge">کتابخانه انجمن</span>
+                    <h2>منابع علمی منتخب</h2>
+                    <p>جزوه‌ها، فایل‌های آموزشی و منابع کاربردی برای دانشجویان مهندسی مکانیک.</p>
+                </div>
+
+                <a href="{% url 'all_resources' %}" class="view-all">همه منابع ←</a>
             </div>
-            <div class="resources-grid-glass">
+
+            <div class="modern-list resources-list">
                 {% for resource in resources %}
-                <div class="resource-card-glass">
-                    <div class="resource-image-glass">
-                        {% if resource.image %}
-                            <img src="{{ resource.image.url }}" alt="{{ resource.title }}" loading="lazy">
-                        {% else %}
-                            <img src="https://via.placeholder.com/400x200" alt="منبع" loading="lazy">
-                        {% endif %}
-                        <span class="resource-type-glass">PDF</span>
+                <article class="resource-item">
+                    <div class="resource-icon">
+                        <i class="fa-solid fa-book-open"></i>
                     </div>
-                    <div class="resource-content-glass">
+
+                    <div class="resource-content">
                         <h3>{{ resource.title }}</h3>
-                        <p>{{ resource.description|truncatechars:60 }}</p>
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'download_resource' resource.id %}" class="btn-download-glass">
-                                <i class="fa-solid fa-download"></i> دانلود
-                            </a>
-                        {% else %}
-                            <button class="btn-download-glass" onclick="alert('لطفاً ابتدا وارد حساب کاربری شوید')">
-                                <i class="fa-solid fa-download"></i> دانلود
-                            </button>
-                        {% endif %}
+                        <p>{{ resource.description|truncatechars:110 }}</p>
                     </div>
-                </div>
+
+                    <div class="resource-action">
+                        <a href="{% url 'download_resource' resource.id %}" class="download-link">دانلود PDF</a>
+                    </div>
+                </article>
                 {% empty %}
-                <div class="resource-card-glass empty-glass">
-                    <p>هیچ منبعی وجود ندارد</p>
+                <div class="empty-state">
+                    <i class="fa-solid fa-book"></i>
+                    <p>فعلاً منبعی برای نمایش وجود ندارد.</p>
                 </div>
                 {% endfor %}
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ============================================ -->
-    <!-- بخش افتخارات (کارت‌های مدرن با حاشیه طلایی) -->
-    <!-- ============================================ -->
-    <section class="honors-section-modern">
-        <div class="container-modern">
-            <div class="section-header-glass">
-                <h2>🏆 افتخارات انجمن</h2>
-                <a href="{% url 'honors' %}" class="view-all-glass">مشاهده همه <i class="fa-solid fa-arrow-left"></i></a>
+        <!-- ========================================================= -->
+        <!-- بخش افتخارات -->
+        <!-- ========================================================= -->
+        <section class="modern-section honors-section">
+            <div class="section-head">
+                <div>
+                    <span class="section-badge">افتخارات</span>
+                    <h2>دستاوردهای دانشجویی</h2>
+                    <p>بخشی از موفقیت‌ها و افتخارهای ثبت‌شده توسط اعضا و دانشجویان انجمن.</p>
+                </div>
+
+                <a href="{% url 'honors' %}" class="view-all">همه افتخارات ←</a>
             </div>
-            <div class="honors-grid-glass">
+
+            <div class="honors-container">
                 {% for honor in honors %}
-                <div class="honor-card-glass {% if forloop.first %}featured-glass{% endif %}">
-                    <div class="honor-image-glass">
+                <article class="honor-card {% if forloop.first %}one{% elif forloop.last %}tree{% endif %}">
+                    <div class="honor-image">
                         {% if honor.image %}
-                            <img src="{{ honor.image.url }}" alt="{{ honor.competition_name }}" loading="lazy">
+                            <img src="{{ honor.image.url }}" alt="{{ honor.competition_name }}">
                         {% else %}
-                            <img src="{% static 'assets/images/bc-footer.jpg' %}" alt="افتخار" loading="lazy">
+                            <img src="{% static 'assets/images/bc-footer.jpg' %}" alt="افتخار">
                         {% endif %}
                     </div>
-                    <div class="honor-content-glass">
-                        <div class="honor-rank-glass">{{ honor.rank }}</div>
-                        <div class="honor-competition-glass">{{ honor.competition_name }}</div>
+
+                    <div class="honor-content">
+                        <span>افتخار دانشجویی</span>
+                        <div class="honor-title">{{ honor.rank }}</div>
+                        <div class="honor-festival">{{ honor.competition_name }}</div>
                     </div>
-                </div>
+                </article>
                 {% empty %}
-                <div class="honor-card-glass empty-glass">
-                    <p>هیچ افتخاری ثبت نشده است</p>
+                <div class="empty-state">
+                    <i class="fa-solid fa-award"></i>
+                    <p>افتخاری برای نمایش ثبت نشده است.</p>
                 </div>
                 {% endfor %}
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ============================================ -->
-    <!-- فوتر (ثابت) -->
-    <!-- ============================================ -->
-    <footer>
-        <div class="footer-up">
-            <div class="content">
-                <p><i class="fa-solid fa-location-dot"></i>&nbsp;&nbsp;&nbsp;&nbsp; کرمان - بلوار جمهوری - پل امیرکبیر -
-                    دانشکده فنی مهندسی &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;دانشگاه شهید باهنر - دانشکده
-                    مکانیک</p>
-                <p><i class="fa-brands fa-telegram"></i> &nbsp;&nbsp;&nbsp;&nbsp; ukmechanics@</p>
-                <p><i class="fa-brands fa-instagram"></i> &nbsp;&nbsp;&nbsp;&nbsp; ukmechanics@</p>
+        <!-- ========================================================= -->
+        <!-- دعوت به عضویت (باکس آبی کشیده) -->
+        <!-- ========================================================= -->
+        <section class="membership-cta">
+            <div class="membership-card">
+                <span>انجمن علمی مکانیک</span>
+                <h2>آماده‌ای وارد جمع فعالان مکانیک شوی؟</h2>
+                <p>عضویت در انجمن، شروع ارتباط با رویدادها، تیم‌ها و فرصت‌های آموزشی است.</p>
+
+                <a href="{% url 'membership_page' %}" class="membership-button">عضویت در انجمن</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================================= -->
+    <!-- فوتر مدرن (فقط پنل‌ها در بخش "بخش‌های سایت") -->
+    <!-- ========================================================= -->
+    <footer class="modern-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>مهندسی مکانیک</h3>
+                <p>انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان</p>
+                <div class="footer-social">
+                    <a href="https://t.me/ukmechanics" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="https://instagram.com/ukmechanics" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                </div>
             </div>
 
-            <div class="map">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3445.4741871022507!2d57.012748796789545!3d30.28055960000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f0218b67107c6dd%3A0x398906da69669661!2sFaculty%20of%20Engineering%20Campus%20-Shahid%20Bahonar%20University%20of%20Kerman!5e0!3m2!1sen!2s!4v1781183631960!5m2!1sen!2s"
-                    width="550" height="320" allowfullscreen="" loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
+            <div class="footer-links">
+                <div>
+                    <h4>دسترسی سریع</h4>
+                    <ul>
+                        <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
+                        <li><a href="{% url 'about' %}">درباره دانشکده</a></li>
+                        <li><a href="{% url 'industry' %}">ارتباط با صنعت</a></li>
+                        <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                    </ul>
+                </div>
+
+                <!-- ===== بخش "بخش‌های سایت" فقط با پنل‌ها ===== -->
+                <div>
+                    <h4>بخش‌های سایت</h4>
+                    <ul>
+                        <li><a href="http://127.0.0.1:8000/panel/student/" target="_blank">پنل دانشجو</a></li>
+                        <li><a href="http://127.0.0.1:8000/panel/professor/" target="_blank">پنل استاد</a></li>
+                        <li><a href="http://127.0.0.1:8000/members/" target="_blank">پنل انجمن</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4>اطلاعات تماس</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-location-dot"></i> کرمان - بلوار جمهوری - دانشکده مکانیک</li>
+                        <li><i class="fa-solid fa-phone"></i> ۰۳۴-۳۱۳۲۱۲۳۴</li>
+                        <li><i class="fa-solid fa-envelope"></i> info@mech-uk.ac.ir</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
-        <div class="footer-down">
-            <p>&copy; ۲۰۲۵ انجمن علمی مکانیک - تمامی حقوق محفوظ است</p>
+        <div class="footer-bottom">
+            <p>&copy; ۲۰۲۵ تمامی حقوق برای انجمن علمی مهندسی مکانیک دانشگاه شهید باهنر کرمان محفوظ است.</p>
         </div>
     </footer>
 
+    <!-- ========================================================= -->
+    <!-- آیکون‌های شناور (تلگرام و اینستاگرام) -->
+    <!-- ========================================================= -->
     <div id="icons">
         <a href="https://t.me/ukmechanics" target="_blank">
-            <img src="{% static 'assets/icons/15.png' %}">
+            <img src="{% static 'assets/icons/15.png' %}" alt="تلگرام">
         </a>
         <a href="https://instagram.com/ukmechanics?igshid=14gmuy96orpnd" target="_blank">
-            <img src="{% static 'assets/icons/2.png' %}">
+            <img src="{% static 'assets/icons/2.png' %}" alt="اینستاگرام">
         </a>
     </div>
 
-    <div id="gallery-config" data-total="{{ gallery_items.count|default:0 }}" data-current="1"></div>
-    
-    <script src="{% static 'js/index.js' %}"></script>
+    <!-- ========================================================= -->
+    <!-- دیتا و اسکریپت -->
+    <!-- ========================================================= -->
+    <div id="gallery-config"
+         data-total="{{ gallery_items.count|default:0 }}"
+         data-current-slide="1">
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // منوی همبرگری
+            const toggleBtn = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+
+            if (toggleBtn && navMenu) {
+                toggleBtn.addEventListener('click', function () {
+                    navMenu.classList.toggle('active');
+                });
+            }
+
+            // دراپ‌داون درباره و صنعت
+            const aboutUrl = "{% url 'about' %}";
+            const industryUrl = "{% url 'industry' %}";
+
+            const aboutLink = document.querySelector('.nav-list a[href="' + aboutUrl + '"]');
+            const ulAbout = document.getElementById('ul-about');
+
+            const relationLink = document.querySelector('.nav-list a[href="' + industryUrl + '"]');
+            const ulRelation = document.getElementById('ul-relation');
+
+            function setupDropdown(link, dropdown) {
+                if (!link || !dropdown) return;
+                const parent = link.closest('.dropdown');
+
+                function show() {
+                    dropdown.style.display = 'block';
+                }
+                function hide() {
+                    dropdown.style.display = 'none';
+                }
+
+                if (parent) {
+                    parent.addEventListener('mouseenter', show);
+                    parent.addEventListener('mouseleave', hide);
+                } else {
+                    link.addEventListener('mouseover', show);
+                    link.addEventListener('mouseout', hide);
+                }
+
+                dropdown.addEventListener('mouseover', show);
+                dropdown.addEventListener('mouseout', hide);
+            }
+
+            setupDropdown(aboutLink, ulAbout);
+            setupDropdown(relationLink, ulRelation);
+
+            // کنترل اسلایدر گالری
+            const radios = document.querySelectorAll('.css-slider input[name="slider"]');
+            const prevBtn = document.querySelector('.slider-controls .prev');
+            const nextBtn = document.querySelector('.slider-controls .next');
+
+            if (radios.length > 0 && prevBtn && nextBtn) {
+                let current = 0;
+                radios.forEach((r, idx) => { if (r.checked) current = idx; });
+
+                prevBtn.addEventListener('click', function () {
+                    let newIdx = (current - 1 + radios.length) % radios.length;
+                    radios[newIdx].checked = true;
+                    current = newIdx;
+                });
+
+                nextBtn.addEventListener('click', function () {
+                    let newIdx = (current + 1) % radios.length;
+                    radios[newIdx].checked = true;
+                    current = newIdx;
+                });
+
+                radios.forEach((r, idx) => {
+                    r.addEventListener('change', function () {
+                        if (this.checked) current = idx;
+                    });
+                });
+            }
+        });
+    </script>
+
 </body>
 
 </html>

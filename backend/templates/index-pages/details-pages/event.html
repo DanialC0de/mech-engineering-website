@@ -7,226 +7,295 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/index/details-pages/event.css' %}">
-    <title>{{ event.title }}</title>
+    <title>{{ event.title }} | انجمن علمی مکانیک</title>
 </head>
 
 <body>
-    <header>
-        <div id="logo">
-            <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}">
-        </div>
-        <div class="header-top">
-            <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
-            {% if user.is_authenticated %}
-                <span class="user-welcome">خوش آمدی {{ user.get_full_name|default:user.username }}</span>
-                <a href="{% url 'logout' %}" class="logout-btn">خروج</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
-            {% endif %}
-        </div>
-        <div class="nav-bar">
-            <div class="logo">⚙️انجمن علمی مهندسی <span>مکانیک</span></div>
-            <div class="nav-links">
-                <a href="{% url 'home' %}">صفحه اصلی</a>
-                <a href="#"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
-                <a href="#"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
-                <a href="{% url 'all_events' %}">رویدادها</a>
-                <a href="{% url 'all_resources' %}">منابع علمی</a>
-                <a href="{% url 'honors' %}">افتخارات انجمن</a>
-                <a href="{% url 'contact' %}">تماس با ما</a>
+
+    <!-- ==================== هدر مدرن (دقیقاً مثل صفحه اصلی) ==================== -->
+    <header class="main-header">
+        <div class="header-container">
+
+            <div class="brand">
+                <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}" alt="لوگو دانشگاه">
+                <span class="brand-name">مهندسی مکانیک</span>
             </div>
+
+            <nav class="nav-menu" id="navMenu">
+                <ul class="nav-list">
+                    <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
+
+                    <li class="dropdown">
+                        <a href="{% url 'about' %}">
+                            درباره دانشکده <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" id="ul-about">
+                            <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
+                            <li><a href="{% url 'honors' %}">دستاوردها و افتخارات</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="{% url 'industry' %}">
+                            ارتباط با صنعت <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" id="ul-relation">
+                            <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="{% url 'all_events' %}" class="active">رویدادها</a></li>
+                    <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <a href="https://uk.ac.ir/" target="_blank" class="university-link">
+                    <i class="fa-solid fa-graduation-cap"></i> دانشگاه
+                </a>
+
+                {% if user.is_authenticated %}
+                    <span class="user-greeting">خوش آمدی {{ user.first_name|default:user.username }}</span>
+                    <a href="{% url 'logout' %}" class="login-btn">خروج</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
+                {% endif %}
+            </div>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="منو">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
     </header>
 
-    <!-- منوهای dropdown -->
-    <ul id="ul-about">
-        <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
-        <li><a href="{% url 'honors' %}">دستاورد ها و افتخارات</a></li>
-    </ul>
-    <ul id="ul-relation">
-        <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
-    </ul>
+    <!-- ==================== محتوای اصلی (جزئیات رویداد) ==================== -->
+    <main class="event-detail-main">
+        <div class="event-container">
 
-    <div class="event-detail">
-        <div class="ev-container">
-            <div class="event-card">
+            <!-- کارت اصلی رویداد -->
+            <article class="event-detail-card">
+
                 <!-- بنر -->
                 <div class="event-banner">
                     {% if event.image %}
-                        <img src="{{ event.image.url }}" alt="{{ event.title }}" style="width:100%; max-height:300px; object-fit:cover; border-radius:10px 10px 0 0;">
+                        <img src="{{ event.image.url }}" alt="{{ event.title }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/1200x400" alt="{{ event.title }}">
                     {% endif %}
-                    <h1>{{ event.title }}</h1>
-                    <p>{{ event.short_description }}</p>
+                    <div class="banner-overlay">
+                        <h1>{{ event.title }}</h1>
+                        <p>{{ event.short_description }}</p>
+                    </div>
                 </div>
 
-                <!-- محتوا -->
-                <div class="event-content">
-                    <!-- اطلاعات پایه -->
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-icon">📅</div>
-                            <div class="info-text">
-                                <strong>تاریخ برگزاری</strong>
-                                {{ event.jalali_date }}
-                            </div>
+                <!-- اطلاعات پایه -->
+                <div class="event-info-grid">
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fa-regular fa-calendar"></i></div>
+                        <div class="info-text">
+                            <span class="info-label">تاریخ برگزاری</span>
+                            <span class="info-value">{{ event.jalali_date }}</span>
                         </div>
-                        <div class="info-item">
-                            <div class="info-icon">⏰</div>
-                            <div class="info-text">
-                                <strong>ساعت</strong>
-                                {{ event.time }}
-                            </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fa-regular fa-clock"></i></div>
+                        <div class="info-text">
+                            <span class="info-label">ساعت</span>
+                            <span class="info-value">{{ event.time }}</span>
                         </div>
-                        <div class="info-item">
-                            <div class="info-icon">👥</div>
-                            <div class="info-text">
-                                <strong>ظرفیت</strong>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fa-regular fa-users"></i></div>
+                        <div class="info-text">
+                            <span class="info-label">ظرفیت</span>
+                            <span class="info-value">
                                 {% if event.capacity == 0 %}
                                     نامحدود
                                 {% else %}
                                     {{ event.capacity }} نفر
                                 {% endif %}
-                                | 
-                                <span id="remainingText">
-                                    {% if event.capacity == 0 %}
-                                        نامحدود
-                                    {% else %}
-                                        {{ remaining_capacity }} نفر باقی‌مانده
+                                <span class="remaining">
+                                    {% if event.capacity > 0 %}
+                                        ({{ remaining_capacity }} نفر باقی‌مانده)
                                     {% endif %}
                                 </span>
-                            </div>
+                            </span>
                         </div>
-                        <div class="info-item">
-                            <div class="info-icon">📌</div>
-                            <div class="info-text">
-                                <strong>وضعیت</strong>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fa-regular fa-flag"></i></div>
+                        <div class="info-text">
+                            <span class="info-label">وضعیت</span>
+                            <span class="info-value status-badge 
+                                {% if event.status == 'upcoming' %}status-upcoming
+                                {% elif event.status == 'ongoing' %}status-ongoing
+                                {% else %}status-completed{% endif %}">
                                 {% if event.status == 'upcoming' %}
-                                    <span style="color: #28a745; font-weight: bold;">در حال ثبت‌نام</span>
+                                    در حال ثبت‌نام
                                 {% elif event.status == 'ongoing' %}
-                                    <span style="color: #ff9800; font-weight: bold;">در حال برگزاری</span>
+                                    در حال برگزاری
                                 {% else %}
-                                    <span style="color: #6c757d; font-weight: bold;">به پایان رسیده</span>
+                                    به پایان رسیده
                                 {% endif %}
-                            </div>
+                            </span>
                         </div>
                     </div>
+                </div>
 
-                    <!-- توضیحات کامل -->
-                    {% if event.full_description %}
-                    <div class="event-description">
-                        <h3>📖 درباره رویداد</h3>
-                        <p>{{ event.full_description|linebreaks }}</p>
-                    </div>
-                    {% endif %}
+                <!-- توضیحات کامل -->
+                {% if event.full_description %}
+                <div class="event-section">
+                    <h3><i class="fa-regular fa-book-open"></i> درباره رویداد</h3>
+                    <p>{{ event.full_description|linebreaks }}</p>
+                </div>
+                {% endif %}
 
-                    <!-- سرفصل‌ها -->
-                    {% if syllabus_list %}
-                    <div class="syllabus">
-                        <h3>📝 سرفصل‌ها</h3>
-                        <ul>
-                            {% for item in syllabus_list %}
-                                <li>{{ item }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% endif %}
+                <!-- سرفصل‌ها -->
+                {% if syllabus_list %}
+                <div class="event-section">
+                    <h3><i class="fa-regular fa-list-check"></i> سرفصل‌ها</h3>
+                    <ul class="syllabus-list">
+                        {% for item in syllabus_list %}
+                            <li><i class="fa-regular fa-circle-check"></i> {{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
 
-                    <!-- مدرس -->
-                    {% if event.instructor_name %}
-                    <div class="instructor">
-                        <div class="instructor-img">
+                <!-- مدرس -->
+                {% if event.instructor_name %}
+                <div class="event-section instructor-section">
+                    <h3><i class="fa-regular fa-user"></i> مدرس دوره</h3>
+                    <div class="instructor-card">
+                        <div class="instructor-avatar">
                             {% if event.instructor_image %}
-                                <img src="{{ event.instructor_image.url }}" alt="{{ event.instructor_name }}" style="width:80px; height:80px; border-radius:50%; object-fit:cover;">
+                                <img src="{{ event.instructor_image.url }}" alt="{{ event.instructor_name }}">
                             {% else %}
-                                👨‍🏫
+                                <span class="avatar-placeholder"><i class="fa-regular fa-user"></i></span>
                             {% endif %}
                         </div>
-                        <div class="instructor-info">
+                        <div class="instructor-details">
                             <h4>{{ event.instructor_name }}</h4>
                             <p>{{ event.instructor_title|default:"مدرس دوره" }}</p>
                         </div>
                     </div>
-                    {% endif %}
+                </div>
+                {% endif %}
 
-                    <!-- بخش ثبت‌نام -->
-                    <div class="register-box">
-                        <div class="capacity">
-                            ✅ ظرفیت باقیمانده: 
-                            <span id="remainingCount">
+                <!-- بخش ثبت‌نام -->
+                <div class="register-box">
+                    <div class="register-info">
+                        <span class="capacity-info">
+                            ✅ ظرفیت باقیمانده:
+                            <strong id="remainingCount">
                                 {% if event.capacity == 0 %}
                                     نامحدود
                                 {% else %}
-                                    {{ remaining_capacity }}
+                                    {{ remaining_capacity }} نفر
                                 {% endif %}
-                            </span>
-                            {% if event.capacity > 0 %}نفر{% endif %}
-                        </div>
+                            </strong>
+                        </span>
+                    </div>
 
+                    <div class="register-actions">
                         {% if user.is_authenticated %}
                             {% if is_registered %}
-                                <button class="register-btn" style="background:#4caf50; cursor:not-allowed;" disabled>
-                                    ✓ قبلاً ثبت‌نام کرده‌اید
+                                <button class="register-btn registered" disabled>
+                                    <i class="fa-regular fa-circle-check"></i> قبلاً ثبت‌نام کرده‌اید
                                 </button>
                                 {% if event.status == 'upcoming' %}
-                                    <a href="{% url 'cancel_registration' event.id %}" class="cancel-btn" 
-                                    onclick="return confirm('آیا از لغو ثبت‌نام خود مطمئن هستید؟')"
-                                    style="display:inline-block; margin-top:10px; padding:10px 20px; background:#dc3545; color:white; text-decoration:none; border-radius:5px;">
-                                        لغو ثبت‌نام
+                                    <a href="{% url 'cancel_registration' event.id %}" 
+                                       class="cancel-btn"
+                                       onclick="return confirm('آیا از لغو ثبت‌نام خود مطمئن هستید؟')">
+                                        <i class="fa-regular fa-circle-xmark"></i> لغو ثبت‌نام
                                     </a>
                                 {% endif %}
                             {% elif event.can_register %}
-                                <a href="{% url 'register_event' event.id %}" class="register-btn" style="display:inline-block; padding:12px 30px; background:#ffaa00; color:#333; text-decoration:none; border-radius:5px; font-weight:bold;">
-                                    📝 ثبت‌نام در رویداد
+                                <a href="{% url 'register_event' event.id %}" class="register-btn">
+                                    <i class="fa-regular fa-pen-to-square"></i> ثبت‌نام در رویداد
                                 </a>
                             {% else %}
-                                <button class="register-btn" style="background:#ff9800; cursor:not-allowed;" disabled>
+                                <button class="register-btn disabled" disabled>
                                     {% if event.is_full %}
-                                        ⏳ ظرفیت تکمیل شده
+                                        <i class="fa-regular fa-clock"></i> ظرفیت تکمیل شده
                                     {% elif event.status == 'completed' %}
-                                        ❌ رویداد به پایان رسیده
+                                        <i class="fa-regular fa-circle-xmark"></i> رویداد به پایان رسیده
                                     {% else %}
                                         غیرفعال
                                     {% endif %}
                                 </button>
                             {% endif %}
                         {% else %}
-                            <a href="{% url 'login' %}" class="register-btn" style="display:inline-block; padding:12px 30px; background:#2196F3; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">
-                                🔑 برای ثبت‌نام وارد شوید
+                            <a href="{% url 'login' %}" class="register-btn login-required">
+                                <i class="fa-regular fa-key"></i> برای ثبت‌نام وارد شوید
                             </a>
                         {% endif %}
                     </div>
 
-                        <div class="message" id="message"></div>
-                    </div>
+                    <div id="message" class="message-box"></div>
+                </div>
+
+            </article>
+
+            <!-- دکمه بازگشت -->
+            <div class="back-link">
+                <a href="{% url 'all_events' %}">
+                    <i class="fa-regular fa-arrow-right"></i> بازگشت به لیست رویدادها
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ==================== فوتر مدرن (دقیقاً مثل صفحه اصلی) ==================== -->
+    <footer class="modern-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>مهندسی مکانیک</h3>
+                <p>انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان</p>
+                <div class="footer-social">
+                    <a href="https://t.me/ukmechanics" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="https://instagram.com/ukmechanics" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <div>
+                    <h4>دسترسی سریع</h4>
+                    <ul>
+                        <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
+                        <li><a href="{% url 'about' %}">درباره دانشکده</a></li>
+                        <li><a href="{% url 'industry' %}">ارتباط با صنعت</a></li>
+                        <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>بخش‌های سایت</h4>
+                    <ul>
+                        <li><a href="{% url 'all_events' %}">رویدادها</a></li>
+                        <li><a href="{% url 'all_resources' %}">منابع علمی</a></li>
+                        <li><a href="{% url 'honors' %}">افتخارات</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>اطلاعات تماس</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-location-dot"></i> کرمان - بلوار جمهوری - دانشکده مکانیک</li>
+                        <li><i class="fa-solid fa-phone"></i> ۰۳۴-۳۱۳۲۱۲۳۴</li>
+                        <li><i class="fa-solid fa-envelope"></i> info@mech-uk.ac.ir</li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </div>
 
-    <footer>
-        <div class="footer-up">
-            <div class="content">
-                <p><i class="fa-solid fa-location-dot"></i>&nbsp;&nbsp;&nbsp;&nbsp; کرمان - بلوار جمهوری - پل امیرکبیر -
-                    دانشکده فنی مهندسی &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;دانشگاه شهید باهنر - دانشکده
-                    مکانیک</p>
-                <p><i class="fa-brands fa-telegram"></i> &nbsp;&nbsp;&nbsp;&nbsp; ukmechanics@</p>
-                <p><i class="fa-brands fa-instagram"></i> &nbsp;&nbsp;&nbsp;&nbsp; ukmechanics@</p>
-            </div>
-
-            <div class="map">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3445.4741871022507!2d57.012748796789545!3d30.28055960000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f0218b67107c6dd%3A0x398906da69669661!2sFaculty%20of%20Engineering%20Campus%20-Shahid%20Bahonar%20University%20of%20Kerman!5e0!3m2!1sen!2s!4v1781183631960!5m2!1sen!2s"
-                    width="550" height="320" allowfullscreen="" loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-            </div>
-        </div>
-
-        <div class="footer-down">
-            <p>&copy; ۲۰۲۵ انجمن علمی مکانیک - تمامی حقوق محفوظ است</p>
+        <div class="footer-bottom">
+            <p>&copy; ۲۰۲۵ تمامی حقوق برای انجمن علمی مهندسی مکانیک دانشگاه شهید باهنر کرمان محفوظ است.</p>
         </div>
     </footer>
 
+    <!-- ==================== آیکون‌های شناور ==================== -->
     <div id="icons">
         <a href="https://t.me/ukmechanics" target="_blank">
             <img src="{% static 'assets/icons/15.png' %}">
@@ -236,42 +305,49 @@
         </a>
     </div>
 
-    <!-- اسکریپت dropdown -->
+    <!-- ==================== اسکریپت ==================== -->
     <script>
-        let aboutLink = document.querySelector('.nav-links a:nth-child(2)');
-        let aboutUl = document.getElementById('ul-about');
+        document.addEventListener("DOMContentLoaded", function () {
 
-        aboutLink.addEventListener('mouseover', function () {
-            aboutUl.classList.add('show');
-        });
-        aboutLink.addEventListener('mouseout', function () {
-            aboutUl.classList.remove("show");
-        });
+            // ---- منوی همبرگری ----
+            const toggleBtn = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            if (toggleBtn && navMenu) {
+                toggleBtn.addEventListener('click', function () {
+                    navMenu.classList.toggle('active');
+                });
+            }
 
-        aboutUl.addEventListener('mouseover', function () {
-            aboutUl.classList.add('show');
-        });
-        aboutUl.addEventListener('mouseout', function () {
-            aboutUl.classList.remove("show");
-        });
+            // ---- دراپ‌داون ----
+            const aboutUrl = "{% url 'about' %}";
+            const industryUrl = "{% url 'industry' %}";
 
-        let relationLink = document.querySelector('.nav-links a:nth-child(3)');
-        let relationUl = document.getElementById('ul-relation');
+            const aboutLink = document.querySelector('.nav-list a[href="' + aboutUrl + '"]');
+            const ulAbout = document.getElementById('ul-about');
+            const relationLink = document.querySelector('.nav-list a[href="' + industryUrl + '"]');
+            const ulRelation = document.getElementById('ul-relation');
 
-        relationLink.addEventListener('mouseover', function () {
-            relationUl.classList.add('show');
-        });
-        relationLink.addEventListener('mouseout', function () {
-            relationUl.classList.remove("show");
-        });
+            function setupDropdown(link, dropdown) {
+                if (!link || !dropdown) return;
+                const parent = link.closest('.dropdown');
+                function show() { dropdown.style.display = 'block'; }
+                function hide() { dropdown.style.display = 'none'; }
+                if (parent) {
+                    parent.addEventListener('mouseenter', show);
+                    parent.addEventListener('mouseleave', hide);
+                } else {
+                    link.addEventListener('mouseover', show);
+                    link.addEventListener('mouseout', hide);
+                }
+                dropdown.addEventListener('mouseover', show);
+                dropdown.addEventListener('mouseout', hide);
+            }
+            setupDropdown(aboutLink, ulAbout);
+            setupDropdown(relationLink, ulRelation);
 
-        relationUl.addEventListener('mouseover', function () {
-            relationUl.classList.add('show');
-        });
-        relationUl.addEventListener('mouseout', function () {
-            relationUl.classList.remove("show");
         });
     </script>
+
 </body>
 
 </html>

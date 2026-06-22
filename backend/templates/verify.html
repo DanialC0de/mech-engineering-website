@@ -4,73 +4,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/verify.css' %}">
     <title>تایید کد | انجمن علمی مکانیک</title>
 </head>
 <body>
-    <div class="verify-container">
-        <div class="verify-header">
-            <div class="logo">⚙️ انجمن <span>مکانیک</span></div>
-            <p>انجمن علمی مهندسی مکانیک</p>
-        </div>
 
-        <div class="verify-body">
-            <div class="verify-title">✅ تایید کد</div>
-            <div class="verify-subtitle">
-                کد ۶ رقمی ارسال شده به شماره زیر را وارد کنید
+    <!-- ==================== هدر مدرن (۴ آیتم) ==================== -->
+    <header class="main-header">
+        <div class="header-container">
+
+            <div class="brand">
+                <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}" alt="لوگو دانشگاه">
+                <span class="brand-name">مهندسی مکانیک</span>
             </div>
 
-            <div id="identifierDisplay" class="identifier-display">
-                📱 شماره موبایل: <strong dir="ltr">0912***6789</strong>
+            <nav class="nav-menu" id="navMenu">
+                <ul class="nav-list">
+                    <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
+
+                    <li class="dropdown">
+                        <a href="{% url 'about' %}">
+                            درباره دانشکده <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" id="ul-about">
+                            <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
+                            <li><a href="{% url 'honors' %}">دستاوردها و افتخارات</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="{% url 'industry' %}">
+                            ارتباط با صنعت <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" id="ul-relation">
+                            <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <a href="https://uk.ac.ir/" target="_blank" class="university-link">
+                    <i class="fa-solid fa-graduation-cap"></i> دانشگاه
+                </a>
+
+                {% if user.is_authenticated %}
+                    <span class="user-greeting">خوش آمدی {{ user.first_name|default:user.username }}</span>
+                    <a href="{% url 'logout' %}" class="login-btn">خروج</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
+                {% endif %}
             </div>
 
-            <div class="error-message" id="errorMsg"></div>
-
-            <div class="otp-container">
-                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autofocus>
-                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
-                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
-                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
-                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
-                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
-            </div>
-
-            <div class="timer-section">
-                <span>زمان باقی‌مانده: <span id="timerSeconds">120</span> ثانیه</span>
-                <button id="resendBtn" disabled>ارسال مجدد کد</button>
-            </div>
-
-            <button id="verifyBtn" class="verify-btn" disabled>
-                تایید کد →
+            <button class="menu-toggle" id="menuToggle" aria-label="منو">
+                <i class="fa-solid fa-bars"></i>
             </button>
+        </div>
+    </header>
 
-            <div class="loading" id="loading" style="display:none;">
-                <div class="loading-spinner"></div>
-                <p>در حال تایید کد...</p>
-            </div>
+    <!-- ==================== محتوای اصلی (تایید کد) ==================== -->
+    <main class="verify-page-main">
+        <div class="verify-container">
+            <div class="verify-box">
+                <div class="verify-header">
+                    <div class="logo-icon">⚙️</div>
+                    <div class="logo-text">
+                        <h2>انجمن <span>مکانیک</span></h2>
+                        <p>انجمن علمی مهندسی مکانیک</p>
+                    </div>
+                </div>
 
-            <div class="back-link">
-                <a href="/accounts/login/">← بازگشت به صفحه ورود</a>
+                <div class="verify-body">
+                    <div class="verify-title">
+                        <h1>✅ تایید کد</h1>
+                        <p>کد ۶ رقمی ارسال شده به شماره زیر را وارد کنید</p>
+                    </div>
+
+                    <div id="identifierDisplay" class="identifier-display">
+                        <i class="fa-regular fa-phone"></i>
+                        شماره موبایل: <strong dir="ltr">0912***6789</strong>
+                    </div>
+
+                    <div class="error-message" id="errorMsg"></div>
+
+                    <!-- فیلدهای OTP -->
+                    <div class="otp-container">
+                        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autofocus>
+                        <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                    </div>
+
+                    <!-- تایمر و ارسال مجدد -->
+                    <div class="timer-section">
+                        <span class="timer-text">
+                            <i class="fa-regular fa-clock"></i>
+                            زمان باقی‌مانده: <span id="timerSeconds">120</span> ثانیه
+                        </span>
+                        <button id="resendBtn" class="resend-btn" disabled>ارسال مجدد کد</button>
+                    </div>
+
+                    <!-- دکمه تایید -->
+                    <button id="verifyBtn" class="verify-btn" disabled>
+                        تایید کد <i class="fa-regular fa-arrow-left"></i>
+                    </button>
+
+                    <!-- لودینگ -->
+                    <div class="loading" id="loading" style="display:none;">
+                        <div class="loading-spinner"></div>
+                        <p>در حال تایید کد...</p>
+                    </div>
+
+                    <!-- لینک بازگشت -->
+                    <div class="back-link">
+                        <a href="/accounts/login/">
+                            <i class="fa-regular fa-arrow-right"></i> بازگشت به صفحه ورود
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
+    </main>
+
+    <!-- ==================== فوتر مدرن ==================== -->
+    <footer class="modern-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>مهندسی مکانیک</h3>
+                <p>انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان</p>
+                <div class="footer-social">
+                    <a href="https://t.me/ukmechanics" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="https://instagram.com/ukmechanics" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <div>
+                    <h4>دسترسی سریع</h4>
+                    <ul>
+                        <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
+                        <li><a href="{% url 'about' %}">درباره دانشکده</a></li>
+                        <li><a href="{% url 'industry' %}">ارتباط با صنعت</a></li>
+                        <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>بخش‌های سایت</h4>
+                    <ul>
+                        <li><a href="{% url 'all_events' %}">رویدادها</a></li>
+                        <li><a href="{% url 'all_resources' %}">منابع علمی</a></li>
+                        <li><a href="{% url 'honors' %}">افتخارات</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>اطلاعات تماس</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-location-dot"></i> کرمان - بلوار جمهوری - دانشکده مکانیک</li>
+                        <li><i class="fa-solid fa-phone"></i> ۰۳۴-۳۱۳۲۱۲۳۴</li>
+                        <li><i class="fa-solid fa-envelope"></i> info@mech-uk.ac.ir</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; ۲۰۲۵ تمامی حقوق برای انجمن علمی مهندسی مکانیک دانشگاه شهید باهنر کرمان محفوظ است.</p>
+        </div>
+    </footer>
+
+    <!-- ==================== آیکون‌های شناور ==================== -->
+    <div id="icons">
+        <a href="https://t.me/ukmechanics" target="_blank">
+            <img src="{% static 'assets/icons/15.png' %}">
+        </a>
+        <a href="https://instagram.com/ukmechanics?igshid=14gmuy96orpnd" target="_blank">
+            <img src="{% static 'assets/icons/2.png' %}">
+        </a>
     </div>
 
+    <!-- ==================== اسکریپت ==================== -->
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // ---- منوی همبرگری ----
+            const toggleBtn = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            if (toggleBtn && navMenu) {
+                toggleBtn.addEventListener('click', function () {
+                    navMenu.classList.toggle('active');
+                });
+            }
+
+            // ---- دراپ‌داون ----
+            const aboutUrl = "{% url 'about' %}";
+            const industryUrl = "{% url 'industry' %}";
+
+            const aboutLink = document.querySelector('.nav-list a[href="' + aboutUrl + '"]');
+            const ulAbout = document.getElementById('ul-about');
+            const relationLink = document.querySelector('.nav-list a[href="' + industryUrl + '"]');
+            const ulRelation = document.getElementById('ul-relation');
+
+            function setupDropdown(link, dropdown) {
+                if (!link || !dropdown) return;
+                const parent = link.closest('.dropdown');
+                function show() { dropdown.style.display = 'block'; }
+                function hide() { dropdown.style.display = 'none'; }
+                if (parent) {
+                    parent.addEventListener('mouseenter', show);
+                    parent.addEventListener('mouseleave', hide);
+                } else {
+                    link.addEventListener('mouseover', show);
+                    link.addEventListener('mouseout', hide);
+                }
+                dropdown.addEventListener('mouseover', show);
+                dropdown.addEventListener('mouseout', hide);
+            }
+            setupDropdown(aboutLink, ulAbout);
+            setupDropdown(relationLink, ulRelation);
+
+        });
+
         // ============================================
-        // دریافت شماره از session
+        // منطق اصلی تایید کد (با همان JS قبلی)
         // ============================================
         const phoneNumber = localStorage.getItem("tempPhone") || "09123456789";
         document.querySelector('#identifierDisplay strong').textContent = phoneNumber.slice(0, 4) + '***' + phoneNumber.slice(-4);
 
-        // ============================================
-        // مدیریت فیلدهای OTP
-        // ============================================
         const inputs = document.querySelectorAll('.otp-input');
         const verifyBtn = document.getElementById("verifyBtn");
         const errorDiv = document.getElementById("errorMsg");
         const loadingDiv = document.getElementById("loading");
 
-        // تبدیل اعداد فارسی به انگلیسی
         function toEnglishDigits(str) {
             if (!str) return '';
             return str
@@ -78,7 +249,6 @@
                 .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
         }
 
-        // گرفتن CSRF Token
         function getCSRFToken() {
             const cookies = document.cookie.split(';');
             for (let cookie of cookies) {
@@ -90,7 +260,6 @@
             return '';
         }
 
-        // دریافت کد کامل
         function getCode() {
             let code = '';
             inputs.forEach(input => {
@@ -99,29 +268,23 @@
             return code;
         }
 
-        // بررسی کامل بودن کد
         function checkComplete() {
             const code = getCode();
             verifyBtn.disabled = code.length !== 6;
         }
 
-        // نمایش خطا
         function showError(msg) {
             errorDiv.textContent = msg;
             errorDiv.style.display = "block";
             setTimeout(() => errorDiv.style.display = "none", 4000);
         }
 
-        // نمایش وضعیت بارگذاری
         function setLoading(isLoading) {
             verifyBtn.disabled = isLoading;
             loadingDiv.style.display = isLoading ? "block" : "none";
             if (isLoading) errorDiv.style.display = "none";
         }
 
-        // ============================================
-        // رویدادهای فیلدهای OTP
-        // ============================================
         inputs.forEach((input, index) => {
             input.addEventListener('input', (e) => {
                 let value = toEnglishDigits(e.target.value);
@@ -146,7 +309,6 @@
                 }
             });
 
-            // چسباندن (Paste) کد
             input.addEventListener('paste', (e) => {
                 e.preventDefault();
                 const pasted = (e.clipboardData || window.clipboardData).getData('text');
@@ -165,9 +327,6 @@
             });
         });
 
-        // ============================================
-        // تایمر
-        // ============================================
         let timerSeconds = 120;
         let timerInterval = null;
 
@@ -196,9 +355,6 @@
 
         startTimer();
 
-        // ============================================
-        // ارسال مجدد کد
-        // ============================================
         document.getElementById("resendBtn").addEventListener("click", async () => {
             if (timerSeconds > 0) return;
 
@@ -231,9 +387,6 @@
             }
         });
 
-        // ============================================
-        // ✅ تایید کد (ارسال به سرور جنگو)
-        // ============================================
         verifyBtn.addEventListener("click", async () => {
             const code = getCode();
 
@@ -257,7 +410,6 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // ریدایرکت موفق
                     verifyBtn.textContent = "✓ تایید شد!";
                     setTimeout(() => {
                         window.location.href = data.redirect || "/panel/student/";
@@ -276,10 +428,8 @@
             }
         });
 
-        // ============================================
-        // فوکوس اولیه
-        // ============================================
         setTimeout(() => inputs[0].focus(), 200);
     </script>
+
 </body>
 </html>

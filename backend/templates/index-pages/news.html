@@ -1,59 +1,85 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang="fa" dir="rtl">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/index/news.css' %}">
-    <title>اخبار دانشکده</title>
+    <title>اخبار دانشکده | انجمن علمی مکانیک</title>
 </head>
 
 <body>
-    <header>
-        <div id="logo">
-            <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}">
-        </div>
-        <div class="header-top">
-            <a href="https://uk.ac.ir/" target="_blank">دانشگاه شهید باهنر کرمان</a>
-            {% if user.is_authenticated %}
-                <span class="user-welcome">خوش آمدی {{ user.get_full_name|default:user.username }}</span>
-                <a href="{% url 'logout' %}" class="logout-btn">خروج</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
-            {% endif %}
-        </div>
-        <div class="nav-bar">
-            <div class="logo">⚙️انجمن علمی مهندسی <span>مکانیک</span></div>
-            <div class="nav-links">
-                <a href="{% url 'home' %}">صفحه اصلی</a>
-                <a href="{% url 'about' %}"><i class="fa-solid fa-chevron-down"></i> درباره دانشکده</a>
-                <a href="{% url 'industry' %}"><i class="fa-solid fa-chevron-down"></i> ارتباط با صنعت</a>
-                <a href="{% url 'all_events' %}">رویدادها</a>
-                <a href="{% url 'all_news' %}" class="active">منابع علمی</a>
-                <a href="{% url 'honors' %}">افتخارات انجمن</a>
-                <a href="{% url 'contact' %}">تماس با ما</a>
+
+    <!-- ==================== هدر (فقط ۴ آیتم) ==================== -->
+    <header class="main-header">
+        <div class="header-container">
+
+            <div class="brand">
+                <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}" alt="لوگو دانشگاه">
+                <span class="brand-name">مهندسی مکانیک</span>
             </div>
+
+            <nav class="nav-menu" id="navMenu">
+                <ul class="nav-list">
+                    <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
+
+                    <li class="dropdown">
+                        <a href="{% url 'about' %}">
+                            درباره دانشکده <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" id="ul-about">
+                            <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
+                            <li><a href="{% url 'honors' %}">دستاوردها و افتخارات</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="{% url 'industry' %}">
+                            ارتباط با صنعت <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" id="ul-relation">
+                            <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <a href="https://uk.ac.ir/" target="_blank" class="university-link">
+                    <i class="fa-solid fa-graduation-cap"></i> دانشگاه
+                </a>
+
+                {% if user.is_authenticated %}
+                    <span class="user-greeting">خوش آمدی {{ user.first_name|default:user.username }}</span>
+                    <a href="{% url 'logout' %}" class="login-btn">خروج</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
+                {% endif %}
+            </div>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="منو">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
     </header>
-    <ul id="ul-about">
-        <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
-        <li><a href="{% url 'honors' %}">دستاورد ها و افتخارات</a></li>
-    </ul>
-    <ul id="ul-relation">
-        <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
-    </ul>
 
+    <!-- ==================== هیرو ==================== -->
     <section class="hero">
-        <img src="{% static 'assets/images/fani.jpg' %}" alt="">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
     </section>
 
-    <div class="page-title">
-        <h1>اخبار و اطلاعیه ها</h1>
+    <!-- ==================== عنوان صفحه ==================== -->
+    <div class="page-header">
+        <h1>اخبار و اطلاعیه‌ها</h1>
+        <p>آخرین اخبار، اطلاعیه‌ها و رویدادهای آموزشی دانشکده مکانیک را در این بخش مشاهده کنید.</p>
     </div>
 
-    <!-- فیلتر دسته‌بندی -->
+    <!-- ==================== فیلترها و جستجو ==================== -->
     <div class="filter-section">
         <div class="filter-buttons">
             <a href="{% url 'all_news' %}" class="filter-btn {% if not category %}active{% endif %}">همه</a>
@@ -63,87 +89,115 @@
                 </a>
             {% endfor %}
         </div>
-        
+
         <form method="GET" class="search-form">
-            <input type="text" name="search" placeholder="جستجوی خبر..." value="{{ search_query }}">
+            <input type="text" name="search" placeholder="جستجوی خبر..." value="{{ search_query|default:'' }}">
             <button type="submit"><i class="fa-solid fa-search"></i></button>
         </form>
     </div>
 
-    <main class="content-container">
+    <!-- ==================== لیست اخبار ==================== -->
+    <main class="news-page-main">
         <div class="news-grid">
             {% for news in page_obj %}
-            <div class="news-card {% if forloop.first %}big-right{% elif forloop.counter == 2 %}two{% elif forloop.counter == 3 %}big-left{% elif forloop.counter == 4 %}for{% endif %}">
-                <div class="news-image">
+            <article class="news-card-modern">
+                <div class="card-image">
                     {% if news.image %}
                         <img src="{{ news.image.url }}" alt="{{ news.title }}">
                     {% else %}
-                        <img src="https://via.placeholder.com/400x250" alt="{{ news.title }}">
+                        <img src="https://via.placeholder.com/500x320" alt="{{ news.title }}">
                     {% endif %}
                 </div>
-                <div class="news-content">
-                    <div class="news-category">{{ news.get_category_display_fa }}</div>
-                    <div class="news-text">{{ news.summary|truncatechars:60 }}</div>
-                    <div class="news-link">
-                        <a href="{% url 'news_detail' news.id %}">برای اطلاعات بیشتر کلیک کنید</a>
-                    </div>
+                <div class="card-body">
+                    <span class="card-tag">{{ news.get_category_display_fa }}</span>
+                    <h3>{{ news.title }}</h3>
+                    <p>{{ news.summary|truncatechars:80 }}</p>
+                    <a href="{% url 'news_detail' news.id %}" class="card-link">
+                        مطالعه بیشتر <i class="fa-regular fa-arrow-left"></i>
+                    </a>
                 </div>
-            </div>
+            </article>
             {% empty %}
-            <div class="news-card">
-                <div class="news-content">
-                    <div class="news-text">هیچ خبری یافت نشد.</div>
+            <div class="empty-state">
+                <i class="fa-regular fa-newspaper"></i>
+                <p>هیچ خبری یافت نشد.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- ==================== صفحه‌بندی ==================== -->
+        {% if page_obj.has_other_pages %}
+        <div class="pagination-modern">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; قبلی</a>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="current-page">{{ num }}</span>
+                    {% else %}
+                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="page-link">بعدی &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+        {% endif %}
+    </main>
+
+    <!-- ==================== فوتر ==================== -->
+    <footer class="modern-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>مهندسی مکانیک</h3>
+                <p>انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان</p>
+                <div class="footer-social">
+                    <a href="https://t.me/ukmechanics" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="https://instagram.com/ukmechanics" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
                 </div>
             </div>
-            {% endfor %}
-        </div>
-        
-       <!-- صفحه‌بندی -->
-    <div class="pagination" style="text-align: center;">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}">قبلی</a>
-            {% endif %}
 
-            {% for num in page_obj.paginator.page_range %}
-                {% if page_obj.number == num %}
-                    <span>{{ num }}</span>
-                {% else %}
-                    <a href="?page={{ num }}">{{ num }}</a>
-                {% endif %}
-            {% endfor %}
-
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">بعدی</a>
-            {% endif %}
-        </span>
-    </div>
-    </main>
-    
-    <footer>
-        <div class="footer-up">
-            <div class="content">
-                <p><i class="fa-solid fa-location-dot"></i>&nbsp;&nbsp;&nbsp;&nbsp; کرمان - بلوار جمهوری - پل امیرکبیر -
-                    دانشکده فنی مهندسی &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;دانشگاه شهید باهنر - دانشکده
-                    مکانیک</p>
-                <p><i class="fa-brands fa-telegram"></i> &nbsp;&nbsp;&nbsp;&nbsp; ukmechanics@</p>
-                <p><i class="fa-brands fa-instagram"></i> &nbsp;&nbsp;&nbsp;&nbsp; ukmechanics@</p>
-            </div>
-
-            <div class="map">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3445.4741871022507!2d57.012748796789545!3d30.28055960000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f0218b67107c6dd%3A0x398906da69669661!2sFaculty%20of%20Engineering%20Campus%20-Shahid%20Bahonar%20University%20of%20Kerman!5e0!3m2!1sen!2s!4v1781183631960!5m2!1sen!2s"
-                    width="550" height="320" allowfullscreen="" loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
+            <div class="footer-links">
+                <div>
+                    <h4>دسترسی سریع</h4>
+                    <ul>
+                        <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
+                        <li><a href="{% url 'about' %}">درباره دانشکده</a></li>
+                        <li><a href="{% url 'industry' %}">ارتباط با صنعت</a></li>
+                        <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>بخش‌های سایت</h4>
+                    <ul>
+                        <li><a href="{% url 'all_events' %}">رویدادها</a></li>
+                        <li><a href="{% url 'all_resources' %}">منابع علمی</a></li>
+                        <li><a href="{% url 'honors' %}">افتخارات</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>اطلاعات تماس</h4>
+                    <ul>
+                        <li><i class="fa-solid fa-location-dot"></i> کرمان - بلوار جمهوری - دانشکده مکانیک</li>
+                        <li><i class="fa-solid fa-phone"></i> ۰۳۴-۳۱۳۲۱۲۳۴</li>
+                        <li><i class="fa-solid fa-envelope"></i> info@mech-uk.ac.ir</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
-        <div class="footer-down">
-            <p>&copy; ۲۰۲۵ انجمن علمی مکانیک - تمامی حقوق محفوظ است</p>
+        <div class="footer-bottom">
+            <p>&copy; ۲۰۲۵ تمامی حقوق برای انجمن علمی مهندسی مکانیک دانشگاه شهید باهنر کرمان محفوظ است.</p>
         </div>
     </footer>
 
+    <!-- ==================== آیکون‌های شناور ==================== -->
     <div id="icons">
         <a href="https://t.me/ukmechanics" target="_blank">
             <img src="{% static 'assets/icons/15.png' %}">
@@ -153,41 +207,49 @@
         </a>
     </div>
 
+    <!-- ==================== اسکریپت ==================== -->
     <script>
-        let aboutLink = document.querySelector('.nav-links a:nth-child(2)');
-        let aboutUl = document.getElementById('ul-about');
+        document.addEventListener("DOMContentLoaded", function () {
 
-        aboutLink.addEventListener('mouseover', function () {
-            aboutUl.classList.add('show');
-        });
-        aboutLink.addEventListener('mouseout', function () {
-            aboutUl.classList.remove("show");
-        });
+            // ---- منوی همبرگری ----
+            const toggleBtn = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            if (toggleBtn && navMenu) {
+                toggleBtn.addEventListener('click', function () {
+                    navMenu.classList.toggle('active');
+                });
+            }
 
-        aboutUl.addEventListener('mouseover', function () {
-            aboutUl.classList.add('show');
-        });
-        aboutUl.addEventListener('mouseout', function () {
-            aboutUl.classList.remove("show");
-        });
+            // ---- دراپ‌داون ----
+            const aboutUrl = "{% url 'about' %}";
+            const industryUrl = "{% url 'industry' %}";
 
-        let relationLink = document.querySelector('.nav-links a:nth-child(3)');
-        let relationUl = document.getElementById('ul-relation');
+            const aboutLink = document.querySelector('.nav-list a[href="' + aboutUrl + '"]');
+            const ulAbout = document.getElementById('ul-about');
+            const relationLink = document.querySelector('.nav-list a[href="' + industryUrl + '"]');
+            const ulRelation = document.getElementById('ul-relation');
 
-        relationLink.addEventListener('mouseover', function () {
-            relationUl.classList.add('show');
-        });
-        relationLink.addEventListener('mouseout', function () {
-            relationUl.classList.remove("show");
-        });
+            function setupDropdown(link, dropdown) {
+                if (!link || !dropdown) return;
+                const parent = link.closest('.dropdown');
+                function show() { dropdown.style.display = 'block'; }
+                function hide() { dropdown.style.display = 'none'; }
+                if (parent) {
+                    parent.addEventListener('mouseenter', show);
+                    parent.addEventListener('mouseleave', hide);
+                } else {
+                    link.addEventListener('mouseover', show);
+                    link.addEventListener('mouseout', hide);
+                }
+                dropdown.addEventListener('mouseover', show);
+                dropdown.addEventListener('mouseout', hide);
+            }
+            setupDropdown(aboutLink, ulAbout);
+            setupDropdown(relationLink, ulRelation);
 
-        relationUl.addEventListener('mouseover', function () {
-            relationUl.classList.add('show');
-        });
-        relationUl.addEventListener('mouseout', function () {
-            relationUl.classList.remove("show");
         });
     </script>
+
 </body>
 
 </html>
