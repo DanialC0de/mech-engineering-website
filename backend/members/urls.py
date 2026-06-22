@@ -9,4 +9,8 @@ urlpatterns = [
     path('request/<int:pk>/reject/', views.reject_request, name='reject_request'),
     path('event/create/', views.create_event, name='create_event'),
     path('event/<int:pk>/delete/', views.delete_event, name='delete_event'),
+    path('gallery/upload/', views.upload_gallery, name='upload_gallery'),
+    path('resource/upload/', views.upload_resource, name='upload_resource'),
+    path('request/', views.member_request_view, name='member_request'),
+    path('resource/<int:pk>/delete/',views.delete_resource,name='delete_resource'),
 ]

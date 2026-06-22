@@ -33,45 +33,50 @@ def event_list(request):
     return render(request, 'index-pages/events.html', context)  # <-- مسیر قبلی
 
 def event_detail(request, pk):
-    """نمایش جزئیات یک رویداد"""
     event = get_object_or_404(Event, pk=pk)
-    
-    # بررسی ثبت‌نام کاربر
+
+    # ثبت‌نام کاربر
     is_registered = False
     if request.user.is_authenticated:
         is_registered = Registration.objects.filter(
-            user=request.user, 
+            user=request.user,
             event=event
         ).exists()
-    
-    # تعداد کل ثبت‌نام‌ها
-    registered_count = Registration.objects.filter(event=event).count()
-    
-    # محاسبه ظرفیت باقیمانده
-    remaining_capacity = 0
-    if event.capacity > 0:
+
+    # 🔥 تعداد ثبت‌نام معتبر (مهم)
+    registered_count = event.registrations.filter(
+        status__in=['pending', 'confirmed']
+    ).count()
+
+    # 🔥 ظرفیت باقی‌مانده (تمیز و safe)
+    if event.capacity and event.capacity > 0:
         remaining_capacity = max(0, event.capacity - registered_count)
-    
-    # پردازش سرفصل‌ها (تبدیل به لیست)
+    else:
+        remaining_capacity = None  # نامحدود
+
+    # سرفصل‌ها
     syllabus_list = []
     if event.syllabus:
-        syllabus_list = [item.strip() for item in event.syllabus.split('\n') if item.strip()]
-    
-    context = {
+        syllabus_list = [
+            item.strip()
+            for item in event.syllabus.split('\n')
+            if item.strip()
+        ]
+
+        return render(request, 'index-pages/details-pages/event.html', {
         'event': event,
         'is_registered': is_registered,
         'registered_count': registered_count,
         'remaining_capacity': remaining_capacity,
         'syllabus_list': syllabus_list,
-    }
-    return render(request, 'index-pages/details-pages/event.html', context)
+    })
 @login_required
 def register_event(request, pk):
     """ثبت‌نام کاربر در رویداد"""
     event = get_object_or_404(Event, pk=pk)
     
     # بررسی امکان ثبت‌نام
-    if not event.can_register():
+    if not event.can_register:
         if event.status == 'completed':
             messages.error(request, 'این رویداد به پایان رسیده است.')
         elif event.is_full:

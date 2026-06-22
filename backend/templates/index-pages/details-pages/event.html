@@ -79,19 +79,19 @@
                         </div>
                         <div class="info-item">
                             <div class="info-icon">👥</div>
-                            <div class="info-text">
+                           <div class="info-text">
                                 <strong>ظرفیت</strong>
+
                                 {% if event.capacity == 0 %}
                                     نامحدود
                                 {% else %}
                                     {{ event.capacity }} نفر
                                 {% endif %}
-                                | 
                                 <span id="remainingText">
-                                    {% if event.capacity == 0 %}
+                                    {% if event.remaining_capacity is None %}
                                         نامحدود
                                     {% else %}
-                                        {{ remaining_capacity }} نفر باقی‌مانده
+                                        {{ event.remaining_capacity }} نفر باقی‌مانده
                                     {% endif %}
                                 </span>
                             </div>
@@ -151,15 +151,15 @@
                     <!-- بخش ثبت‌نام -->
                     <div class="register-box">
                         <div class="capacity">
-                            ✅ ظرفیت باقیمانده: 
-                            <span id="remainingCount">
-                                {% if event.capacity == 0 %}
-                                    نامحدود
-                                {% else %}
-                                    {{ remaining_capacity }}
-                                {% endif %}
-                            </span>
-                            {% if event.capacity > 0 %}نفر{% endif %}
+                            ظرفیت باقی‌مانده:
+
+                            {% if event.remaining_capacity is None %}
+                                نامحدود
+                            {% else %}
+                                {{ event.remaining_capacity }}
+                            {% endif %}
+
+                            {% if event.capacity > 0 %} نفر {% endif %}
                         </div>
 
                         {% if user.is_authenticated %}

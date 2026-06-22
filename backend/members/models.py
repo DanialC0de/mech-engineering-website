@@ -61,7 +61,11 @@ class MemberRequest(models.Model):
         ('approved', 'تأیید شده'),
         ('rejected', 'رد شده'),
     )
-    
+    message = models.TextField(
+    blank=True,
+    null=True,
+    verbose_name='پیام متقاضی'
+    )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -73,10 +77,37 @@ class MemberRequest(models.Model):
         null=True,
         blank=True
     )
-    student_id = models.CharField(max_length=20, verbose_name="شماره دانشجویی")
+    student_id = models.CharField(
+        max_length=20,
+        unique=True
+    )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     
+    def save(self, *args, **kwargs):
+
+        old_status = None
+
+        if self.pk:
+            try:
+                old_status = MemberRequest.objects.get(pk=self.pk).status
+            except MemberRequest.DoesNotExist:
+                pass
+
+        super().save(*args, **kwargs)
+
+        if old_status != 'approved' and self.status == 'approved':
+
+            Member.objects.get_or_create(
+                user=self.user,
+                defaults={
+                    'committee': self.committee,
+                    'student_id': self.student_id,
+                    'role': 'member',
+                    'is_active': True,
+                })
+
+
     class Meta:
         verbose_name = "درخواست عضویت"
         verbose_name_plural = "درخواست‌های عضویت"

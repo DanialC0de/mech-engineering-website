@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/member.css' %}">
+    <title>ثبت درخواست عضویت | انجمن علمی مکانیک</title>
+</head>
+
+<body>
+    <div class="container" style="max-width:600px; margin:50px auto; padding:20px;">
+        <div class="request-box" style="background:white; padding:40px; border-radius:20px; box-shadow:0 5px 20px rgba(0,0,0,0.1);">
+            <div class="logo" style="text-align:center; font-size:24px; margin-bottom:30px;">
+                ⚙️ انجمن <span style="color:#ffaa00;">مکانیک</span>
+                <small style="display:block; font-size:14px; color:#666;">ثبت درخواست عضویت</small>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" style="padding:10px; border-radius:10px; margin-bottom:15px; background:{% if message.tags == 'success' %}#d4edda{% elif message.tags == 'error' %}#f8d7da{% else %}#fff3cd{% endif %};">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group" style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:5px; font-weight:bold;">شماره دانشجویی</label>
+                    <input type="text" name="student_id" placeholder="مثال: ۹۸۱۲۳۴۵۶" required style="width:100%; padding:12px; border:2px solid #ddd; border-radius:10px; font-size:16px;">
+                </div>
+
+                <div class="form-group" style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:5px; font-weight:bold;">کمیته مورد نظر</label>
+                    <select name="committee" required style="width:100%; padding:12px; border:2px solid #ddd; border-radius:10px; font-size:16px;">
+                        <option value="">انتخاب کنید...</option>
+                        {% for committee in committees %}
+                            <option value="{{ committee.id }}">{{ committee.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:5px; font-weight:bold;">پیام (اختیاری)</label>
+                    <textarea name="message" rows="4" placeholder="توضیحات اضافی..." style="width:100%; padding:12px; border:2px solid #ddd; border-radius:10px; font-size:16px; resize:vertical;"></textarea>
+                </div>
+
+                <button type="submit" style="width:100%; padding:14px; background:#ffaa00; color:#0a2a44; border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer;">
+                    ثبت درخواست عضویت
+                </button>
+            </form>
+
+            <div style="text-align:center; margin-top:20px;">
+                <a href="{% url 'members:dashboard' %}" style="color:#0a2a44; text-decoration:none;">← بازگشت به پنل</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
