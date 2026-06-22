@@ -20,7 +20,8 @@ INSTALLED_APPS = [
     'accounts',
     'news',
     'members',
-    'students',  # اپ جدید اضافه شد
+    'students',
+    'professor',  # اپ استاد اضافه شد
 ]
 
 MIDDLEWARE = [

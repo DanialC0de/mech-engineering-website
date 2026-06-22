@@ -17,45 +17,53 @@
         </div>
         <ul class="menu">
             <li class="active" data-tab="dashboard">
-                <a href="#" onclick="switchTab('dashboard'); return false;"><i class="fa-solid fa-chart-line"></i> داشبورد</a>
+                <a href="#" onclick="switchTab('dashboard'); return false;">
+                    <i class="fa-solid fa-chart-line"></i> داشبورد
+                </a>
             </li>
             <li data-tab="events">
-                <a href="#" onclick="switchTab('events'); return false;"><i class="fa-solid fa-calendar-days"></i> اخبار و رویدادها</a>
-            </li>
-            <li data-tab="registrations">
-                <a href="#" onclick="switchTab('registrations'); return false;"><i class="fa-solid fa-clipboard-check"></i> ثبت‌نام‌های من</a>
+                <a href="#" onclick="switchTab('events'); return false;">
+                    <i class="fa-solid fa-calendar-days"></i> رویدادها
+                </a>
             </li>
             <li data-tab="resources">
-                <a href="#" onclick="switchTab('resources'); return false;"><i class="fa-solid fa-book-open"></i> منابع و دانلودها</a>
+                <a href="#" onclick="switchTab('resources'); return false;">
+                    <i class="fa-solid fa-book-open"></i> منابع و دانلودها
+                </a>
             </li>
             <li data-tab="tickets">
-                <a href="#" onclick="switchTab('tickets'); return false;"><i class="fa-solid fa-ticket"></i> تیکت‌ها</a>
+                <a href="#" onclick="switchTab('tickets'); return false;">
+                    <i class="fa-solid fa-ticket"></i> تیکت‌ها
+                </a>
             </li>
             <li data-tab="profile">
-                <a href="#" onclick="switchTab('profile'); return false;"><i class="fa-solid fa-user"></i> پروفایل من</a>
+                <a href="#" onclick="switchTab('profile'); return false;">
+                    <i class="fa-solid fa-user"></i> پروفایل
+                </a>
             </li>
         </ul>
     </div>
-    
+
     <div class="main-content">
+        <!-- هدر -->
         <div class="top-bar">
             <div>
                 <div class="eyebrow">انجمن علمی مهندسی مکانیک</div>
                 <div class="page-title" id="pageTitle">داشبورد دانشجو</div>
             </div>
             <div class="top-actions">
-                <a class="site-link" href="/">مشاهده سایت</a>
+                <a class="site-link" href="/"><i class="fa-solid fa-globe"></i> مشاهده سایت</a>
                 <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
             </div>
         </div>
 
-        <!-- داشبورد -->
+        <!-- ==================== داشبورد ==================== -->
         <div id="dashboard" class="tab-content active">
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
                     <div class="number" id="myRegistrations">۰</div>
-                    <div class="label">رویدادهای ثبت‌نام شده</div>
+                    <div class="label">ثبت‌نام‌های من</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fa-solid fa-file-arrow-down"></i></div>
@@ -78,97 +86,65 @@
 
             <div class="section-card">
                 <div class="section-title"><span><i class="fa-solid fa-calendar-plus"></i> رویدادهای قابل ثبت‌نام</span></div>
-                <div class="table-wrap">
-                    <table id="availableEventsTable">
-                        <thead>
-                            <tr>
-                                <th>عنوان رویداد</th>
-                                <th>تاریخ</th>
-                                <th>ظرفیت باقیمانده</th>
-                                <th>عملیات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="availableEventsBody">
-                            <tr><td colspan="4" class="empty-state">در حال بارگذاری...</td></tr>
-                        </tbody>
-                    </table>
+                <div id="availableEventsContainer" class="events-grid">
+                    <!-- کارت‌های رویداد توسط JS ساخته می‌شوند -->
                 </div>
             </div>
         </div>
 
-        <!-- اخبار و رویدادها -->
+        <!-- ==================== رویدادها ==================== -->
         <div id="events" class="tab-content">
+            <!-- بخش اول: همه رویدادها -->
             <div class="section-card">
-                <div class="section-title"><span><i class="fa-solid fa-calendar-days"></i> همه رویدادها</span></div>
-                <div class="toolbar">
-                    <select id="eventStatusFilter" onchange="loadAllEvents()">
-                        <option value="all">همه</option>
-                        <option value="upcoming">در حال ثبت‌نام</option>
-                        <option value="ongoing">در حال برگزاری</option>
-                        <option value="completed">به پایان رسیده</option>
-                    </select>
+                <div class="section-title">
+                    <span><i class="fa-solid fa-calendar-days"></i> همه رویدادها</span>
+                    <div class="filter-group">
+                        <select id="eventStatusFilter" onchange="loadAllEvents()">
+                            <option value="all">همه</option>
+                            <option value="upcoming">در حال ثبت‌نام</option>
+                            <option value="ongoing">در حال برگزاری</option>
+                            <option value="completed">به پایان رسیده</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="table-wrap">
-                    <table id="allEventsTable">
-                        <thead>
-                            <tr>
-                                <th>عنوان</th>
-                                <th>تاریخ</th>
-                                <th>وضعیت رویداد</th>
-                                <th>وضعیت من</th>
-                                <th>عملیات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="allEventsBody">
-                            <tr><td colspan="5" class="empty-state">در حال بارگذاری...</td></tr>
-                        </tbody>
-                    </table>
+                <div id="allEventsContainer" class="events-grid">
+                    <!-- کارت‌ها توسط JS ساخته می‌شوند -->
+                </div>
+            </div>
+
+            <!-- بخش دوم: ثبت‌نام‌های من -->
+            <div class="section-card">
+                <div class="section-title">
+                    <span><i class="fa-solid fa-clipboard-check"></i> ثبت‌نام‌های من</span>
+                </div>
+                <div id="myRegistrationsContainer" class="events-grid">
+                    <!-- کارت‌ها توسط JS ساخته می‌شوند -->
                 </div>
             </div>
         </div>
 
-        <!-- ثبت‌نام‌های من -->
-        <div id="registrations" class="tab-content">
-            <div class="section-card">
-                <div class="section-title"><span><i class="fa-solid fa-clipboard-check"></i> رویدادهای ثبت‌نام شده من</span></div>
-                <div class="table-wrap">
-                    <table id="myRegistrationsTable">
-                        <thead>
-                            <tr>
-                                <th>عنوان رویداد</th>
-                                <th>تاریخ</th>
-                                <th>وضعیت</th>
-                                <th>عملیات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="myRegistrationsBody">
-                            <tr><td colspan="4" class="empty-state">در حال بارگذاری...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- منابع و دانلودها -->
+        <!-- ==================== منابع ==================== -->
         <div id="resources" class="tab-content">
             <div class="section-card">
-                <div class="section-title"><span><i class="fa-solid fa-book-open"></i> منابع علمی</span></div>
-                <div class="toolbar">
-                    <select id="resourceFilter" onchange="filterResources()">
-                        <option value="all">همه دسته‌ها</option>
-                        <option value="آموزشی">آموزشی</option>
-                        <option value="پژوهشی">پژوهشی</option>
-                        <option value="صنعتی">صنعتی</option>
-                        <option value="فناوری">فناوری</option>
-                        <option value="بین‌الملل">بین‌الملل</option>
-                        <option value="سایر">سایر</option>
-                    </select>
+                <div class="section-title">
+                    <span><i class="fa-solid fa-book-open"></i> منابع علمی</span>
+                    <div class="filter-group">
+                        <select id="resourceFilter" onchange="filterResources()">
+                            <option value="all">همه دسته‌ها</option>
+                            <option value="آموزشی">آموزشی</option>
+                            <option value="پژوهشی">پژوهشی</option>
+                            <option value="صنعتی">صنعتی</option>
+                            <option value="فناوری">فناوری</option>
+                            <option value="بین‌الملل">بین‌الملل</option>
+                            <option value="سایر">سایر</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="table-wrap">
                     <table id="resourcesTable">
                         <thead>
                             <tr>
-                                <th>عنوان منبع</th>
+                                <th>عنوان</th>
                                 <th>دسته‌بندی</th>
                                 <th>توضیحات</th>
                                 <th>عملیات</th>
@@ -182,7 +158,7 @@
             </div>
         </div>
 
-        <!-- تیکت‌ها -->
+        <!-- ==================== تیکت‌ها ==================== -->
         <div id="tickets" class="tab-content">
             <div class="section-card">
                 <div class="section-title">
@@ -209,7 +185,7 @@
             </div>
         </div>
 
-        <!-- پروفایل -->
+        <!-- ==================== پروفایل ==================== -->
         <div id="profile" class="tab-content">
             <div class="section-card">
                 <div class="section-title">
@@ -324,6 +300,19 @@
             <div class="modal-buttons">
                 <button class="secondary-btn" onclick="closeTicketModal()">انصراف</button>
                 <button class="primary-btn" onclick="submitTicket()">ارسال تیکت</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال جزئیات رویداد -->
+    <div id="eventDetailModal" class="modal">
+        <div class="modal-content modal-lg">
+            <h3 id="eventDetailTitle"><i class="fa-solid fa-calendar-days"></i> جزئیات رویداد</h3>
+            <div id="eventDetailBody">
+                <!-- توسط JS پر می‌شود -->
+            </div>
+            <div class="modal-buttons">
+                <button class="secondary-btn" onclick="closeEventDetail()">بستن</button>
             </div>
         </div>
     </div>
