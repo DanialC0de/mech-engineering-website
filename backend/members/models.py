@@ -52,6 +52,27 @@ class Member(models.Model):
     def full_name(self):
         return self.user.get_full_name() or self.user.username
 
+class GalleryImage(models.Model):
+    """تصاویر گالری انجمن"""
+    title = models.CharField(max_length=200, verbose_name="عنوان تصویر")
+    image = models.ImageField(upload_to='gallery/', verbose_name="تصویر")
+    description = models.TextField(blank=True, verbose_name="توضیحات")
+    uploaded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='gallery_images'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = "تصویر گالری"
+        verbose_name_plural = "تصاویر گالری"
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return self.title
+
+
 
 class MemberRequest(models.Model):
     """درخواست عضویت"""

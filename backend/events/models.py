@@ -51,6 +51,15 @@ class Event(models.Model):
     def __str__(self):
         return self.title
     
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='created_events',
+        verbose_name="ایجاد کننده"
+    )
+
     @property
     def is_upcoming(self):
         """سازگاری با کدهای قبلی"""

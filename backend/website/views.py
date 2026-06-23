@@ -16,22 +16,23 @@ from .models import (
 from events.models import Registration
 from news.models import News
 from events.models import Event
+from members.models import GalleryImage
 import os
 
 def home(request):
     """نمایش صفحه اصلی با تمام بخش‌ها"""
+    
     context = {
         'news': News.objects.filter(is_published=True)[:3],
-        'events': Event.objects.filter(status='upcoming')[:3],  # ✅ تغییر
+        'events': Event.objects.filter(status='upcoming')[:3],
         'resources': Resource.objects.all()[:3],
         'honors': Honor.objects.filter(is_featured=True)[:3],
         'about': AboutInfo.objects.first(),
-        'gallery_items': GalleryItem.objects.all(),
+        'gallery_items': GalleryImage.objects.all().order_by('-created_at'),  # ⭐ فقط جدید
         'footer_socials': SocialLink.objects.filter(is_footer=True),
         'floating_socials': SocialLink.objects.filter(is_floating=True),
     }
     return render(request, 'index-pages/index.html', context)
-
 
 def all_events(request):
     """نمایش همه رویدادها با فیلتر و جستجو"""
