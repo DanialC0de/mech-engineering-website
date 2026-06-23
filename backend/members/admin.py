@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Committee, Member, MemberRequest, InternalResource
+from .models import Committee, Member, MemberRequest, InternalResource, GalleryImage
 
 @admin.register(Committee)
 class CommitteeAdmin(admin.ModelAdmin):
@@ -41,3 +41,11 @@ class InternalResourceAdmin(admin.ModelAdmin):
     list_filter = ('category',)
     search_fields = ('title',)
     list_editable = ('category',)
+
+
+@admin.register(GalleryImage)
+class GalleryImageAdmin(admin.ModelAdmin):
+    list_display = ('title', 'uploaded_by', 'created_at')
+    list_filter = ('created_at',)
+    search_fields = ('title', 'description')
+    readonly_fields = ('created_at',)

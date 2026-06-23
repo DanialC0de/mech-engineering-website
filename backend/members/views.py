@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
-from .models import Member, MemberRequest, Committee, InternalResource
-from events.models import Event, Registration
+from .models import Member, MemberRequest, Committee, InternalResource, GalleryImage
+from events.models import Event
 
 @login_required
 def member_dashboard(request):
@@ -22,6 +22,7 @@ def member_dashboard(request):
             'internal_resources': [],
             'my_events': [],
             'all_my_events': [],
+            'gallery_images': [],
         })
     
     # رویدادهای تحت مسئولیت کاربر
@@ -38,7 +39,7 @@ def member_dashboard(request):
     pending_requests = MemberRequest.objects.filter(status='pending')
     members_list = Member.objects.filter(is_active=True)
     internal_resources = InternalResource.objects.filter(uploaded_by=request.user)
-    
+    gallery_images = GalleryImage.objects.all()[:20]
     context = {
         'member': member,
         'pending_requests': pending_requests.count(),
@@ -48,6 +49,7 @@ def member_dashboard(request):
         'internal_resources': internal_resources,
         'my_events': my_events,
         'all_my_events': all_my_events,
+        'gallery_images': gallery_images, 
     }
     return render(request, 'member.html', context)  # ← مسیر درسته
 
@@ -109,7 +111,8 @@ def create_event(request):
         time = request.POST.get('time')
         short_description = request.POST.get('short_description')
         capacity = request.POST.get('capacity', 0)
-        
+        image = request.FILES.get('image') 
+
         if not title or not jalali_date or not time:
             messages.error(request, 'لطفاً همه فیلدهای ضروری را پر کنید.')
             return redirect('members:dashboard')
@@ -128,6 +131,8 @@ def create_event(request):
             capacity=int(capacity) if capacity else 0,
             status='upcoming',
             instructor_name=member.full_name,
+            created_by=request.user, 
+            image=image,
         )
         
         messages.success(request, f'رویداد "{event.title}" با موفقیت ایجاد شد.')
@@ -152,4 +157,51 @@ def delete_event(request, pk):
     
     event.delete()
     messages.success(request, 'رویداد با موفقیت حذف شد.')
+    return redirect('members:dashboard')
+
+
+
+@login_required
+def gallery_upload(request):
+    """آپلود تصویر جدید در گالری"""
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        image = request.FILES.get('image')
+        description = request.POST.get('description', '')
+        
+        if not title or not image:
+            messages.error(request, 'لطفاً عنوان و تصویر را وارد کنید.')
+            return redirect('members:dashboard')
+        
+        if not image.content_type.startswith('image/'):
+            messages.error(request, 'لطفاً فقط فایل تصویری آپلود کنید.')
+            return redirect('members:dashboard')
+        
+        # ذخیره در دیتابیس
+        try:
+            GalleryImage.objects.create(
+                title=title,
+                image=image,
+                description=description,
+                uploaded_by=request.user
+            )
+            messages.success(request, '✅ تصویر با موفقیت آپلود شد.')
+        except Exception as e:
+            messages.error(request, f'خطا در آپلود تصویر: {str(e)}')
+        
+        return redirect('members:dashboard')
+    
+    return redirect('members:dashboard')
+@login_required
+def gallery_delete(request, pk):
+    """حذف تصویر از گالری"""
+    image = get_object_or_404(GalleryImage, pk=pk)
+    
+    # فقط کسی که آپلود کرده یا ادمین میتونه حذف کنه
+    if image.uploaded_by != request.user and not request.user.is_staff:
+        messages.error(request, 'شما مجوز حذف این تصویر را ندارید.')
+        return redirect('members:dashboard')
+    
+    image.delete()
+    messages.success(request, 'تصویر با موفقیت حذف شد.')
     return redirect('members:dashboard')

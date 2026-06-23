@@ -9,4 +9,6 @@ urlpatterns = [
     path('request/<int:pk>/reject/', views.reject_request, name='reject_request'),
     path('event/create/', views.create_event, name='create_event'),
     path('event/<int:pk>/delete/', views.delete_event, name='delete_event'),
+    path('gallery/upload/', views.gallery_upload, name='gallery_upload'),
+    path('gallery/delete/<int:pk>/', views.gallery_delete, name='gallery_delete'),
 ]

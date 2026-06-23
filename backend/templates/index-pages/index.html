@@ -98,7 +98,7 @@
     <!-- ========================================================= -->
     <main class="home-main">
 
-        <!-- ========================================================= -->
+       <!-- ========================================================= -->
         <!-- ردیف دو ستونه: گالری + درباره -->
         <!-- ========================================================= -->
         <div class="two-column-section">
@@ -121,21 +121,45 @@
                                 <input type="radio" name="slider" id="slide{{ forloop.counter }}" {% if forloop.first %}checked{% endif %}>
 
                                 <div class="slide {% if item.media_type == 'video' %}video-slide{% endif %}">
-                                    {% if item.media_type == 'image' and item.image %}
-                                        <img src="{{ item.image.url }}" alt="{{ item.caption_title }}">
-                                    {% elif item.media_type == 'video' and item.video_file %}
+                                    
+                                    <!-- ===== نمایش تصویر یا ویدیو ===== -->
+                                    {% if item.media_type == 'video' and item.video_file %}
+                                        <!-- ویدیو (مدل قدیمی GalleryItem) -->
                                         <video controls preload="auto" playsinline muted>
                                             <source src="{{ item.video_file.url }}" type="video/mp4">
                                             مرورگر شما ویدیو را پشتیبانی نمی‌کند.
                                         </video>
+                                        
+                                    {% elif item.image %}
+                                        <!-- تصویر (هر دو مدل) -->
+                                        {% with title_value=item.caption_title|default:item.title|default:'گالری انجمن' %}
+                                        <img src="{{ item.image.url }}" alt="{{ title_value }}">
+                                        {% endwith %}
+                                        
                                     {% else %}
+                                        <!-- تصویر پیش‌فرض -->
                                         <img src="https://via.placeholder.com/900x480" alt="گالری انجمن">
                                     {% endif %}
 
+                                    <!-- ===== کپشن ===== -->
                                     <div class="slide-caption">
                                         <span>انجمن علمی مکانیک</span>
-                                        <h3>{{ item.caption_title }}</h3>
-                                        <p>{{ item.caption_text }}</p>
+                                        
+                                        {# مدل قدیمی GalleryItem #}
+                                        {% if item.caption_title %}
+                                            <h3>{{ item.caption_title }}</h3>
+                                            <p>{{ item.caption_text|default:"" }}</p>
+                                            
+                                        {# مدل جدید GalleryImage #}
+                                        {% elif item.title %}
+                                            <h3>{{ item.title }}</h3>
+                                            <p>{{ item.description|default:"" }}</p>
+                                            
+                                        {# حالت پیش‌فرض #}
+                                        {% else %}
+                                            <h3>گالری انجمن</h3>
+                                            <p>تصاویر فعالیت‌های انجمن علمی مکانیک</p>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 {% empty %}
@@ -149,6 +173,7 @@
                                 </div>
                                 {% endfor %}
 
+                                <!-- ===== دکمه‌های ناوبری ===== -->
                                 <div class="slider-nav">
                                     {% for item in gallery_items %}
                                     <label for="slide{{ forloop.counter }}" class="nav-btn"></label>
@@ -165,6 +190,28 @@
                 </div>
             </section>
 
+            <!-- درباره انجمن -->
+            <section class="modern-section about-association">
+                <div class="about-card">
+                    <div class="about-content">
+                        <span class="section-badge">درباره ما</span>
+                        <h2>انجمن علمی مکانیک؛ جایی برای رشد، تجربه و ساخت آینده</h2>
+                        <p>
+                            انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان در سال ۱۳۸۶ با هدف ارتقای دانش،
+                            مهارت و تجربه دانشجویان این رشته فعالیت خود را آغاز کرد. این انجمن با برگزاری کارگاه‌های آموزشی،
+                            رویدادهای تخصصی، برنامه‌های علمی و فعالیت‌های پژوهشی تلاش می‌کند بستری پویا برای رشد دانشجویان
+                            مهندسی مکانیک فراهم کند.
+                        </p>
+
+                        <div class="about-actions">
+                            <a href="{% url 'membership_page' %}" class="primary-action">عضویت در انجمن</a>
+                            <a href="{% url 'about' %}" class="secondary-action">آشنایی بیشتر</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div> <!-- پایان دو ستونه -->
             <!-- درباره انجمن -->
             <section class="modern-section about-association">
                 <div class="about-card">
