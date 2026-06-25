@@ -21,6 +21,11 @@
                     <i class="fa-solid fa-chart-line"></i> داشبورد
                 </a>
             </li>
+            <li data-tab="invitations">
+                <a href="#" onclick="switchTab('invitations'); return false;">
+                    <i class="fa-solid fa-envelope"></i> دعوت‌نامه‌ها
+                </a>
+            </li>
             <li data-tab="events">
                 <a href="#" onclick="switchTab('events'); return false;">
                     <i class="fa-solid fa-calendar-days"></i> رویدادها
@@ -40,7 +45,6 @@
     </div>
 
     <div class="main-content">
-        <!-- هدر یکپارچه -->
         <div class="top-bar">
             <div>
                 <div class="eyebrow">انجمن علمی مهندسی مکانیک</div>
@@ -52,7 +56,7 @@
             </div>
         </div>
 
-        <!-- ==================== داشبورد ==================== -->
+        <!-- ==================== داشبورد (فقط کارت‌های آماری) ==================== -->
         <div id="dashboard" class="tab-content active">
             <div class="stats-grid">
                 <div class="stat-card">
@@ -61,51 +65,31 @@
                     <div class="label">رویدادهای پیش رو</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon"><i class="fa-solid fa-envelope"></i></div>
-                    <div class="number" id="invitations">۰</div>
-                    <div class="label">دعوتنامه‌های جدید</div>
-                </div>
-                <div class="stat-card">
                     <div class="stat-icon"><i class="fa-solid fa-file-pen"></i></div>
                     <div class="number" id="myArticles">۰</div>
                     <div class="label">مقالات من</div>
                 </div>
             </div>
+        </div>
 
+        <!-- ==================== دعوت‌نامه‌ها ==================== -->
+        <div id="invitations" class="tab-content">
             <div class="section-card">
-                <div class="section-title"><span><i class="fa-solid fa-envelope"></i> دعوتنامه‌های رویداد</span></div>
+                <div class="section-title"><span><i class="fa-solid fa-envelope"></i> دعوت‌نامه‌های رویداد</span></div>
                 <div class="table-wrap">
                     <table id="invitationsTable">
                         <thead>
                             <tr>
                                 <th>عنوان رویداد</th>
                                 <th>تاریخ</th>
+                                <th>ساعت</th>
                                 <th>نقش شما</th>
                                 <th>وضعیت</th>
                                 <th>عملیات</th>
                             </tr>
                         </thead>
                         <tbody id="invitationsBody">
-                            <tr><td colspan="5" class="empty-state">در حال بارگذاری...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="section-card">
-                <div class="section-title"><span><i class="fa-solid fa-calendar-days"></i> رویدادهای پیش رو (نقش شما)</span></div>
-                <div class="table-wrap">
-                    <table id="myEventsTable">
-                        <thead>
-                            <tr>
-                                <th>عنوان رویداد</th>
-                                <th>تاریخ</th>
-                                <th>ساعت</th>
-                                <th>نقش شما</th>
-                            </tr>
-                        </thead>
-                        <tbody id="myEventsBody">
-                            <tr><td colspan="4" class="empty-state">در حال بارگذاری...</td></tr>
+                            <tr><td colspan="6" class="empty-state">در حال بارگذاری...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -126,7 +110,7 @@
                                 <th>عنوان رویداد</th>
                                 <th>تاریخ</th>
                                 <th>ساعت</th>
-                                <th>نوع رویداد</th>
+                                <th>نوع</th>
                                 <th>وضعیت</th>
                                 <th>عملیات</th>
                             </tr>
@@ -193,37 +177,21 @@
 
                 <form id="profileEditForm" class="profile-edit-form" onsubmit="saveProfile(event)">
                     <div class="form-grid">
-                        <label>نام
-                            <input type="text" id="editFirstName" required>
-                        </label>
-                        <label>نام خانوادگی
-                            <input type="text" id="editLastName" required>
-                        </label>
-                        <label>سمت
-                            <select id="editPosition">
-                                <option value="">انتخاب سمت</option>
-                                <option value="استاد">استاد</option>
-                                <option value="دانشیار">دانشیار</option>
-                                <option value="استادیار">استادیار</option>
-                                <option value="مربی">مربی</option>
-                            </select>
-                        </label>
-                        <label>دانشکده
-                            <input type="text" id="editFaculty">
-                        </label>
-                        <label>شماره تماس
-                            <input type="tel" id="editPhone">
-                        </label>
-                        <label>ایمیل
-                            <input type="email" id="editEmail">
-                        </label>
-                        <label>تخصص
-                            <input type="text" id="editExpertise">
-                        </label>
+                        <label>نام <input type="text" id="editFirstName" required></label>
+                        <label>نام خانوادگی <input type="text" id="editLastName" required></label>
+                        <label>سمت <select id="editPosition">
+                            <option value="">انتخاب سمت</option>
+                            <option value="استاد">استاد</option>
+                            <option value="دانشیار">دانشیار</option>
+                            <option value="استادیار">استادیار</option>
+                            <option value="مربی">مربی</option>
+                        </select></label>
+                        <label>دانشکده <input type="text" id="editFaculty"></label>
+                        <label>شماره تماس <input type="tel" id="editPhone"></label>
+                        <label>ایمیل <input type="email" id="editEmail"></label>
+                        <label>تخصص <input type="text" id="editExpertise"></label>
                     </div>
-                    <label class="full-field">درباره من
-                        <textarea id="editBio" rows="4"></textarea>
-                    </label>
+                    <label class="full-field">درباره من <textarea id="editBio" rows="4"></textarea></label>
                     <div class="form-actions">
                         <button type="button" class="secondary-btn" onclick="toggleProfileEdit(false)">انصراف</button>
                         <button type="submit" class="primary-btn" id="saveProfileBtn">
@@ -244,7 +212,7 @@
         </div>
     </div>
 
-    <!-- مودال پیشنهاد رویداد -->
+    <!-- مودال‌ها -->
     <div id="proposeEventModal" class="modal">
         <div class="modal-content">
             <h3><i class="fa-solid fa-calendar-plus"></i> پیشنهاد رویداد علمی</h3>
@@ -263,7 +231,6 @@
         </div>
     </div>
 
-    <!-- مودال آپلود مقاله -->
     <div id="addArticleModal" class="modal">
         <div class="modal-content">
             <h3><i class="fa-solid fa-file-arrow-up"></i> آپلود مقاله جدید</h3>

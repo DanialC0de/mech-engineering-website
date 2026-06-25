@@ -4,48 +4,36 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
-from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 import json
+from website.models import Resource
 
 from accounts.models import CustomUser
-from events.models import Event, Registration
-from news.models import News
-from .models import ProfessorProfile, EventInvitation
+from events.models import Event
+from .models import ProfessorProfile, EventInvitation, ProfessorArticle, EventProposal
 
 
-# ==================== دکوریتور سفارشی ====================
 def professor_or_superuser_required(view_func):
-    """دکوریتور برای اجازه دسترسی به اساتید و سوپر یوزرها"""
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(request, 'لطفاً ابتدا وارد شوید')
             return redirect('accounts:login')
-        
-        # اجازه دسترسی به professors و superusers
         if request.user.role == 'professor' or request.user.is_superuser:
             return view_func(request, *args, **kwargs)
-        
-        # برای درخواست‌های AJAX
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({'error': 'دسترسی غیرمجاز'}, status=403)
-        
         messages.error(request, 'شما دسترسی به این بخش ندارید')
         return redirect('home')
     return wrapper
 
 
-# ==================== ویوهای پنل استاد ====================
-
 @login_required
 @professor_or_superuser_required
 def professor_panel(request):
-    """نمایش پنل استاد"""
-    # گرفتن پروفایل استاد
     try:
         professor = request.user.professor_profile
     except ProfessorProfile.DoesNotExist:
         professor = None
-    
     return render(request, 'professor.html', {
         'user': request.user,
         'professor': professor,
@@ -55,130 +43,62 @@ def professor_panel(request):
 @login_required
 @professor_or_superuser_required
 def get_dashboard_data(request):
-    """دریافت اطلاعات داشبورد به صورت JSON"""
-    # رویدادهای پیش رو که استاد مدرس آن است
     upcoming_events = Event.objects.filter(
         instructor_name__icontains=request.user.get_full_name(),
         status='upcoming'
     ).count()
     
-    # دعوتنامه‌های در انتظار
-    pending_invitations = EventInvitation.objects.filter(
-        professor=request.user,
-        status='pending'
-    ).count()
-    
-    # پیام‌های جدید (اگر سیستم پیام دارید)
-    new_messages = 0
-    
-    # مقالات (این باید از مدل مقالات بیاید اگر دارید)
-    my_articles = 0
-    
-    # لیست دعوتنامه‌ها
-    invitations = EventInvitation.objects.filter(
-        professor=request.user,
-        status='pending'
-    ).select_related('event')[:10]
-    
-    # رویدادهای من (پذیرفته شده)
-    my_events = EventInvitation.objects.filter(
-        professor=request.user,
-        status='accepted'
-    ).select_related('event')[:10]
+    my_articles = ProfessorArticle.objects.filter(professor=request.user).count()
     
     data = {
         'stats': {
             'upcomingEvents': upcoming_events,
-            'invitations': pending_invitations,
-            'newMessages': new_messages,
             'myArticles': my_articles,
-        },
-        'invitations': [
-            {
-                'id': inv.id,
-                'event_id': inv.event.id,
-                'title': inv.event.title,
-                'date': inv.event.jalali_date,
-                'role': dict(EventInvitation.ROLE_CHOICES).get(inv.role, 'نامشخص'),
-                'status': dict(EventInvitation.STATUS_CHOICES).get(inv.status, 'نامشخص'),
-                'message': inv.message or ''
-            }
-            for inv in invitations
-        ],
-        'myEvents': [
-            {
-                'id': inv.event.id,
-                'title': inv.event.title,
-                'date': inv.event.jalali_date,
-                'time': inv.event.time,
-                'role': dict(EventInvitation.ROLE_CHOICES).get(inv.role, 'نامشخص'),
-                'registered_count': inv.event.registered_count
-            }
-            for inv in my_events
-        ]
+        }
     }
-    
     return JsonResponse(data)
 
 
 @login_required
 @professor_or_superuser_required
-def get_events_list(request):
-    """دریافت لیست همه رویدادها"""
-    status_filter = request.GET.get('status', 'all')
-    
-    events = Event.objects.all()
-    
-    if status_filter != 'all':
-        events = events.filter(status=status_filter)
+def get_invitations_list(request):
+    invitations = EventInvitation.objects.filter(
+        professor=request.user
+    ).select_related('event').order_by('-created_at')
     
     data = []
-    for event in events:
-        # بررسی آیا استاد در این رویداد دعوت شده
-        has_invitation = EventInvitation.objects.filter(
-            event=event,
-            professor=request.user
-        ).exists()
-        
-        invitation_status = None
-        if has_invitation:
-            inv = EventInvitation.objects.filter(
-                event=event,
-                professor=request.user
-            ).first()
-            if inv:
-                invitation_status = inv.status
-        
+    for inv in invitations:
         data.append({
-            'id': event.id,
-            'title': event.title,
-            'date': event.jalali_date,
-            'time': event.time,
-            'status': dict(Event.STATUS_CHOICES).get(event.status, 'نامشخص'),
-            'capacity': event.capacity,
-            'registered_count': event.registered_count,
-            'instructor_name': event.instructor_name or '',
-            'has_invitation': has_invitation,
-            'invitation_status': invitation_status
+            'id': inv.id,
+            'event_id': inv.event.id,
+            'title': inv.event.title,
+            'date': inv.event.jalali_date,
+            'time': inv.event.time,
+            'role': dict(EventInvitation.ROLE_CHOICES).get(inv.role, 'نامشخص'),
+            'status': inv.status,
+            'status_display': dict(EventInvitation.STATUS_CHOICES).get(inv.status, 'نامشخص'),
+            'status_class': {
+                'pending': 'warning',
+                'accepted': 'success',
+                'declined': 'danger'
+            }.get(inv.status, 'secondary'),
+            'message': inv.message or '',
+            'created_at': inv.created_at.strftime('%Y-%m-%d %H:%M')
         })
-    
-    return JsonResponse({'events': data})
+    return JsonResponse({'invitations': data})
 
 
 @login_required
 @professor_or_superuser_required
 @require_http_methods(["POST"])
 def respond_to_invitation(request, invitation_id):
-    """پاسخ به دعوتنامه رویداد"""
     invitation = get_object_or_404(EventInvitation, id=invitation_id, professor=request.user)
-    
     try:
         data = json.loads(request.body)
     except json.JSONDecodeError:
         return JsonResponse({'error': 'داده‌های ارسالی نامعتبر است'}, status=400)
     
-    action = data.get('action')  # 'accept' or 'decline'
-    
+    action = data.get('action')
     if action == 'accept':
         invitation.status = 'accepted'
         message = 'دعوتنامه پذیرفته شد'
@@ -189,24 +109,164 @@ def respond_to_invitation(request, invitation_id):
         return JsonResponse({'error': 'عملیات نامعتبر'}, status=400)
     
     invitation.save()
-    
     return JsonResponse({'success': True, 'message': message})
 
 
 @login_required
 @professor_or_superuser_required
-def get_profile_data(request):
-    """دریافت اطلاعات پروفایل استاد"""
-    user = request.user
+def get_events_list(request):
+
+    events = Event.objects.all().order_by('-created_at')
+
+    events_data = []
+
+    for event in events:
+        events_data.append({
+            'id': event.id,
+            'title': event.title,
+            'date': event.jalali_date,
+            'time': event.time,
+
+            'status': event.get_status_display(),
+            'detail_url': f'/events/{event.id}/',
+
+            'status_class': {
+                'upcoming': 'primary',
+                'ongoing': 'warning',
+                'completed': 'secondary'
+            }.get(event.status, 'secondary'),
+
+            'capacity': event.capacity,
+            'registered_count': event.registered_count,
+
+            'description': event.short_description,
+            'full_description': event.full_description,
+
+            'instructor_name': event.instructor_name,
+            'instructor_title': event.instructor_title,
+
+            'is_full': event.is_full,
+
+            # برای رفتن به صفحه جزئیات
+            'detail_url': f'/events/{event.id}/',
+        })
+
+    return JsonResponse({
+        'events': events_data
+    })
+@login_required
+@professor_or_superuser_required
+@require_http_methods(["POST"])
+def propose_event(request):
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'داده‌های ارسالی نامعتبر است'}, status=400)
+
+    title = data.get('title', '').strip()
+    description = data.get('description', '').strip()
+    proposed_date = data.get('date', '').strip()
+    event_type = data.get('type', '').strip()
+
+    if not all([title, description, proposed_date, event_type]):
+        return JsonResponse({'success': False, 'error': 'تمامی فیلدها الزامی هستند'}, status=400)
+
+    proposal = EventProposal.objects.create(
+        professor=request.user,
+        title=title,
+        description=description,
+        proposed_date=proposed_date,
+        event_type=event_type,
+        status='pending'
+    )
+
+    return JsonResponse({
+        'success': True,
+        'message': 'پیشنهاد شما با موفقیت ثبت شد و در انتظار تایید دبیر انجمن است.',
+        'id': proposal.id
+    })
+
+
+@login_required
+@professor_or_superuser_required
+def get_articles_list(request):
+    articles = ProfessorArticle.objects.filter(professor=request.user).order_by('-created_at')
+    data = {
+        'articles': [
+            {
+                'id': article.id,
+                'title': article.title,
+                'author': request.user.get_full_name() or request.user.username,
+                'date': article.created_at.strftime('%Y-%m-%d %H:%M'),
+                'status': article.get_status_display(),
+                'status_class': {
+                    'draft': 'secondary',
+                    'submitted': 'warning',
+                    'approved': 'success',
+                    'rejected': 'danger'
+                }.get(article.status, 'secondary'),
+                'file_url': article.file.url if article.file else None,
+            }
+            for article in articles
+        ]
+    }
+    return JsonResponse(data)
+
+
+@csrf_exempt
+@login_required
+@professor_or_superuser_required
+@require_http_methods(["POST"])
+def create_article(request):
+    title = request.POST.get('title', '').strip()
+    abstract = request.POST.get('abstract', '').strip()
+    uploaded_file = request.FILES.get('file')
+
+    if not title:
+        return JsonResponse({'success': False, 'error': 'عنوان مقاله الزامی است'}, status=400)
+    if not uploaded_file:
+        return JsonResponse({'success': False, 'error': 'فایل مقاله الزامی است'}, status=400)
+    if not uploaded_file.name.endswith('.pdf'):
+        return JsonResponse({'success': False, 'error': 'فقط فایل‌های PDF مجاز هستند'}, status=400)
+
+    article = ProfessorArticle.objects.create(
+        professor=request.user,
+        title=title,
+        abstract=abstract,
+        file=uploaded_file,
+        status='submitted'
+    )
+
+    return JsonResponse({
+        'success': True,
+        'message': 'مقاله با موفقیت ارسال شد و در انتظار تایید دبیر انجمن است.',
+        'id': article.id
+    })
+
+
+@login_required
+@professor_or_superuser_required
+@require_http_methods(["POST"])
+def delete_article(request, article_id):
+    article = get_object_or_404(ProfessorArticle, id=article_id, professor=request.user)
+    if article.status not in ['draft', 'submitted']:
+        return JsonResponse({'success': False, 'error': 'این مقاله قابل حذف نیست'}, status=400)
     
+    article.delete()
+    return JsonResponse({'success': True, 'message': 'مقاله با موفقیت حذف شد'})
+
+
+@login_required
+@professor_or_superuser_required
+def get_profile_data(request):
+    user = request.user
     try:
         professor = user.professor_profile
     except ProfessorProfile.DoesNotExist:
         professor = ProfessorProfile.objects.create(user=user)
     
-    # آمار
     event_count = Event.objects.filter(instructor_name__icontains=user.get_full_name()).count()
-    publication_count = 0  # این باید از مدل مقالات بیاید
+    publication_count = ProfessorArticle.objects.filter(professor=user).count()
     
     data = {
         'first_name': user.first_name,
@@ -214,20 +274,13 @@ def get_profile_data(request):
         'username': user.username,
         'phone_number': user.phone_number,
         'email': user.email,
-        'employee_id': professor.employee_id if professor else '',
-        'department': professor.department if professor else '',
-        'academic_rank': professor.academic_rank if professor else '',
-        'field_of_study': professor.field_of_study if professor else '',
-        'office_number': professor.office_number if professor else '',
-        'research_interests': professor.research_interests if professor else '',
-        'publications': professor.publications if professor else '',
-        'bio': professor.bio if professor else '',
+        'position': professor.academic_rank or '',
+        'faculty': professor.department or '',
+        'expertise': professor.field_of_study or '',
+        'bio': professor.bio or '',
         'avatar_url': professor.avatar.url if professor and professor.avatar else '',
-        'role': dict(CustomUser.ROLE_CHOICES).get(user.role, ''),
-        'event_count': event_count,
-        'publication_count': publication_count,
+        'article_count': publication_count,
     }
-    
     return JsonResponse(data)
 
 
@@ -235,20 +288,17 @@ def get_profile_data(request):
 @professor_or_superuser_required
 @require_http_methods(["POST"])
 def update_profile_data(request):
-    """به‌روزرسانی اطلاعات پروفایل استاد"""
     try:
         data = json.loads(request.body)
     except json.JSONDecodeError:
         return JsonResponse({'success': False, 'error': 'داده‌های ارسالی نامعتبر است'}, status=400)
     
     user = request.user
-    
     try:
         professor = user.professor_profile
     except ProfessorProfile.DoesNotExist:
         professor = ProfessorProfile.objects.create(user=user)
     
-    # به‌روزرسانی اطلاعات کاربر
     first_name = str(data.get('first_name', '')).strip()
     last_name = str(data.get('last_name', '')).strip()
     email = str(data.get('email', '')).strip()
@@ -263,14 +313,9 @@ def update_profile_data(request):
     user.phone_number = phone_number
     user.save(update_fields=['first_name', 'last_name', 'email', 'phone_number'])
     
-    # به‌روزرسانی اطلاعات پروفایل استاد
-    professor.employee_id = str(data.get('employee_id', '')).strip() or None
-    professor.department = str(data.get('department', '')).strip()
-    professor.academic_rank = str(data.get('academic_rank', '')).strip()
-    professor.field_of_study = str(data.get('field_of_study', '')).strip()
-    professor.office_number = str(data.get('office_number', '')).strip()
-    professor.research_interests = str(data.get('research_interests', '')).strip()
-    professor.publications = str(data.get('publications', '')).strip()
+    professor.academic_rank = str(data.get('position', '')).strip()
+    professor.department = str(data.get('faculty', '')).strip()
+    professor.field_of_study = str(data.get('expertise', '')).strip()
     professor.bio = str(data.get('bio', '')).strip()
     professor.save()
     
@@ -281,7 +326,6 @@ def update_profile_data(request):
 @professor_or_superuser_required
 @require_http_methods(["POST"])
 def change_password(request):
-    """تغییر رمز عبور کاربر"""
     try:
         data = json.loads(request.body)
     except json.JSONDecodeError:
@@ -292,18 +336,108 @@ def change_password(request):
     
     if not new_password or not confirm_password:
         return JsonResponse({'error': 'رمز عبور را وارد کنید'}, status=400)
-    
     if new_password != confirm_password:
         return JsonResponse({'error': 'رمز عبور با تکرار آن مطابقت ندارد'}, status=400)
-    
     if len(new_password) < 8:
         return JsonResponse({'error': 'رمز عبور باید حداقل ۸ کاراکتر باشد'}, status=400)
     
-    # تغییر رمز عبور
     request.user.set_password(new_password)
     request.user.save()
-    
-    # نگه داشتن نشست کاربر
     update_session_auth_hash(request, request.user)
     
     return JsonResponse({'success': True, 'message': 'رمز عبور با موفقیت تغییر کرد'})
+
+@login_required
+@professor_or_superuser_required
+def get_resources_list(request):
+
+    resources = Resource.objects.all().order_by('-created_at')
+
+    resources_data = []
+
+    for resource in resources:
+        resources_data.append({
+            'id': resource.id,
+            'title': resource.title,
+            'category': resource.category,
+            'description': resource.description,
+            'download_count': resource.download_count,
+
+            'file_url': (
+                resource.file.url
+                if resource.file
+                else None
+            ),
+
+            'image_url': (
+                resource.image.url
+                if resource.image
+                else None
+            )
+        })
+
+    return JsonResponse({
+        'resources': resources_data
+    })
+
+@login_required
+@require_http_methods(["POST"])
+def send_event_invitation(request):
+
+    if not request.user.is_superuser:
+        return JsonResponse({
+            'success': False,
+            'error': 'شما دسترسی ندارید'
+        }, status=403)
+
+    try:
+        data = json.loads(request.body)
+    except:
+        return JsonResponse({
+            'success': False,
+            'error': 'داده نامعتبر'
+        }, status=400)
+
+    professor_id = data.get('professor_id')
+    event_id = data.get('event_id')
+
+    role = data.get(
+        'role',
+        'instructor'
+    )
+
+    message = data.get(
+        'message',
+        ''
+    )
+
+    professor = get_object_or_404(
+        CustomUser,
+        id=professor_id
+    )
+
+    event = get_object_or_404(
+        Event,
+        id=event_id
+    )
+
+    invitation, created = EventInvitation.objects.get_or_create(
+        professor=professor,
+        event=event,
+        defaults={
+            'role': role,
+            'message': message,
+            'status': 'pending'
+        }
+    )
+
+    if not created:
+        return JsonResponse({
+            'success': False,
+            'error': 'قبلاً دعوتنامه ارسال شده است'
+        })
+
+    return JsonResponse({
+        'success': True,
+        'message': 'دعوتنامه با موفقیت ارسال شد'
+    })

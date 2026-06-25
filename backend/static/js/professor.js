@@ -1,3 +1,4 @@
+// ==================== توابع کمکی ====================
 function toPersianDigits(value) {
     return String(value ?? '').replace(/\d/g, digit => '۰۱۲۳۴۵۶۷۸۹'[digit]);
 }
@@ -27,6 +28,7 @@ function setEmpty(elementId, colspan, message) {
 
 let currentProfileData = {};
 
+// ==================== مدیریت تب‌ها ====================
 function switchTab(tabId) {
     document.querySelectorAll('.menu li').forEach(item => item.classList.remove('active'));
     document.querySelector(`.menu li[data-tab="${tabId}"]`)?.classList.add('active');
@@ -36,6 +38,7 @@ function switchTab(tabId) {
 
     const titles = {
         dashboard: 'داشبورد استاد',
+        invitations: 'دعوت‌نامه‌ها',
         events: 'مدیریت رویدادها',
         resources: 'منابع علمی',
         profile: 'پروفایل من'
@@ -43,11 +46,12 @@ function switchTab(tabId) {
     document.getElementById('pageTitle').innerText = titles[tabId] || 'پنل استاد';
 
     const loaders = {
-        dashboard: loadDashboard,
-        events: loadAllEvents,
-        resources: loadArticles,
-        profile: loadProfile
-    };
+    dashboard: loadDashboard,
+    invitations: loadInvitations,
+    events: loadAllEvents,
+    resources: loadResources,
+    profile: loadProfile
+};
 
     loaders[tabId]?.();
     if (window.innerWidth <= 900) {
@@ -63,39 +67,14 @@ function loadDashboard() {
             if (data.error) throw new Error(data.error);
 
             document.getElementById('upcomingEvents').innerText = toPersianDigits(data.stats.upcomingEvents || 0);
-            document.getElementById('invitations').innerText = toPersianDigits(data.stats.invitations || 0);
-            document.getElementById('newMessages').innerText = toPersianDigits(data.stats.newMessages || 0);
             document.getElementById('myArticles').innerText = toPersianDigits(data.stats.myArticles || 0);
 
-            renderInvitations(data.invitations || []);
             renderMyEvents(data.myEvents || []);
         })
         .catch(error => {
             console.error('Error loading dashboard:', error);
-            setEmpty('invitationsBody', 5, 'خطا در دریافت اطلاعات');
             setEmpty('myEventsBody', 4, 'خطا در دریافت اطلاعات');
         });
-}
-
-function renderInvitations(invitations) {
-    const tbody = document.getElementById('invitationsBody');
-    if (!tbody) return;
-
-    if (!invitations.length) {
-        setEmpty('invitationsBody', 5, 'هیچ دعوتنامه‌ای وجود ندارد');
-        return;
-    }
-
-    tbody.innerHTML = invitations.map(item => `
-        <tr>
-            <td><strong>${escapeHtml(item.title)}</strong></td>
-            <td>${escapeHtml(item.date)}</td>
-            <td>${escapeHtml(item.role)}</td>
-            <td><span class="status-pending">${escapeHtml(item.status)}</span></td>
-            <td><button class="primary-btn" onclick="respondInvitation(${item.id}, 'accept')">پذیرش</button>
-                <button class="secondary-btn" onclick="respondInvitation(${item.id}, 'reject')">رد</button></td>
-        </tr>
-    `).join('');
 }
 
 function renderMyEvents(events) {
@@ -117,6 +96,48 @@ function renderMyEvents(events) {
     `).join('');
 }
 
+// ==================== دعوت‌نامه‌ها ====================
+function loadInvitations() {
+    setLoading('invitationsBody', 6);
+
+    fetch('/panel/professor/api/invitations/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) throw new Error(data.error);
+
+            const tbody = document.getElementById('invitationsBody');
+            if (!tbody) return;
+
+            const invitations = data.invitations || [];
+            if (!invitations.length) {
+                setEmpty('invitationsBody', 6, 'هیچ دعوتنامه‌ای وجود ندارد');
+                return;
+            }
+
+            tbody.innerHTML = invitations.map(inv => `
+                <tr>
+                    <td><strong>${escapeHtml(inv.title)}</strong></td>
+                    <td>${escapeHtml(inv.date)}</td>
+                    <td>${escapeHtml(inv.time)}</td>
+                    <td>${escapeHtml(inv.role)}</td>
+                    <td><span class="status-${inv.status_class}">${escapeHtml(inv.status_display)}</span></td>
+                    <td>
+                        ${inv.status === 'pending' ? `
+                            <button class="primary-btn" onclick="respondInvitation(${inv.id}, 'accept')">پذیرش</button>
+                            <button class="secondary-btn" onclick="respondInvitation(${inv.id}, 'decline')">رد</button>
+                        ` : `
+                            <span class="status-${inv.status_class}">${escapeHtml(inv.status_display)}</span>
+                        `}
+                    </td>
+                </tr>
+            `).join('');
+        })
+        .catch(error => {
+            console.error('Error loading invitations:', error);
+            setEmpty('invitationsBody', 6, 'خطا در دریافت دعوت‌نامه‌ها');
+        });
+}
+
 function respondInvitation(id, action) {
     fetch(`/panel/professor/api/invitations/${id}/respond/`, {
         method: 'POST',
@@ -130,6 +151,7 @@ function respondInvitation(id, action) {
         .then(data => {
             if (data.success) {
                 alert(data.message);
+                loadInvitations();
                 loadDashboard();
             } else {
                 alert(`خطا: ${data.error}`);
@@ -163,7 +185,7 @@ function loadAllEvents() {
                     <td><strong>${escapeHtml(event.title)}</strong></td>
                     <td>${escapeHtml(event.date)}</td>
                     <td>${escapeHtml(event.time)}</td>
-                    <td>${escapeHtml(event.type)}</td>
+                    <td>${escapeHtml(event.type || 'عمومی')}</td>
                     <td><span class="status-${event.status_class}">${escapeHtml(event.status)}</span></td>
                     <td><button class="primary-btn" onclick="viewEvent(${event.id})"><i class="fa-solid fa-eye"></i></button></td>
                 </tr>
@@ -176,7 +198,7 @@ function loadAllEvents() {
 }
 
 function viewEvent(id) {
-    alert(`مشاهده جزئیات رویداد با شناسه ${id} - در حال توسعه`);
+    window.location.href = `/events/${id}/`;
 }
 
 // ==================== منابع علمی ====================
@@ -191,19 +213,22 @@ function loadArticles() {
             const tbody = document.getElementById('articlesBody');
             if (!tbody) return;
 
-            if (!data.articles.length) {
+            const articles = data.articles || [];
+            if (!articles.length) {
                 setEmpty('articlesBody', 5, 'هیچ مقاله‌ای وجود ندارد');
                 return;
             }
 
-            tbody.innerHTML = data.articles.map(article => `
+            tbody.innerHTML = articles.map(article => `
                 <tr>
                     <td><strong>${escapeHtml(article.title)}</strong></td>
                     <td>${escapeHtml(article.author)}</td>
                     <td>${escapeHtml(article.date)}</td>
                     <td><span class="status-${article.status_class}">${escapeHtml(article.status)}</span></td>
-                    <td><button class="download-btn" onclick="downloadArticle(${article.id})"><i class="fa-solid fa-download"></i></button>
-                        <button class="cancel-btn" onclick="deleteArticle(${article.id})"><i class="fa-solid fa-trash"></i></button></td>
+                    <td>
+                        ${article.file_url ? `<button class="download-btn" onclick="window.open('${escapeHtml(article.file_url)}', '_blank')"><i class="fa-solid fa-download"></i></button>` : ''}
+                        <button class="cancel-btn" onclick="deleteArticle(${article.id})"><i class="fa-solid fa-trash"></i></button>
+                    </td>
                 </tr>
             `).join('');
         })
@@ -211,10 +236,6 @@ function loadArticles() {
             console.error('Error loading articles:', error);
             setEmpty('articlesBody', 5, 'خطا در دریافت مقالات');
         });
-}
-
-function downloadArticle(id) {
-    window.open(`/panel/professor/api/articles/${id}/download/`, '_blank');
 }
 
 function deleteArticle(id) {
@@ -232,6 +253,7 @@ function deleteArticle(id) {
             if (data.success) {
                 alert(data.message);
                 loadArticles();
+                loadDashboard();
             } else {
                 alert(`خطا: ${data.error}`);
             }
@@ -242,7 +264,82 @@ function deleteArticle(id) {
         });
 }
 
-// ==================== پروفایل (یکپارچه با دانشجو) ====================
+// 
+
+function loadResources() {
+
+    setLoading('articlesBody', 5);
+
+    fetch('/panel/professor/api/resources/')
+        .then(response => response.json())
+        .then(data => {
+
+            const tbody = document.getElementById('articlesBody');
+
+            if (!tbody) return;
+
+            const resources = data.resources || [];
+
+            if (!resources.length) {
+                setEmpty(
+                    'articlesBody',
+                    5,
+                    'هیچ منبع علمی ثبت نشده است'
+                );
+                return;
+            }
+
+            tbody.innerHTML = resources.map(resource => `
+                <tr>
+                    <td>
+                        <strong>
+                            ${escapeHtml(resource.title)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(resource.category)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(resource.description)}
+                    </td>
+
+                    <td>
+                        ${toPersianDigits(resource.download_count)}
+                    </td>
+
+                    <td>
+                        ${
+                            resource.file_url
+                            ?
+                            `
+                            <button
+                                class="download-btn"
+                                onclick="window.open('${resource.file_url}','_blank')"
+                            >
+                                <i class="fa-solid fa-download"></i>
+                            </button>
+                            `
+                            :
+                            '-'
+                        }
+                    </td>
+                </tr>
+            `).join('');
+        })
+        .catch(error => {
+
+            console.error(error);
+
+            setEmpty(
+                'articlesBody',
+                5,
+                'خطا در دریافت منابع علمی'
+            );
+        });
+}
+// ==================== پروفایل ====================
 function loadProfile() {
     fetch('/panel/professor/api/profile/')
         .then(response => response.json())
@@ -342,7 +439,6 @@ function saveProfile(event) {
         });
 }
 
-// ==================== تغییر رمز عبور ====================
 function changePassword() {
     const newPassword = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmNewPassword').value;
@@ -516,7 +612,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // بستن مودال با کلیک بیرون
     document.querySelectorAll('.modal').forEach(modal => {
         modal.addEventListener('click', event => {
             if (event.target === modal) {
@@ -525,8 +620,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // بارگذاری اولیه
+    // بارگذاری اولیه همه تب‌ها
     loadDashboard();
+    loadInvitations();
     loadAllEvents();
     loadArticles();
     loadProfile();
