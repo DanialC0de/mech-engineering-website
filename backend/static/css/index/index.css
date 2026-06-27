@@ -42,7 +42,8 @@ ul {
 /* هدر مدرن */
 /* ============================== */
 .main-header {
-    background: #012e71;
+    background: linear-gradient(315deg, #0a2a44 0%, #420303 100%);
+    /* #012e71; */
     color: white;
     position: sticky;
     top: 0;
@@ -210,45 +211,37 @@ ul {
     position: relative;
     height: 550px;
     overflow: hidden;
+    background: none;
 }
 
 .hero-slides {
     position: absolute;
-    inset: 0;
-    width: 100%;
+    top: 0;
+    left: 0;
+    width: 300%;
     height: 100%;
+    display: flex;
+    animation: slideShow 25s infinite;
 }
 
 .hero-slide {
-    position: absolute;
-    inset: 0;
-    width: 100%;
+    width: calc(100% / 3);
     height: 100%;
+    flex-shrink: 0;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0;
-    animation: fadeAnimation 12s infinite;
 }
 
-/* زمان‌بندی هر اسلاید */
-.hero-slide:nth-child(1) {
-    animation-delay: 0s;
-}
-.hero-slide:nth-child(2) {
-    animation-delay: 4s;
-}
-.hero-slide:nth-child(3) {
-    animation-delay: 8s;
-}
-
-/* انیمیشن محو شدن */
-@keyframes fadeAnimation {
-    0%   { opacity: 0; }
-    8%   { opacity: 1; }   /* ۱ ثانیه محو شدن */
-    25%  { opacity: 1; }   /* ۳ ثانیه نمایش کامل */
-    33%  { opacity: 0; }   /* ۱ ثانیه محو شدن */
-    100% { opacity: 0; }
+@keyframes slideShow {
+    0%    { transform: translateX(0); }
+    28%   { transform: translateX(0); }
+    33%   { transform: translateX(-33.333%); }
+    61%   { transform: translateX(-33.333%); }
+    66%   { transform: translateX(-66.666%); }
+    94%   { transform: translateX(-66.666%); }
+    99.9% { transform: translateX(-66.666%); }
+    100%  { transform: translateX(0); }
 }
 
 .hero-overlay {
@@ -262,18 +255,20 @@ ul {
     justify-content: center;
     text-align: center;
     padding: 20px;
+    padding-bottom: 200px;
 }
 
 .hero-text h1 {
     color: #fff;
-    font-size: 3.2rem;
+    font-size: 2.5rem;
     font-weight: 900;
     margin-bottom: 10px;
     text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    text-shadow: 5px 5px 5px rgb(81, 22, 22);
 }
 
 .hero-text p {
-    color: #eee;
+    color: #d2eaed;
     font-size: 1.4rem;
     font-weight: 600;
     opacity: 0.95;
@@ -962,7 +957,7 @@ input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5) {
 /* ============================== */
 #icons {
     position: fixed;
-    left: 10px;
+    left: 2px;
     bottom: 150px;
     z-index: 999;
 }
@@ -977,7 +972,6 @@ input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5) {
 }
 #icons a:last-child {
     width: 48px;
-    margin-top: 8px;
 }
 #icons a img {
     border-radius: 100%;
