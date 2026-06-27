@@ -330,3 +330,23 @@ def approve_request(request, pk):
         member_request.save(update_fields=['status'])
     
     return redirect('members:dashboard')
+
+
+@login_required
+def gallery_delete(request, pk):
+    """حذف تصویر از گالری"""
+    if request.method != 'POST':
+        return redirect('members:dashboard')
+
+    image = get_object_or_404(GalleryImage, pk=pk)
+
+    if image.uploaded_by != request.user and not request.user.is_staff:
+        messages.error(request, 'شما مجوز حذف این تصویر را ندارید.')
+        return redirect('members:dashboard')
+
+    if image.image:
+        image.image.delete(save=False)
+
+    image.delete()
+    messages.success(request, 'تصویر با موفقیت حذف شد.')
+    return redirect('members:dashboard')

@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+
 class Committee(models.Model):
     """کمیته‌های انجمن"""
     name = models.CharField(max_length=100, verbose_name="نام کمیته")
@@ -51,6 +52,19 @@ class Member(models.Model):
     @property
     def full_name(self):
         return self.user.get_full_name() or self.user.username
+    
+    # ⭐ اضافه کردن متد get_role_display
+    def get_role_display(self):
+        """دریافت نمایش فارسی نقش"""
+        role_map = {
+            'head': 'رئیس',
+            'vice': 'نائب رئیس',
+            'secretary': 'دبیر',
+            'committee_head': 'مسئول کمیته',
+            'member': 'عضو',
+        }
+        return role_map.get(self.role, self.role)
+
 
 class GalleryImage(models.Model):
     """تصاویر گالری انجمن"""
@@ -73,7 +87,6 @@ class GalleryImage(models.Model):
         return self.title
 
 
-
 class MemberRequest(models.Model):
     """درخواست عضویت"""
     
@@ -82,11 +95,7 @@ class MemberRequest(models.Model):
         ('approved', 'تأیید شده'),
         ('rejected', 'رد شده'),
     )
-    message = models.TextField(
-    blank=True,
-    null=True,
-    verbose_name='پیام متقاضی'
-    )
+    
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -100,15 +109,31 @@ class MemberRequest(models.Model):
     )
     student_id = models.CharField(
         max_length=20,
-        unique=True
+        verbose_name="شماره دانشجویی"
     )
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    message = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name='پیام متقاضی'
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     
+    class Meta:
+        verbose_name = "درخواست عضویت"
+        verbose_name_plural = "درخواست‌های عضویت"
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.user.get_full_name()} - {self.status}"
+    
     def save(self, *args, **kwargs):
-
         old_status = None
-
+        
         if self.pk:
             try:
                 old_status = MemberRequest.objects.get(pk=self.pk).status
@@ -117,8 +142,8 @@ class MemberRequest(models.Model):
 
         super().save(*args, **kwargs)
 
+        # اگر وضعیت به approved تغییر کرد، عضو بساز
         if old_status != 'approved' and self.status == 'approved':
-
             Member.objects.get_or_create(
                 user=self.user,
                 defaults={
@@ -126,15 +151,8 @@ class MemberRequest(models.Model):
                     'student_id': self.student_id,
                     'role': 'member',
                     'is_active': True,
-                })
-
-
-    class Meta:
-        verbose_name = "درخواست عضویت"
-        verbose_name_plural = "درخواست‌های عضویت"
-    
-    def __str__(self):
-        return f"{self.user.username} - {self.status}"
+                }
+            )
 
 
 class InternalResource(models.Model):
@@ -148,8 +166,16 @@ class InternalResource(models.Model):
     )
     
     title = models.CharField(max_length=200, verbose_name="عنوان")
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='educational')
-    file = models.FileField(upload_to='members/resources/', blank=True, null=True)
+    category = models.CharField(
+        max_length=20,
+        choices=CATEGORY_CHOICES,
+        default='educational'
+    )
+    file = models.FileField(
+        upload_to='members/resources/',
+        blank=True,
+        null=True
+    )
     uploaded_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -160,6 +186,11 @@ class InternalResource(models.Model):
     class Meta:
         verbose_name = "منبع داخلی"
         verbose_name_plural = "منابع داخلی"
+        ordering = ['-created_at']
     
     def __str__(self):
         return self.title
+    
+    def get_category_display(self):
+        """دریافت نمایش فارسی دسته‌بندی"""
+        return dict(self.CATEGORY_CHOICES).get(self.category, self.category)
