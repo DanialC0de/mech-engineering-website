@@ -42,7 +42,7 @@ ul {
 /* هدر مدرن */
 /* ============================== */
 .main-header {
-    background: linear-gradient(315deg, #0a2a44 0%, #420303 100%);
+    background: linear-gradient(315deg, #0a2a44 55%, #420303 80%);
     /* #012e71; */
     color: white;
     position: sticky;
@@ -279,7 +279,8 @@ ul {
     text-align: center;
     padding: 12px;
     color: white;
-    background-color: #012e71;
+    background: linear-gradient(315deg, #0a2a44 0%, #420303 100%);
+    /* #012e71; */
     font-weight: 700;
     font-size: 1.1rem;
     letter-spacing: 0.5px;
@@ -422,27 +423,29 @@ ul {
 .card-button,
 .membership-button,
 .download-link {
-    background: #012e71;
-    color: #fff;
+    background: linear-gradient(315deg, #0a2a44 0%, #420303 100%);
+    color: #ddd;
     padding: 12px 26px;
+    transition-duration: 0.5s;
 }
 
 .secondary-action {
     background: rgba(1, 46, 113, 0.08);
     color: #012e71;
     padding: 12px 26px;
+    transition: 0.5s;
 }
 
 .primary-action:hover,
 .card-button:hover,
 .membership-button:hover,
 .download-link:hover {
-    background: #ffaa00;
-    color: #01213d;
+    background: linear-gradient(315deg, #115185 0%, #791212 100%);
+    color: rgb(255, 255, 255);
 }
 .secondary-action:hover {
-    background: #012e71;
-    color: #fff;
+    background: #cfd2d1;
+    color:black;
 }
 
 /* ============================== */
@@ -668,8 +671,8 @@ input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5) {
     gap: 6px;
     padding: 10px 22px;
     border-radius: 999px;
-    background: #012e71;  /* آبی */
-    color: #ffffff !important;  /* متن سفید */
+    background: linear-gradient(315deg, #0a2a44 0%, #420303 100%);
+    color: #ffffff !important;  
     font-weight: 700;
     font-size: 0.9rem;
     transition: 0.3s ease;
@@ -678,7 +681,7 @@ input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5) {
     text-decoration: none;
 }
 .card-link:hover {
-    background: #012e71;  /* آبی تیره‌تر در هاور */
+    background: linear-gradient(315deg, #115185 0%, #791212 100%);  
     color: #ffffff !important;
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0, 102, 204, 0.35);
@@ -821,9 +824,9 @@ input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5) {
 
 .membership-card {
     text-align: center;
-    background:
-        radial-gradient(circle at top right, rgba(255, 170, 0, 0.25), transparent 280px),
-        linear-gradient(135deg, #012e71, #001f4d);
+    background:linear-gradient(315deg, #0a2a44 0%, #420303 100%);
+        /* radial-gradient(circle at top right, rgba(255, 170, 0, 0.25), transparent 280px),
+        linear-gradient(135deg, #012e71, #001f4d); */
     border-radius: 28px;
     padding: 50px 20px;
     color: #fff;
@@ -863,7 +866,8 @@ input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5) {
 /* فوتر مدرن */
 /* ============================== */
 .modern-footer {
-    background: #0a1e3a;
+    background: linear-gradient(315deg, #0a2a44 25%, #420303 40%);
+    /* #0a1e3a; */
     color: rgba(255,255,255,0.8);
     padding: 50px 20px 0;
     margin-top: 80px;
