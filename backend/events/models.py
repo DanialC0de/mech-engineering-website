@@ -9,7 +9,14 @@ class Event(models.Model):
         ('ongoing', 'در حال برگزاری'),
         ('completed', 'به پایان رسیده'),
     )
-    
+    created_by = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.CASCADE,
+    related_name='created_events',
+    null=True,
+    blank=True,
+    verbose_name='ایجاد کننده'
+    )
     # فیلدهای اصلی
     title = models.CharField(max_length=200, verbose_name="عنوان رویداد")
     image = models.ImageField(upload_to='events/', blank=True, null=True, verbose_name="تصویر")
@@ -65,8 +72,8 @@ class Event(models.Model):
         """سازگاری با کدهای قبلی"""
         return self.status == 'upcoming'
     
+    @property
     def can_register(self):
-        """بررسی امکان ثبت‌نام"""
         return self.status == 'upcoming' and not self.is_full
     
     def update_registration_count(self):
@@ -110,3 +117,14 @@ class Registration(models.Model):
     
     def __str__(self):
         return f"{self.user.get_full_name() or self.user.username} - {self.event.title}"
+
+    @property
+    def remaining_capacity(self):
+        if self.capacity == 0:
+            return None
+
+        count = self.registrations.filter(
+            status__in=['pending', 'confirmed']
+        ).count()
+
+        return max(0, self.capacity - count)

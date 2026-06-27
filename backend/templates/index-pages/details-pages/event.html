@@ -103,20 +103,21 @@
                             <span class="info-label">ساعت</span>
                             <span class="info-value">{{ event.time }}</span>
                         </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-icon"><i class="fa-regular fa-users"></i></div>
-                        <div class="info-text">
-                            <span class="info-label">ظرفیت</span>
-                            <span class="info-value">
+                        <div class="info-item">
+                            <div class="info-icon">👥</div>
+                           <div class="info-text">
+                                <strong>ظرفیت</strong>
+
                                 {% if event.capacity == 0 %}
                                     نامحدود
                                 {% else %}
                                     {{ event.capacity }} نفر
                                 {% endif %}
-                                <span class="remaining">
-                                    {% if event.capacity > 0 %}
-                                        ({{ remaining_capacity }} نفر باقی‌مانده)
+                                <span id="remainingText">
+                                    {% if event.remaining_capacity is None %}
+                                        نامحدود
+                                    {% else %}
+                                        {{ event.remaining_capacity }} نفر باقی‌مانده
                                     {% endif %}
                                 </span>
                             </span>
@@ -182,20 +183,19 @@
                 </div>
                 {% endif %}
 
-                <!-- بخش ثبت‌نام -->
-                <div class="register-box">
-                    <div class="register-info">
-                        <span class="capacity-info">
-                            ✅ ظرفیت باقیمانده:
-                            <strong id="remainingCount">
-                                {% if event.capacity == 0 %}
-                                    نامحدود
-                                {% else %}
-                                    {{ remaining_capacity }} نفر
-                                {% endif %}
-                            </strong>
-                        </span>
-                    </div>
+                    <!-- بخش ثبت‌نام -->
+                    <div class="register-box">
+                        <div class="capacity">
+                            ظرفیت باقی‌مانده:
+
+                            {% if event.remaining_capacity is None %}
+                                نامحدود
+                            {% else %}
+                                {{ event.remaining_capacity }}
+                            {% endif %}
+
+                            {% if event.capacity > 0 %} نفر {% endif %}
+                        </div>
 
                     <div class="register-actions">
                         {% if user.is_authenticated %}
