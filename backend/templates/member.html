@@ -214,8 +214,6 @@
                             <option value="conference">کنفرانس</option>
                             <option value="other">سایر</option>
                         </select>
-                        <!-- ✅ فیلد آپلود عکس رویداد -->
-                        <input type="file" name="image" accept="image/*">
                     </div>
                     <button type="submit" style="margin-top:15px; padding:10px 30px; background:#ffaa00; color:#0a2a44; border:none; border-radius:25px; font-weight:bold; cursor:pointer;">
                         + ایجاد رویداد جدید
@@ -367,27 +365,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>دکتر رضایی</td>
-                            <td>کارگاه تخصصی شبیه‌سازی سیالات</td>
-                            <td>آشنایی با نرم‌افزار فلوئنت و شبیه‌سازی جریان‌های آشفته</td>
-                            <td>۱۴۰۴/۰۳/۱۵</td>
-                            <td><a href="#" class="btn-view" onclick="alert('جزئیات رویداد (داده فیک)')">👁️ مشاهده</a></td>
-                        </tr>
-                        <tr>
-                            <td>دکتر کریمی</td>
-                            <td>سمینار انتقال حرارت در سیستم‌های میکرو</td>
-                            <td>بررسی آخرین دستاوردها در زمینه میکروکانال‌ها</td>
-                            <td>۱۴۰۴/۰۴/۰۵</td>
-                            <td><a href="#" class="btn-view" onclick="alert('جزئیات رویداد (داده فیک)')">👁️ مشاهده</a></td>
-                        </tr>
-                        <tr>
-                            <td>دکتر نوروزی</td>
-                            <td>کنفرانس هوش مصنوعی در مهندسی مکانیک</td>
-                            <td>کاربردهای یادگیری ماشین در طراحی و بهینه‌سازی</td>
-                            <td>۱۴۰۴/۰۵/۲۰</td>
-                            <td><a href="#" class="btn-view" onclick="alert('جزئیات رویداد (داده فیک)')">👁️ مشاهده</a></td>
-                        </tr>
+                        {% for event in suggested_events %}
+                            <tr>
+                                <td>{{ event.professor.get_full_name }}</td>
+                                <td>{{ event.title }}</td>
+                                <td>{{ event.description }}</td>
+                                <td>{{ event.proposed_date }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4">
+                                    هیچ رویدادی پیشنهاد نشده است.
+                                </td>
+                            </tr>
+                            {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -405,36 +396,27 @@
                 <div class="section-title">📄 مقالات علمی پیشنهاد شده توسط اساتید</div>
                 <table>
                     <thead>
+                       {% for article in suggested_articles %}
                         <tr>
-                            <th>استاد پیشنهاددهنده</th>
-                            <th>عنوان مقاله</th>
-                            <th>توضیحات</th>
-                            <th>فایل</th>
-                            <th>عملیات</th>
+                            <td>{{ article.professor.get_full_name }}</td>
+                            <td>{{ article.title }}</td>
+                            <td>{{ article.abstract|truncatechars:80 }}</td>
+
+                            <td>
+                                {% if article.file %}
+                                <a href="{{ article.file.url }}">
+                                    دانلود
+                                </a>
+                                {% endif %}
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
+                        {% empty %}
                         <tr>
-                            <td>دکتر صادقی</td>
-                            <td>مروری بر روش‌های عددی در تحلیل سازه‌های کامپوزیتی</td>
-                            <td>مقاله مروری منتشر شده در مجله علمی پژوهشی</td>
-                            <td><a href="#" class="btn-download" onclick="alert('دانلود فایل (داده فیک)')">📥 دانلود</a></td>
-                            <td><a href="#" class="btn-view" onclick="alert('مشاهده جزئیات مقاله (داده فیک)')">👁️ مشاهده</a></td>
+                        <td colspan="4">
+                        هیچ مقاله‌ای وجود ندارد.
+                        </td>
                         </tr>
-                        <tr>
-                            <td>دکتر حسینی</td>
-                            <td>بهینه‌سازی مصرف سوخت در موتورهای احتراق داخلی</td>
-                            <td>ارائه مدل جدید برای کاهش آلایندگی</td>
-                            <td><a href="#" class="btn-download" onclick="alert('دانلود فایل (داده فیک)')">📥 دانلود</a></td>
-                            <td><a href="#" class="btn-view" onclick="alert('مشاهده جزئیات مقاله (داده فیک)')">👁️ مشاهده</a></td>
-                        </tr>
-                        <tr>
-                            <td>دکتر موسوی</td>
-                            <td>بررسی رفتار دینامیکی ربات‌های موازی</td>
-                            <td>تحلیل سینماتیکی و دینامیکی با استفاده از روش لاگرانژ</td>
-                            <td><a href="#" class="btn-download" onclick="alert('دانلود فایل (داده فیک)')">📥 دانلود</a></td>
-                            <td><a href="#" class="btn-view" onclick="alert('مشاهده جزئیات مقاله (داده فیک)')">👁️ مشاهده</a></td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -454,39 +436,47 @@
 
                 <div class="section-title">📩 دعوت از اساتید به رویدادها</div>
 
-                <!-- فرم دعوت -->
-                <form method="POST" action="#" style="margin-bottom:30px; padding:20px; background:#f5f7fa; border-radius:16px;">
+                <form method="POST" action="{% url 'members:invite_professor' %}" style="margin-bottom:30px; padding:20px; background:#f5f7fa; border-radius:16px;">
                     {% csrf_token %}
+
                     <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px;">
+
+                        <!-- Event -->
                         <div>
-                            <label style="display:block; font-weight:700; color:var(--navy); margin-bottom:4px;">رویداد</label>
+                            <label>رویداد</label>
                             <select name="event" required>
                                 <option value="">– انتخاب رویداد –</option>
-                                <option value="1">کارگاه شبیه‌سازی سیالات (۱۴۰۴/۰۳/۱۵)</option>
-                                <option value="2">سمینار انتقال حرارت (۱۴۰۴/۰۴/۰۵)</option>
-                                <option value="3">کنفرانس هوش مصنوعی (۱۴۰۴/۰۵/۲۰)</option>
-                                <option value="4">همایش مهندسی مکانیک (۱۴۰۴/۰۶/۱۰)</option>
+                                {% for event in my_events %}
+                                    <option value="{{ event.id }}">
+                                        {{ event.title }} ({{ event.jalali_date }})
+                                    </option>
+                                {% endfor %}
                             </select>
                         </div>
+
+                        <!-- Professor -->
                         <div>
-                            <label style="display:block; font-weight:700; color:var(--navy); margin-bottom:4px;">استاد مدعو</label>
+                            <label>استاد</label>
                             <select name="professor" required>
                                 <option value="">– انتخاب استاد –</option>
-                                <option value="1">دکتر رضایی</option>
-                                <option value="2">دکتر کریمی</option>
-                                <option value="3">دکتر نوروزی</option>
-                                <option value="4">دکتر صادقی</option>
-                                <option value="5">دکتر حسینی</option>
-                                <option value="6">دکتر موسوی</option>
+                                {% for prof in professors %}
+                                    <option value="{{ prof.id }}">
+                                        {{ prof.get_full_name }}
+                                    </option>
+                                {% endfor %}
                             </select>
                         </div>
+
+                        <!-- Message -->
                         <div>
-                            <label style="display:block; font-weight:700; color:var(--navy); margin-bottom:4px;">پیام (اختیاری)</label>
-                            <input type="text" name="message" placeholder="متن دعوت یا توضیحات اضافی" style="width:100%;">
+                            <label>پیام</label>
+                            <input type="text" name="message" placeholder="پیام دعوت..." style="width:100%;">
                         </div>
+
                     </div>
-                    <button type="submit" style="margin-top:16px; padding:10px 32px; background:var(--gold); color:var(--navy); border:none; border-radius:999px; font-weight:700; cursor:pointer; box-shadow:0 6px 18px rgba(255,170,0,0.3);">
-                        <i class="fas fa-paper-plane"></i> ارسال دعوت
+
+                    <button type="submit" style="margin-top:16px;">
+                        ارسال دعوت
                     </button>
                 </form>
 
@@ -503,34 +493,39 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for invite in professor_invitations %}
                         <tr>
-                            <td>کارگاه شبیه‌سازی سیالات</td>
-                            <td>دکتر رضایی</td>
-                            <td>۱۴۰۴/۰۲/۱۰</td>
-                            <td><span class="badge" style="background:#4caf50; color:#fff;">پذیرفته شده</span></td>
-                            <td><a href="#" class="btn-view" onclick="alert('مشاهده جزئیات دعوت (داده فیک)')">👁️</a></td>
+                            <td>{{ invite.event.title }}</td>
+
+                            <td>
+                                {{ invite.professor.get_full_name }}
+                            </td>
+
+                            <td>
+                                {{ invite.created_at|date:"Y/m/d" }}
+                            </td>
+
+                            <td>
+                                {% if invite.status == "accepted" %}
+                                    <span style="background:#4caf50;color:#fff;padding:4px 10px;border-radius:8px;">پذیرفته شده</span>
+                                {% elif invite.status == "pending" %}
+                                    <span style="background:#ff9800;color:#fff;padding:4px 10px;border-radius:8px;">در انتظار</span>
+                                {% elif invite.status == "rejected" %}
+                                    <span style="background:#f44336;color:#fff;padding:4px 10px;border-radius:8px;">رد شده</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <button onclick="alert('ID: {{ invite.id }}')">👁️</button>
+                            </td>
                         </tr>
+                        {% empty %}
                         <tr>
-                            <td>سمینار انتقال حرارت</td>
-                            <td>دکتر کریمی</td>
-                            <td>۱۴۰۴/۰۲/۱۲</td>
-                            <td><span class="badge" style="background:#ff9800; color:#fff;">در انتظار</span></td>
-                            <td><a href="#" class="btn-view" onclick="alert('مشاهده جزئیات دعوت (داده فیک)')">👁️</a></td>
+                            <td colspan="5" style="text-align:center; color:#999;">
+                                هیچ دعوتی ثبت نشده
+                            </td>
                         </tr>
-                        <tr>
-                            <td>کنفرانس هوش مصنوعی</td>
-                            <td>دکتر نوروزی</td>
-                            <td>۱۴۰۴/۰۲/۱۵</td>
-                            <td><span class="badge" style="background:#f44336; color:#fff;">رد شده</span></td>
-                            <td><a href="#" class="btn-view" onclick="alert('مشاهده جزئیات دعوت (داده فیک)')">👁️</a></td>
-                        </tr>
-                        <tr>
-                            <td>همایش مهندسی مکانیک</td>
-                            <td>دکتر صادقی</td>
-                            <td>۱۴۰۴/۰۲/۱۸</td>
-                            <td><span class="badge" style="background:#ff9800; color:#fff;">در انتظار</span></td>
-                            <td><a href="#" class="btn-view" onclick="alert('مشاهده جزئیات دعوت (داده فیک)')">👁️</a></td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
                 <p style="margin-top:12px; color:var(--muted); font-size:0.85rem;">

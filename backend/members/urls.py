@@ -12,4 +12,6 @@ urlpatterns = [
      path('gallery/upload/', views.upload_gallery, name='upload_gallery'),
     path('gallery/delete/<int:pk>/', views.gallery_delete, name='gallery_delete'),
     path('resource/upload/', views.upload_resource, name='upload_resource'),
+    path("invite-professor/", views.invite_professor, name="invite_professor"),
 ]
+

@@ -9,14 +9,6 @@ class Event(models.Model):
         ('ongoing', 'در حال برگزاری'),
         ('completed', 'به پایان رسیده'),
     )
-    created_by = models.ForeignKey(
-    settings.AUTH_USER_MODEL,
-    on_delete=models.CASCADE,
-    related_name='created_events',
-    null=True,
-    blank=True,
-    verbose_name='ایجاد کننده'
-    )
     # فیلدهای اصلی
     title = models.CharField(max_length=200, verbose_name="عنوان رویداد")
     image = models.ImageField(upload_to='events/', blank=True, null=True, verbose_name="تصویر")
@@ -123,8 +115,7 @@ class Registration(models.Model):
         if self.capacity == 0:
             return None
 
-        count = self.registrations.filter(
-            status__in=['pending', 'confirmed']
-        ).count()
-
-        return max(0, self.capacity - count)
+        return max(
+            0,
+            self.capacity-self.registered_count
+        )

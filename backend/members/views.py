@@ -6,7 +6,13 @@ from django.db.models import Q
 from .models import Member, MemberRequest, Committee, InternalResource
 from events.models import Event, Registration
 from website.models import GalleryItem
-
+from .models import GalleryImage
+from professor.models import (
+    ProfessorArticle,
+    EventProposal,
+    EventInvitation,
+)
+from professor.models import ProfessorProfile
 @login_required
 def member_dashboard(request):
     """پنل عضو انجمن"""
@@ -48,7 +54,17 @@ def member_dashboard(request):
     # گالری تصاویر (از اپ website)
     
     gallery_items = GalleryItem.objects.all().order_by('-order')
-    
+    gallery_items = GalleryImage.objects.all()
+
+    suggested_articles = ProfessorArticle.objects.filter(
+        status='approved'
+    ).select_related('professor')
+
+    suggested_events = EventProposal.objects.filter(
+        status='approved'
+    ).select_related('professor')
+
+    professors = ProfessorProfile.objects.select_related("user").all()
     context = {
         'member': member,
         'pending_requests': pending_requests.count(),
@@ -59,6 +75,9 @@ def member_dashboard(request):
         'my_events': my_events,
         'all_my_events': all_my_events,
         'gallery_items': gallery_items,
+        "suggested_articles": suggested_articles,
+        "suggested_events": suggested_events,
+        "professors": professors,
     }
     return render(request, 'member.html', context)
 
@@ -94,8 +113,11 @@ def reject_request(request, pk):
         request,
         'درخواست عضویت با موفقیت رد شد.'
     )
-
+    if member_request.user == request.user:
+        messages.error(request,"نمی‌توانید درخواست خودتان را رد کنید.")
     return redirect('members:dashboard')
+
+
 
 
 @login_required
@@ -111,23 +133,26 @@ def create_event(request):
         jalali_date = request.POST.get('date')
         time = request.POST.get('time')
         short_description = request.POST.get('short_description')
-        capacity = request.POST.get('capacity', 0)
+        try:
+            capacity = int(request.POST.get("capacity", 0))
+        except ValueError:
+            capacity = 0
         image = request.FILES.get('image')
         
         if not title or not jalali_date or not time:
             messages.error(request, 'لطفاً عنوان، تاریخ و ساعت را وارد کنید.')
             return redirect('members:dashboard')
         
-        # ✅ اصلاح شده - بدون created_by
         event = Event.objects.create(
             title=title,
             jalali_date=jalali_date,
             time=time,
             short_description=short_description or '',
-            capacity=int(capacity) if capacity else 0,
+            capacity=capacity,
             status='upcoming',
             instructor_name=member.full_name,
             created_by=request.user,
+            image=image,
         )
         
         messages.success(request, f'رویداد "{event.title}" با موفقیت ایجاد شد.')
@@ -174,12 +199,11 @@ def upload_gallery(request):
             return redirect('members:dashboard')
         
         from website.models import GalleryItem
-        GalleryItem.objects.create(
-            media_type='image',
+        GalleryImage.objects.create(
+            title=caption or "بدون عنوان",
             image=image,
-            caption_title=caption or 'تصویر بدون عنوان',
-            caption_text=f'بارگذاری شده توسط {member.full_name}',
-            order=0
+            description=f"بارگذاری شده توسط {member.full_name}",
+            uploaded_by=request.user
         )
         
         messages.success(request, 'تصویر با موفقیت بارگذاری شد.')
@@ -222,25 +246,26 @@ def upload_resource(request):
 
 @login_required
 def delete_resource(request, pk):
-    if request.method != 'POST':
-        """حذف منبع داخلی (فقط uploader)"""
-        resource = get_object_or_404(InternalResource, pk=pk)
-        
-        # چک کردن اینکه کاربر عضو هست
-        try:
-            Member.objects.get(user=request.user)
-        except Member.DoesNotExist:
-            messages.error(request, 'شما عضو انجمن نیستید.')
-            return redirect('members:dashboard')
-        
-        # چک کردن مجوز حذف
-        if resource.uploaded_by != request.user:
-            messages.error(request, 'شما مجوز حذف این منبع را ندارید.')
-            return redirect('members:dashboard')
-        
-        resource.delete()
-        messages.success(request, 'منبع با موفقیت حذف شد.')
-    return redirect('members:dashboard')
+    if request.method != "POST":
+        return redirect("members:dashboard")
+
+    resource = get_object_or_404(InternalResource, pk=pk)
+
+    try:
+        Member.objects.get(user=request.user)
+    except Member.DoesNotExist:
+        messages.error(request,"شما عضو انجمن نیستید.")
+        return redirect("members:dashboard")
+
+    if resource.uploaded_by != request.user:
+        messages.error(request,"شما مجوز حذف این منبع را ندارید.")
+        return redirect("members:dashboard")
+
+    resource.delete()
+
+    messages.success(request,"منبع حذف شد.")
+
+    return redirect("members:dashboard")
 
 
 @login_required
@@ -311,13 +336,8 @@ def approve_request(request, pk):
         return redirect('members:dashboard')
 
     try:
-        Member.objects.create(
-            user=member_request.user,
-            student_id=member_request.student_id,
-            committee=member_request.committee,
-            role='member',
-            is_active=True
-        )
+        member_request.status = "approved"
+        member_request.save()
         
         member_request.status = 'approved'
         member_request.save(update_fields=['status'])
@@ -350,3 +370,43 @@ def gallery_delete(request, pk):
     image.delete()
     messages.success(request, 'تصویر با موفقیت حذف شد.')
     return redirect('members:dashboard')
+
+
+
+@login_required
+def invite_professor(request):
+    try:
+        member = Member.objects.get(user=request.user)
+    except Member.DoesNotExist:
+        messages.error(request, "شما عضو انجمن نیستید.")
+        return redirect("members:dashboard")
+
+    # فقط ادمین‌های انجمن
+    if member.role not in ["head", "vice"]:
+        messages.error(request, "دسترسی ندارید.")
+        return redirect("members:dashboard")
+
+    if request.method == "POST":
+        event_id = request.POST.get("event")
+        professor_id = request.POST.get("professor")
+        message = request.POST.get("message", "")
+
+        event = get_object_or_404(Event, id=event_id)
+        professor = get_object_or_404(ProfessorProfile, id=professor_id)
+
+        # جلوگیری از تکراری
+        if EventInvitation.objects.filter(event=event, professor=professor.user).exists():
+            messages.warning(request, "این استاد قبلاً دعوت شده.")
+            return redirect("members:dashboard")
+
+        EventInvitation.objects.create(
+            event=event,
+            professor=professor.user,
+            message=message,
+            created_by=request.user
+        )
+
+        messages.success(request, "دعوت با موفقیت ارسال شد.")
+        return redirect("members:dashboard")
+
+    return redirect("members:dashboard")
