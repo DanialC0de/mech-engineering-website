@@ -22,7 +22,10 @@ html {
     scroll-behavior: smooth;
     font-size: 16px;
 }
-
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
 body {
     margin: 0;
     background-color: #edecf3;
@@ -1185,43 +1188,5 @@ input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5) {
     }
 }
 
-/* دسکتاپ بزرگ (فونت‌ها بزرگتر) */
-@media (min-width: 1400px) {
-    html {
-        font-size: 18px;
-    }
-    .hero {
-        height: 650px;
-    }
-    .hero-text h1 {
-        font-size: 3.8rem;
-    }
-    .hero-text p {
-        font-size: 1.6rem;
-    }
-    .brand-name {
-        font-size: 1.5rem;
-    }
-    .section-head h2 {
-        font-size: 2.4rem;
-    }
-    .membership-card h2 {
-        font-size: 2.6rem;
-    }
-    .nav-list > li > a {
-        font-size: 1.05rem;
-        padding: 10px 20px;
-    }
-}
 
-/* دسکتاپ با فاصله کم از دو طرف */
-@media (min-width: 1200px) {
-    .home-main {
-        padding: 50px 20px 80px;
-    }
-    .modern-section,
-    .two-column-section,
-    .membership-cta {
-        padding: 0 10px;
-    }
-}
+
