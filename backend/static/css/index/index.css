@@ -260,7 +260,7 @@ ul {
 
 .hero-text h1 {
     color: #fff;
-    font-size: 2.5rem;
+    font-size: 3.2rem;
     font-weight: 900;
     margin-bottom: 10px;
     text-shadow: 0 4px 20px rgba(0,0,0,0.5);
@@ -269,7 +269,7 @@ ul {
 
 .hero-text p {
     color: #d2eaed;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     font-weight: 600;
     opacity: 0.95;
 }
@@ -458,12 +458,9 @@ ul {
     box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
     height: 350px;  
 }
-
 .featured-gallery{
     width: 620px;
 }
-
-
 .css-slider {
     position: relative;
     width: 100%;
@@ -508,7 +505,7 @@ input[name="slider"]:nth-of-type(5):checked ~ .slide:nth-of-type(5) {
 .slide-caption {
     position: absolute;
     right: 30px;
-    bottom: 34px;
+    bottom: 24px;
     z-index: 3;
     max-width: 520px;
     color: #fff;
@@ -525,29 +522,29 @@ input[name="slider"]:nth-of-type(5):checked ~ .slide:nth-of-type(5) {
     margin-bottom: 5px;
 }
 .slide-caption h3 {
-    font-size: 1.8rem;
+    font-size: 1.1rem;
     font-weight: 900;
     margin-bottom: 6px;
 }
 .slide-caption p {
     font-size: 0.9rem;
     opacity: 0.9;
-    color: #cfd2d1;
+    color: orange;
 }
 
 .slider-nav {
     position: absolute;
-    bottom: 20px;
+    bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 12px;
-    z-index: 5;
+    gap: 8px;
+    z-index: 20;
 }
 
 .nav-btn {
-    width: 14px;
-    height: 14px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.5);
     cursor: pointer;
@@ -559,7 +556,10 @@ input[name="slider"]:nth-of-type(1):checked ~ .slider-nav label:nth-of-type(1),
 input[name="slider"]:nth-of-type(2):checked ~ .slider-nav label:nth-of-type(2),
 input[name="slider"]:nth-of-type(3):checked ~ .slider-nav label:nth-of-type(3),
 input[name="slider"]:nth-of-type(4):checked ~ .slider-nav label:nth-of-type(4),
-input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5) {
+input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5),
+input[name="slider"]:nth-of-type(6):checked ~ .slider-nav label:nth-of-type(6), 
+input[name="slider"]:nth-of-type(7):checked ~ .slider-nav label:nth-of-type(7),
+input[name="slider"]:nth-of-type(8):checked ~ .slider-nav label:nth-of-type(8) {
     background: #ffaa00;
     transform: scale(1.2);
 }
@@ -573,7 +573,7 @@ input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5) {
     display: flex;
     justify-content: space-between;
     padding: 0 15px;
-    z-index: 5;
+    z-index: 20;
     pointer-events: none;
 }
 

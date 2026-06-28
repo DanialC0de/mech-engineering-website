@@ -143,7 +143,7 @@
 
                                     <!-- ===== کپشن ===== -->
                                     <div class="slide-caption">
-                                        <span>انجمن علمی مکانیک</span>
+                                        {% comment %} <span>انجمن علمی مکانیک</span> {% endcomment %}
                                         
                                         {# مدل قدیمی GalleryItem #}
                                         {% if item.caption_title %}
@@ -460,7 +460,7 @@
                     <ul>
                         <li><a href="http://127.0.0.1:8000/panel/student/" target="_blank">پنل دانشجو</a></li>
                         <li><a href="http://127.0.0.1:8000/panel/professor/" target="_blank">پنل استاد</a></li>
-                        <li><a href="http://127.0.0.1:8000/members/" target="_blank">پنل انجمن</a></li>
+                        <li><a href="http://127.0.0.1:8000/members/" target="_blank">پنل عضو انجمن</a></li>
                     </ul>
                 </div>
 
@@ -547,37 +547,9 @@
 
             setupDropdown(aboutLink, ulAbout);
             setupDropdown(relationLink, ulRelation);
-
-            // کنترل اسلایدر گالری
-            const radios = document.querySelectorAll('.css-slider input[name="slider"]');
-            const prevBtn = document.querySelector('.slider-controls .prev');
-            const nextBtn = document.querySelector('.slider-controls .next');
-
-            if (radios.length > 0 && prevBtn && nextBtn) {
-                let current = 0;
-                radios.forEach((r, idx) => { if (r.checked) current = idx; });
-
-                prevBtn.addEventListener('click', function () {
-                    let newIdx = (current - 1 + radios.length) % radios.length;
-                    radios[newIdx].checked = true;
-                    current = newIdx;
-                });
-
-                nextBtn.addEventListener('click', function () {
-                    let newIdx = (current + 1) % radios.length;
-                    radios[newIdx].checked = true;
-                    current = newIdx;
-                });
-
-                radios.forEach((r, idx) => {
-                    r.addEventListener('change', function () {
-                        if (this.checked) current = idx;
-                    });
-                });
-            }
         });
     </script>
-
+    <script src="{% static 'js/index.js' %}"></script>
 </body>
 
 </html>
