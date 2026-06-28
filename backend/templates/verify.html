@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,82 +10,27 @@
 </head>
 <body>
 
-    <!-- ==================== هدر مدرن (۴ آیتم) ==================== -->
-    <header class="main-header">
-        <div class="header-container">
-
-            <div class="brand">
-                <img src="{% static 'assets/images/shahid-bahonar-university-of-kerman-logo.png' %}" alt="لوگو دانشگاه">
-                <span class="brand-name">مهندسی مکانیک</span>
-            </div>
-
-            <nav class="nav-menu" id="navMenu">
-                <ul class="nav-list">
-                    <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
-
-                    <li class="dropdown">
-                        <a href="{% url 'about' %}">
-                            درباره دانشکده <i class="fa-solid fa-chevron-down"></i>
-                        </a>
-                        <ul class="dropdown-menu" id="ul-about">
-                            <li><a href="{% url 'about' %}">معرفی دانشکده</a></li>
-                            <li><a href="{% url 'honors' %}">دستاوردها و افتخارات</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="dropdown">
-                        <a href="{% url 'industry' %}">
-                            ارتباط با صنعت <i class="fa-solid fa-chevron-down"></i>
-                        </a>
-                        <ul class="dropdown-menu" id="ul-relation">
-                            <li><a href="{% url 'industry' %}">خدمات دانشکده به صنعت</a></li>
-                        </ul>
-                    </li>
-
-                    <li><a href="{% url 'contact' %}">تماس با ما</a></li>
-                </ul>
-            </nav>
-
-            <div class="header-actions">
-                <a href="https://uk.ac.ir/" target="_blank" class="university-link">
-                    <i class="fa-solid fa-graduation-cap"></i> دانشگاه
-                </a>
-
-                {% if user.is_authenticated %}
-                    <span class="user-greeting">خوش آمدی {{ user.first_name|default:user.username }}</span>
-                    <a href="{% url 'logout' %}" class="login-btn">خروج</a>
-                {% else %}
-                    <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
-                {% endif %}
-            </div>
-
-            <button class="menu-toggle" id="menuToggle" aria-label="منو">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-        </div>
-    </header>
-
     <!-- ==================== محتوای اصلی (تایید کد) ==================== -->
     <main class="verify-page-main">
         <div class="verify-container">
             <div class="verify-box">
                 <div class="verify-header">
-                    <div class="logo-icon">⚙️</div>
                     <div class="logo-text">
                         <h2>انجمن <span>مکانیک</span></h2>
                         <p>انجمن علمی مهندسی مکانیک</p>
                     </div>
+                    <div class="logo-icon">⚙️</div>
                 </div>
 
                 <div class="verify-body">
                     <div class="verify-title">
-                        <h1>✅ تایید کد</h1>
+                        <h1> تایید کد✅</h1>
                         <p>کد ۶ رقمی ارسال شده به شماره زیر را وارد کنید</p>
                     </div>
 
                     <div id="identifierDisplay" class="identifier-display">
-                        <i class="fa-regular fa-phone"></i>
-                        شماره موبایل: <strong dir="ltr">0912***6789</strong>
+                        <strong dir="ltr">0912***6789</strong>: شماره موبایل
+                        <i class="fa-solid fa-phone"></i>
                     </div>
 
                     <div class="error-message" id="errorMsg"></div>
@@ -104,14 +49,14 @@
                     <div class="timer-section">
                         <span class="timer-text">
                             <i class="fa-regular fa-clock"></i>
-                            زمان باقی‌مانده: <span id="timerSeconds">120</span> ثانیه
+                         زمان باقی‌مانده :  <span id="timerSeconds">120</span> ثانیه
                         </span>
                         <button id="resendBtn" class="resend-btn" disabled>ارسال مجدد کد</button>
                     </div>
 
                     <!-- دکمه تایید -->
                     <button id="verifyBtn" class="verify-btn" disabled>
-                        تایید کد <i class="fa-regular fa-arrow-left"></i>
+                        تایید کد <i class="fa-solid fa-check"></i>
                     </button>
 
                     <!-- لودینگ -->
@@ -123,7 +68,7 @@
                     <!-- لینک بازگشت -->
                     <div class="back-link">
                         <a href="/accounts/login/">
-                            <i class="fa-regular fa-arrow-right"></i> بازگشت به صفحه ورود
+                            <i class="fa-solid fa-arrow-left"></i> بازگشت به صفحه ورود
                         </a>
                     </div>
                 </div>
@@ -131,65 +76,7 @@
         </div>
     </main>
 
-    <!-- ==================== فوتر مدرن ==================== -->
-    <footer class="modern-footer">
-        <div class="footer-container">
-            <div class="footer-brand">
-                <h3>مهندسی مکانیک</h3>
-                <p>انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان</p>
-                <div class="footer-social">
-                    <a href="https://t.me/ukmechanics" target="_blank"><i class="fa-brands fa-telegram"></i></a>
-                    <a href="https://instagram.com/ukmechanics" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-                    <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-                </div>
-            </div>
-
-            <div class="footer-links">
-                <div>
-                    <h4>دسترسی سریع</h4>
-                    <ul>
-                        <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
-                        <li><a href="{% url 'about' %}">درباره دانشکده</a></li>
-                        <li><a href="{% url 'industry' %}">ارتباط با صنعت</a></li>
-                        <li><a href="{% url 'contact' %}">تماس با ما</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4>بخش‌های سایت</h4>
-                    <ul>
-                        <li><a href="{% url 'all_events' %}">رویدادها</a></li>
-                        <li><a href="{% url 'all_resources' %}">منابع علمی</a></li>
-                        <li><a href="{% url 'honors' %}">افتخارات</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4>اطلاعات تماس</h4>
-                    <ul>
-                        <li><i class="fa-solid fa-location-dot"></i> کرمان - بلوار جمهوری - دانشکده مکانیک</li>
-                        <li><i class="fa-solid fa-phone"></i> ۰۳۴-۳۱۳۲۱۲۳۴</li>
-                        <li><i class="fa-solid fa-envelope"></i> info@mech-uk.ac.ir</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; ۲۰۲۵ تمامی حقوق برای انجمن علمی مهندسی مکانیک دانشگاه شهید باهنر کرمان محفوظ است.</p>
-        </div>
-    </footer>
-
-    <!-- ==================== آیکون‌های شناور ==================== -->
-    <div id="icons">
-        <a href="https://t.me/ukmechanics" target="_blank">
-            <img src="{% static 'assets/icons/15.png' %}">
-        </a>
-        <a href="https://instagram.com/ukmechanics?igshid=14gmuy96orpnd" target="_blank">
-            <img src="{% static 'assets/icons/2.png' %}">
-        </a>
-    </div>
-
-    <!-- ==================== اسکریپت ==================== -->
+    
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 

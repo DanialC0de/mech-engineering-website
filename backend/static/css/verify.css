@@ -25,7 +25,7 @@ html {
 
 body {
     margin: 0;
-    background-color: #edecf3;
+    background:linear-gradient(315deg, #7c8c98 0%, #9a8c8c 100%);
     font-family: 'Arad', 'Tahoma', sans-serif;
     min-height: 100vh;
 }
@@ -37,172 +37,6 @@ ul {
     list-style: none;
     margin: 0;
     padding: 0;
-}
-
-/* ============================== */
-/* هدر مدرن */
-/* ============================== */
-.main-header {
-    background: #012e71;
-    color: white;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
-
-.header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    height: 80px;
-    max-width: 1400px;
-    margin: 0 auto;
-    gap: 15px;
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
-}
-
-.brand img {
-    height: 50px;
-    width: auto;
-}
-
-.brand-name {
-    font-size: 1.2rem;
-    font-weight: 900;
-    color: #fff;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-}
-
-.nav-menu {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-}
-
-.nav-list {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.nav-list > li > a {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 8px 16px;
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 700;
-    font-size: 0.95rem;
-    border-radius: 8px;
-    transition: 0.3s ease;
-    white-space: nowrap;
-}
-
-.nav-list > li > a:hover,
-.nav-list > li > a.active {
-    color: #ffaa00;
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.nav-list > li > a i {
-    font-size: 0.7rem;
-}
-
-.dropdown {
-    position: relative;
-}
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: #fff;
-    min-width: 200px;
-    border-radius: 12px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    padding: 8px 0;
-    z-index: 999;
-}
-
-.dropdown:hover .dropdown-menu {
-    display: block;
-}
-
-.dropdown-menu li a {
-    display: block;
-    padding: 10px 20px;
-    color: #012e71;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: 0.2s;
-}
-
-.dropdown-menu li a:hover {
-    background: #f0f4ff;
-    color: #ffaa00;
-}
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
-}
-
-.university-link {
-    color: rgba(255, 255, 255, 0.7);
-    font-weight: 700;
-    font-size: 0.9rem;
-    padding: 6px 12px;
-    border-radius: 30px;
-    transition: 0.3s;
-}
-.university-link:hover {
-    color: #fff;
-    background: rgba(255,255,255,0.1);
-}
-
-.user-greeting {
-    color: #fff;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.login-btn {
-    background: #ffaa00;
-    color: #012e71 !important;
-    padding: 8px 22px;
-    border-radius: 30px;
-    font-weight: 800;
-    font-size: 0.9rem;
-    transition: 0.3s;
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
-}
-.login-btn:hover {
-    background: #ffcc44;
-    transform: scale(1.02);
-}
-
-.menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.8rem;
-    cursor: pointer;
-    padding: 5px 10px;
 }
 
 /* ============================== */
@@ -404,7 +238,7 @@ ul {
     padding: 14px;
     border: none;
     border-radius: 14px;
-    background: #012e71;
+    background: linear-gradient(315deg, #0a2a44 0%, #420303 100%);
     color: #fff;
     font-size: 1.05rem;
     font-weight: 800;
@@ -418,8 +252,8 @@ ul {
 }
 
 .verify-btn:hover:not(:disabled) {
-    background: #ffaa00;
-    color: #01213d;
+     background: linear-gradient(315deg, #115185 0%, #791212 100%);
+    transform: translateY(-2px);
 }
 
 .verify-btn:disabled {
