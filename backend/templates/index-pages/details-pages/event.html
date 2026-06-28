@@ -12,7 +12,7 @@
 
 <body>
 
-    <!-- ==================== هدر مدرن (دقیقاً مثل صفحه اصلی) ==================== -->
+    <!-- ==================== هدر ==================== -->
     <header class="main-header">
         <div class="header-container">
 
@@ -55,10 +55,10 @@
                 </a>
 
                 {% if user.is_authenticated %}
-                    <span class="user-greeting">خوش آمدی {{ user.first_name|default:user.username }}</span>
-                    <a href="{% url 'logout' %}" class="login-btn">خروج</a>
+                <span class="user-greeting">خوش آمدی {{ user.first_name|default:user.username }}</span>
+                <a href="{% url 'logout' %}" class="login-btn">خروج</a>
                 {% else %}
-                    <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
+                <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
                 {% endif %}
             </div>
 
@@ -71,16 +71,15 @@
     <!-- ==================== محتوای اصلی (جزئیات رویداد) ==================== -->
     <main class="event-detail-main">
         <div class="event-container">
-
             <!-- کارت اصلی رویداد -->
             <article class="event-detail-card">
 
                 <!-- بنر -->
                 <div class="event-banner">
                     {% if event.image %}
-                        <img src="{{ event.image.url }}" alt="{{ event.title }}">
+                    <img src="{{ event.image.url }}" alt="{{ event.title }}">
                     {% else %}
-                        <img src="https://via.placeholder.com/1200x400" alt="{{ event.title }}">
+                    <img src="https://via.placeholder.com/1200x400" alt="{{ event.title }}">
                     {% endif %}
                     <div class="banner-overlay">
                         <h1>{{ event.title }}</h1>
@@ -103,23 +102,24 @@
                             <span class="info-label">ساعت</span>
                             <span class="info-value">{{ event.time }}</span>
                         </div>
-                        <div class="info-item">
-                            <div class="info-icon">👥</div>
-                           <div class="info-text">
-                                <strong>ظرفیت</strong>
 
-                                {% if event.capacity == 0 %}
-                                    نامحدود
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">👥</div>
+                        <div class="info-text">
+                            <strong>ظرفیت</strong>
+
+                            {% if event.capacity == 0 %}
+                            نامحدود
+                            {% else %}
+                            {{ event.capacity }} نفر
+                            {% endif %}
+                            <span id="remainingText">
+                                {% if event.remaining_capacity is None %}
+                                نامحدود
                                 {% else %}
-                                    {{ event.capacity }} نفر
+                                {{ event.remaining_capacity }} نفر باقی‌مانده
                                 {% endif %}
-                                <span id="remainingText">
-                                    {% if event.remaining_capacity is None %}
-                                        نامحدود
-                                    {% else %}
-                                        {{ event.remaining_capacity }} نفر باقی‌مانده
-                                    {% endif %}
-                                </span>
                             </span>
                         </div>
                     </div>
@@ -132,11 +132,11 @@
                                 {% elif event.status == 'ongoing' %}status-ongoing
                                 {% else %}status-completed{% endif %}">
                                 {% if event.status == 'upcoming' %}
-                                    در حال ثبت‌نام
+                                در حال ثبت‌نام
                                 {% elif event.status == 'ongoing' %}
-                                    در حال برگزاری
+                                در حال برگزاری
                                 {% else %}
-                                    به پایان رسیده
+                                به پایان رسیده
                                 {% endif %}
                             </span>
                         </div>
@@ -157,7 +157,7 @@
                     <h3><i class="fa-regular fa-list-check"></i> سرفصل‌ها</h3>
                     <ul class="syllabus-list">
                         {% for item in syllabus_list %}
-                            <li><i class="fa-regular fa-circle-check"></i> {{ item }}</li>
+                        <li><i class="fa-regular fa-circle-check"></i> {{ item }}</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -170,9 +170,9 @@
                     <div class="instructor-card">
                         <div class="instructor-avatar">
                             {% if event.instructor_image %}
-                                <img src="{{ event.instructor_image.url }}" alt="{{ event.instructor_name }}">
+                            <img src="{{ event.instructor_image.url }}" alt="{{ event.instructor_name }}">
                             {% else %}
-                                <span class="avatar-placeholder"><i class="fa-regular fa-user"></i></span>
+                            <span class="avatar-placeholder"><i class="fa-regular fa-user"></i></span>
                             {% endif %}
                         </div>
                         <div class="instructor-details">
@@ -183,52 +183,51 @@
                 </div>
                 {% endif %}
 
-                    <!-- بخش ثبت‌نام -->
-                    <div class="register-box">
-                        <div class="capacity">
-                            ظرفیت باقی‌مانده:
+                <!-- بخش ثبت‌نام -->
+                <div class="register-box">
+                    <div class="capacity">
+                        ظرفیت باقی‌مانده:
 
-                            {% if event.remaining_capacity is None %}
-                                نامحدود
-                            {% else %}
-                                {{ event.remaining_capacity }}
-                            {% endif %}
+                        {% if event.remaining_capacity is None %}
+                        نامحدود
+                        {% else %}
+                        {{ event.remaining_capacity }}
+                        {% endif %}
 
-                            {% if event.capacity > 0 %} نفر {% endif %}
-                        </div>
+                        {% if event.capacity > 0 %} نفر {% endif %}
+                    </div>
 
                     <div class="register-actions">
                         {% if user.is_authenticated %}
-                            {% if is_registered %}
-                                <button class="register-btn registered" disabled>
-                                    <i class="fa-regular fa-circle-check"></i> قبلاً ثبت‌نام کرده‌اید
-                                </button>
-                                {% if event.status == 'upcoming' %}
-                                    <a href="{% url 'cancel_registration' event.id %}" 
-                                       class="cancel-btn"
-                                       onclick="return confirm('آیا از لغو ثبت‌نام خود مطمئن هستید؟')">
-                                        <i class="fa-regular fa-circle-xmark"></i> لغو ثبت‌نام
-                                    </a>
-                                {% endif %}
-                            {% elif event.can_register %}
-                                <a href="{% url 'register_event' event.id %}" class="register-btn">
-                                    <i class="fa-regular fa-pen-to-square"></i> ثبت‌نام در رویداد
-                                </a>
-                            {% else %}
-                                <button class="register-btn disabled" disabled>
-                                    {% if event.is_full %}
-                                        <i class="fa-regular fa-clock"></i> ظرفیت تکمیل شده
-                                    {% elif event.status == 'completed' %}
-                                        <i class="fa-regular fa-circle-xmark"></i> رویداد به پایان رسیده
-                                    {% else %}
-                                        غیرفعال
-                                    {% endif %}
-                                </button>
-                            {% endif %}
+                        {% if is_registered %}
+                        <button class="register-btn registered" disabled>
+                            <i class="fa-regular fa-circle-check"></i> قبلاً ثبت‌نام کرده‌اید
+                        </button>
+                        {% if event.status == 'upcoming' %}
+                        <a href="{% url 'cancel_registration' event.id %}" class="cancel-btn"
+                            onclick="return confirm('آیا از لغو ثبت‌نام خود مطمئن هستید؟')">
+                            <i class="fa-regular fa-circle-xmark"></i> لغو ثبت‌نام
+                        </a>
+                        {% endif %}
+                        {% elif event.can_register %}
+                        <a href="{% url 'register_event' event.id %}" class="register-btn">
+                            <i class="fa-regular fa-pen-to-square"></i> ثبت‌نام در رویداد
+                        </a>
                         {% else %}
-                            <a href="{% url 'login' %}" class="register-btn login-required">
-                                <i class="fa-regular fa-key"></i> برای ثبت‌نام وارد شوید
-                            </a>
+                        <button class="register-btn disabled" disabled>
+                            {% if event.is_full %}
+                            <i class="fa-regular fa-clock"></i> ظرفیت تکمیل شده
+                            {% elif event.status == 'completed' %}
+                            <i class="fa-regular fa-circle-xmark"></i> رویداد به پایان رسیده
+                            {% else %}
+                            غیرفعال
+                            {% endif %}
+                        </button>
+                        {% endif %}
+                        {% else %}
+                        <a href="{% url 'login' %}" class="register-btn login-required">
+                            <i class="fa-regular fa-key"></i> برای ثبت‌نام وارد شوید
+                        </a>
                         {% endif %}
                     </div>
 
@@ -255,7 +254,8 @@
                 <p>انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان</p>
                 <div class="footer-social">
                     <a href="https://t.me/ukmechanics" target="_blank"><i class="fa-brands fa-telegram"></i></a>
-                    <a href="https://instagram.com/ukmechanics" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://instagram.com/ukmechanics" target="_blank"><i
+                            class="fa-brands fa-instagram"></i></a>
                     <a href="#" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
                     <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
                 </div>

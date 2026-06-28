@@ -430,7 +430,7 @@ ul {
 }
 
 .form-group textarea {
-    resize: vertical;
+    resize: none;
     min-height: 100px;
 }
 
@@ -762,42 +762,3 @@ ul {
     }
 }
 
-@media (min-width: 1400px) {
-    html {
-        font-size: 18px;
-    }
-    .hero {
-        height: 420px;
-    }
-    .brand-name {
-        font-size: 1.5rem;
-    }
-    .nav-list > li > a {
-        font-size: 1.05rem;
-        padding: 10px 20px;
-    }
-    .page-header h1 {
-        font-size: 2.4rem;
-        padding: 22px 55px;
-    }
-    .contact-wrapper {
-        padding: 55px 60px;
-        gap: 60px;
-    }
-    .contact-info h2,
-    .contact-form h2 {
-        font-size: 1.6rem;
-    }
-}
-
-@media (min-width: 1200px) {
-    .contact-page-main {
-        padding: 0 30px;
-    }
-    .page-header {
-        padding: 0 30px;
-    }
-    .message-container {
-        padding: 0 30px;
-    }
-}
