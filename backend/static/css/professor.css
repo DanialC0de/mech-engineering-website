@@ -92,10 +92,9 @@ textarea {
 }
 
 .sidebar .logo {
-    padding: 30px 24px 22px;
+    padding: 30px 0px 22px 15px;
     margin-bottom: 12px;
     font-size: 24px;
-    text-align: center;
     font-weight: 700;
 }
 
@@ -120,6 +119,7 @@ textarea {
     color: rgba(255, 255, 255, 0.72);
     font-size: 13px;
     font-weight: 400;
+    text-align: center;
 }
 
 .sidebar .menu {

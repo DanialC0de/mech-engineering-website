@@ -71,10 +71,11 @@ ul {
 .brand img {
     height: 50px;
     width: auto;
+    color:#cfd2d1;
 }
 
 .brand-name {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: 900;
     color: #fff;
     letter-spacing: 0.5px;
@@ -208,7 +209,7 @@ ul {
 /* ============================== */
 .hero {
     position: relative;
-    height: 550px;
+    height: 700px;
     overflow: hidden;
     background: none;
 }
@@ -455,12 +456,18 @@ ul {
     border-radius: 32px;
     overflow: hidden;
     box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
+    height: 350px;  
 }
+
+.featured-gallery{
+    width: 620px;
+}
+
 
 .css-slider {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    height:100%;
 }
 
 .slide {
@@ -511,11 +518,11 @@ input[name="slider"]:nth-of-type(5):checked ~ .slide:nth-of-type(5) {
     display: inline-block;
     background: rgba(255, 170, 0, 0.95);
     color: #01213d;
-    padding: 5px 14px;
+    padding: 5px 7px;
     border-radius: 999px;
-    font-size: 0.8rem;
+    font-size: 0.6rem;
     font-weight: 800;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 .slide-caption h3 {
     font-size: 1.8rem;
@@ -525,6 +532,7 @@ input[name="slider"]:nth-of-type(5):checked ~ .slide:nth-of-type(5) {
 .slide-caption p {
     font-size: 0.9rem;
     opacity: 0.9;
+    color: #cfd2d1;
 }
 
 .slider-nav {
@@ -961,7 +969,7 @@ input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5) {
 #icons {
     position: fixed;
     left: 2px;
-    bottom: 150px;
+    bottom: 70px;
     z-index: 999;
 }
 #icons a {
@@ -1087,6 +1095,9 @@ input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5) {
     }
     .footer-links {
         grid-template-columns: repeat(2, 1fr);
+    }
+    .featured-gallery{
+        width:100%;
     }
 }
 
@@ -1230,7 +1241,9 @@ input[name="slider"]:nth-of-type(5):checked ~ .slider-nav label:nth-of-type(5) {
     .membership-card h2 {
         font-size: 1.6rem;
     }
-
+    .featured-gallery{
+        width:100%;
+    }
     .footer-links {
         grid-template-columns: 1fr;
         gap: 20px;
