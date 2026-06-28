@@ -42,7 +42,8 @@ ul {
 /* هدر مدرن */
 /* ============================== */
 .main-header {
-    background: #012e71;
+    background: linear-gradient(315deg, #0a2a44 55%, #420303 80%);
+    /* #012e71; */
     color: white;
     position: sticky;
     top: 0;
@@ -71,10 +72,11 @@ ul {
 .brand img {
     height: 50px;
     width: auto;
+    color:#cfd2d1;
 }
 
 .brand-name {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: 900;
     color: #fff;
     letter-spacing: 0.5px;
@@ -106,8 +108,7 @@ ul {
     white-space: nowrap;
 }
 
-.nav-list > li > a:hover,
-.nav-list > li > a.active {
+.nav-list > li > a:hover {
     color: #ffaa00;
     background: rgba(255, 255, 255, 0.08);
 }
@@ -168,7 +169,7 @@ ul {
 }
 .university-link:hover {
     color: #fff;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .user-greeting {
@@ -203,7 +204,6 @@ ul {
     cursor: pointer;
     padding: 5px 10px;
 }
-
 /* ============================== */
 /* هیرو */
 /* ============================== */
@@ -241,7 +241,7 @@ ul {
 /* ============================== */
 .page-header {
     max-width: 1380px;
-    margin: -30px auto 30px;
+    margin: -50px auto 30px;
     padding: 0 20px;
     text-align: center;
     position: relative;
@@ -538,10 +538,11 @@ ul {
 /* فوتر مدرن */
 /* ============================== */
 .modern-footer {
-    background: #0a1e3a;
+    background: linear-gradient(315deg, #0a2a44 25%, #420303 40%);
+    /* #0a1e3a; */
     color: rgba(255,255,255,0.8);
     padding: 50px 20px 0;
-    margin-top: 40px;
+    margin-top: 80px;
 }
 
 .footer-container {
@@ -632,8 +633,8 @@ ul {
 /* ============================== */
 #icons {
     position: fixed;
-    left: 10px;
-    bottom: 150px;
+    left: 2px;
+    bottom: 70px;
     z-index: 999;
 }
 #icons a {
@@ -647,7 +648,6 @@ ul {
 }
 #icons a:last-child {
     width: 48px;
-    margin-top: 8px;
 }
 #icons a img {
     border-radius: 100%;
