@@ -196,26 +196,3 @@ class InternalResource(models.Model):
         super().delete(*args, **kwargs)
 
 
-
-
-class EventInvitation(models.Model):
-    event = models.ForeignKey('events.Event', on_delete=models.CASCADE)
-    professor = models.ForeignKey(
-    "professor.ProfessorProfile",
-    on_delete=models.CASCADE
-)
-
-    message = models.TextField(blank=True, null=True)
-
-    status = models.CharField(
-        max_length=20,
-        choices=[
-            ("pending", "در انتظار"),
-            ("accepted", "پذیرفته شده"),
-            ("rejected", "رد شده"),
-        ],
-        default="pending"
-    )
-
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)

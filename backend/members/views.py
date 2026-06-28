@@ -12,6 +12,8 @@ from professor.models import (
     EventProposal,
     EventInvitation,
 )
+from django.contrib.auth import get_user_model 
+User = get_user_model()
 from professor.models import ProfessorProfile
 @login_required
 def member_dashboard(request):
@@ -30,57 +32,128 @@ def member_dashboard(request):
             'my_events': [],
             'all_my_events': [],
             'gallery_items': [],
+            'suggested_articles': [],
+            'suggested_events': [],
+            'professors': [],
+            'professor_invitations': [],
+            'pending_articles': [],
+            'approved_articles': [],
+            'rejected_articles': [],
+            'pending_proposals': [],
+            'approved_proposals': [],
+            'rejected_proposals': [],
         })
     
-    # رویدادهای تحت مسئولیت کاربر (۳ تا برای داشبورد)
+    # ==========================================
+    # رویدادهای تحت مسئولیت کاربر
+    # ==========================================
     my_events = Event.objects.filter(
         created_by=request.user
-    )[:3]
+    ).order_by('-created_at')[:3]
     
-    # همه رویدادهای کاربر برای صفحه مدیریت رویدادها
     all_my_events = Event.objects.filter(
         created_by=request.user
-    )
+    ).order_by('-created_at')
     
-    # درخواست‌های عضویت
+    # ==========================================
+    # درخواست‌های عضویت (فقط برای مدیران)
+    # ==========================================
     pending_requests = MemberRequest.objects.filter(status='pending')
     
+    # ==========================================
     # اعضای انجمن
-    members_list = Member.objects.filter(is_active=True)
+    # ==========================================
+    members_list = Member.objects.filter(is_active=True).select_related('user', 'committee')
     
+    # ==========================================
+    # کمیته‌ها
+    # ==========================================
+    committees = Committee.objects.all()
+    
+    # ==========================================
     # منابع داخلی کاربر
-    internal_resources = InternalResource.objects.filter(uploaded_by=request.user)
+    # ==========================================
+    internal_resources = InternalResource.objects.filter(
+        uploaded_by=request.user
+    ).order_by('-created_at')
     
-    # گالری تصاویر (از اپ website)
+    # ==========================================
+    # گالری تصاویر (از اپ members)
+    # ==========================================
+    gallery_items = GalleryImage.objects.all().order_by('-created_at')
     
-    gallery_items = GalleryItem.objects.all().order_by('-order')
-    gallery_items = GalleryImage.objects.all()
-
-    suggested_articles = ProfessorArticle.objects.filter(
-        status='approved'
-    ).select_related('professor')
-
-    suggested_events = EventProposal.objects.filter(
-        status='approved'
-    ).select_related('professor')
-
-    professors = ProfessorProfile.objects.select_related("user").all()
+    # ==========================================
+    # ✅ مقالات پیشنهادی اساتید (همه مقالات)
+    # ==========================================
+    all_articles = ProfessorArticle.objects.all().select_related(
+        'professor'
+    ).order_by('-created_at')
+    
+    # تفکیک بر اساس وضعیت
+    pending_articles = all_articles.filter(status='submitted')
+    approved_articles = all_articles.filter(status='approved')
+    rejected_articles = all_articles.filter(status='rejected')
+    
+    # مقالات برای نمایش در داشبورد (۱۰ مورد آخر)
+    suggested_articles = all_articles[:10]
+    
+    # ==========================================
+    # ✅ رویدادهای پیشنهادی اساتید (همه پیشنهادات)
+    # ==========================================
+    all_proposals = EventProposal.objects.all().select_related(
+        'professor'
+    ).order_by('-created_at')
+    
+    # تفکیک بر اساس وضعیت
+    pending_proposals = all_proposals.filter(status='pending')
+    approved_proposals = all_proposals.filter(status='approved')
+    rejected_proposals = all_proposals.filter(status='rejected')
+    
+    # رویدادهای پیشنهادی برای نمایش در داشبورد (۲۰ مورد آخر)
+    suggested_events = all_proposals[:20]
+    
+    # ==========================================
+    # لیست اساتید برای دعوت (فقط کاربرانی که پروفایل استاد دارند)
+    # ==========================================
+    professors = User.objects.filter(
+        role='professor'  # اگر فیلد role در مدل User دارید
+    ).order_by('first_name', 'last_name')
+    
+    # ==========================================
+    # دعوت‌نامه‌های ارسال شده توسط کاربر
+    # ==========================================
+    professor_invitations = EventInvitation.objects.filter(
+        created_by=request.user
+    ).select_related('event', 'professor').order_by('-created_at')
+    
+    # ==========================================
+    # ساخت context
+    # ==========================================
     context = {
         'member': member,
         'pending_requests': pending_requests.count(),
         'member_requests': pending_requests,
         'members': members_list,
-        'committees': Committee.objects.all(),
+        'committees': committees,
         'internal_resources': internal_resources,
         'my_events': my_events,
         'all_my_events': all_my_events,
         'gallery_items': gallery_items,
-        "suggested_articles": suggested_articles,
-        "suggested_events": suggested_events,
-        "professors": professors,
+        'suggested_articles': suggested_articles,
+        'suggested_events': suggested_events,
+        'professors': professors,
+        'professor_invitations': professor_invitations,
+        'pending_articles': pending_articles,
+        'approved_articles': approved_articles,
+        'rejected_articles': rejected_articles,
+        'pending_proposals': pending_proposals,
+        'approved_proposals': approved_proposals,
+        'rejected_proposals': rejected_proposals,
+        'all_articles': all_articles,
+        'all_proposals': all_proposals,
     }
+    
     return render(request, 'member.html', context)
-
 @login_required
 def reject_request(request, pk):
     """رد درخواست عضویت"""
@@ -381,29 +454,37 @@ def invite_professor(request):
         messages.error(request, "شما عضو انجمن نیستید.")
         return redirect("members:dashboard")
 
-    # فقط ادمین‌های انجمن
     if member.role not in ["head", "vice"]:
         messages.error(request, "دسترسی ندارید.")
         return redirect("members:dashboard")
 
     if request.method == "POST":
         event_id = request.POST.get("event")
-        professor_id = request.POST.get("professor")
+        professor_id = request.POST.get("professor")  # این ID کاربر است
         message = request.POST.get("message", "")
 
         event = get_object_or_404(Event, id=event_id)
-        professor = get_object_or_404(ProfessorProfile, id=professor_id)
+        
+        # ✅ استفاده از مدل User چون در اپ professor اینگونه تعریف شده
+        professor = get_object_or_404(User, id=professor_id)
+
+        # بررسی اینکه کاربر واقعاً استاد است
+        if not hasattr(professor, 'professor_profile'):
+            messages.error(request, "کاربر انتخاب شده استاد نیست.")
+            return redirect("members:dashboard")
 
         # جلوگیری از تکراری
-        if EventInvitation.objects.filter(event=event, professor=professor.user).exists():
+        if EventInvitation.objects.filter(event=event, professor=professor).exists():
             messages.warning(request, "این استاد قبلاً دعوت شده.")
             return redirect("members:dashboard")
 
+        # ✅ ایجاد با مدل اپ professor
         EventInvitation.objects.create(
             event=event,
-            professor=professor.user,
+            professor=professor,  # ارسال مستقیم مدل User
+            role='instructor',  # مقدار پیش‌فرض
             message=message,
-            created_by=request.user
+            created_at=timezone.now()  # یا auto_now_add=True در مدل
         )
 
         messages.success(request, "دعوت با موفقیت ارسال شد.")
