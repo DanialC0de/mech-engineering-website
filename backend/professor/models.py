@@ -70,6 +70,13 @@ class EventInvitation(models.Model):
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='instructor', verbose_name="نقش")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name="وضعیت")
     message = models.TextField(blank=True, null=True, verbose_name="پیام")
+    created_by = models.ForeignKey(  # ✅ اضافه کنید
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='sent_invitations',
+        null=True,
+        blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

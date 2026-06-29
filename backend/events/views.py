@@ -56,12 +56,14 @@ def event_detail(request, pk):
 
     # سرفصل‌ها
     syllabus_list = []
+
     if event.syllabus:
         syllabus_list = [
             item.strip()
-            for item in event.syllabus.split('\n')
+            for item in event.syllabus.split("\n")
             if item.strip()
         ]
+
 
         return render(request, 'index-pages/details-pages/event.html', {
         'event': event,

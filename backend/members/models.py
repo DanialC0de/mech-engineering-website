@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 
-
 class Committee(models.Model):
     """کمیته‌های انجمن"""
     name = models.CharField(max_length=100, verbose_name="نام کمیته")
@@ -53,18 +52,6 @@ class Member(models.Model):
     def full_name(self):
         return self.user.get_full_name() or self.user.username
     
-    # ⭐ اضافه کردن متد get_role_display
-    def get_role_display(self):
-        """دریافت نمایش فارسی نقش"""
-        role_map = {
-            'head': 'رئیس',
-            'vice': 'نائب رئیس',
-            'secretary': 'دبیر',
-            'committee_head': 'مسئول کمیته',
-            'member': 'عضو',
-        }
-        return role_map.get(self.role, self.role)
-
 
 class GalleryImage(models.Model):
     """تصاویر گالری انجمن"""
@@ -85,6 +72,11 @@ class GalleryImage(models.Model):
     
     def __str__(self):
         return self.title
+    
+    def delete(self, *args, **kwargs):
+        if self.image:
+            self.image.delete(save=False)
+        super().delete(*args, **kwargs)
 
 
 class MemberRequest(models.Model):
@@ -127,13 +119,21 @@ class MemberRequest(models.Model):
         verbose_name = "درخواست عضویت"
         verbose_name_plural = "درخواست‌های عضویت"
         ordering = ['-created_at']
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user'],
+                condition=models.Q(status='pending'),
+                name='unique_pending_request'
+            )
+        ]
     
     def __str__(self):
         return f"{self.user.get_full_name()} - {self.status}"
     
     def save(self, *args, **kwargs):
         old_status = None
-        
+
         if self.pk:
             try:
                 old_status = MemberRequest.objects.get(pk=self.pk).status
@@ -142,7 +142,6 @@ class MemberRequest(models.Model):
 
         super().save(*args, **kwargs)
 
-        # اگر وضعیت به approved تغییر کرد، عضو بساز
         if old_status != 'approved' and self.status == 'approved':
             Member.objects.get_or_create(
                 user=self.user,
@@ -191,6 +190,9 @@ class InternalResource(models.Model):
     def __str__(self):
         return self.title
     
-    def get_category_display(self):
-        """دریافت نمایش فارسی دسته‌بندی"""
-        return dict(self.CATEGORY_CHOICES).get(self.category, self.category)
+    def delete(self, *args, **kwargs):
+        if self.file:
+            self.file.delete(save=False)
+        super().delete(*args, **kwargs)
+
+
