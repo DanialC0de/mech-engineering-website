@@ -10,8 +10,7 @@
 </head>
 <body>
 
-    <!-- ==================== هدر مدرن (۴ آیتم) ==================== -->
-    <header class="main-header">
+    {% comment %} <header class="main-header">
         <div class="header-container">
 
             <div class="brand">
@@ -63,21 +62,22 @@
                 <i class="fa-solid fa-bars"></i>
             </button>
         </div>
-    </header>
+    </header> {% endcomment %}
 
     <!-- ==================== محتوای اصلی (تکمیل ثبت‌نام) ==================== -->
     <main class="register-page-main">
         <div class="register-container">
-            <div class="register-box">
-
-                <!-- هدر باکس -->
-                <div class="register-header">
-                    <div class="logo-icon">⚙️</div>
-                    <div class="logo-text">
-                        <h2>انجمن <span>مکانیک</span></h2>
-                        <p>عضویت در انجمن علمی مهندسی مکانیک</p>
-                    </div>
+            <!-- هدر باکس -->
+            <div class="register-header">
+                
+                <div class="logo-text">
+                    <span class="logo-icon">⚙️</span>
+                    <span id="h2">انجمن <span>مکانیک</span></span>
+                    <p>عضویت در انجمن علمی مهندسی مکانیک</p>
                 </div>
+            </div>
+
+            <div class="register-box">
 
                 <div class="register-body">
                     <div class="register-title">
@@ -90,10 +90,10 @@
 
                     <!-- اطلاعات صفحه قبل -->
                     <div class="info-card">
-                        <span class="info-label"><i class="fa-regular fa-phone"></i> شماره موبایل:</span>
+                        <span class="info-label"><i class="fa-solid fa-phone"></i> شماره موبایل : </span>
                         <span class="info-value" id="infoValue">09123456789</span>
                         <a href="/accounts/login/" class="edit-link">
-                            ویرایش <i class="fa-regular fa-arrow-left"></i>
+                            ویرایش <i class="fa-solid fa-arrow-left"></i>
                         </a>
                     </div>
 
@@ -173,7 +173,7 @@
 
                         <div class="input-group full-width">
                             <label for="bio">درباره خود</label>
-                            <textarea id="bio" rows="3"></textarea>
+                            <textarea id="bio" rows="3" style="resize:none;"></textarea>
                         </div>
 
                         <button type="submit" class="register-btn">
@@ -184,7 +184,7 @@
 
                     <div class="back-link">
                         <a href="/accounts/login/">
-                            <i class="fa-regular fa-arrow-right"></i> بازگشت به صفحه ورود
+                            <i class="fa-solid fa-arrow-right"></i> بازگشت به صفحه ورود
                         </a>
                     </div>
                 </div>
@@ -192,64 +192,6 @@
             </div>
         </div>
     </main>
-
-    <!-- ==================== فوتر مدرن ==================== -->
-    <footer class="modern-footer">
-        <div class="footer-container">
-            <div class="footer-brand">
-                <h3>مهندسی مکانیک</h3>
-                <p>انجمن علمی دانشجویی مهندسی مکانیک دانشگاه شهید باهنر کرمان</p>
-                <div class="footer-social">
-                    <a href="https://t.me/ukmechanics" target="_blank"><i class="fa-brands fa-telegram"></i></a>
-                    <a href="https://instagram.com/ukmechanics" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-                    <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-                </div>
-            </div>
-
-            <div class="footer-links">
-                <div>
-                    <h4>دسترسی سریع</h4>
-                    <ul>
-                        <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
-                        <li><a href="{% url 'about' %}">درباره دانشکده</a></li>
-                        <li><a href="{% url 'industry' %}">ارتباط با صنعت</a></li>
-                        <li><a href="{% url 'contact' %}">تماس با ما</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4>بخش‌های سایت</h4>
-                    <ul>
-                        <li><a href="{% url 'all_events' %}">رویدادها</a></li>
-                        <li><a href="{% url 'all_resources' %}">منابع علمی</a></li>
-                        <li><a href="{% url 'honors' %}">افتخارات</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4>اطلاعات تماس</h4>
-                    <ul>
-                        <li><i class="fa-solid fa-location-dot"></i> کرمان - بلوار جمهوری - دانشکده مکانیک</li>
-                        <li><i class="fa-solid fa-phone"></i> ۰۳۴-۳۱۳۲۱۲۳۴</li>
-                        <li><i class="fa-solid fa-envelope"></i> info@mech-uk.ac.ir</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; ۲۰۲۵ تمامی حقوق برای انجمن علمی مهندسی مکانیک دانشگاه شهید باهنر کرمان محفوظ است.</p>
-        </div>
-    </footer>
-
-    <!-- ==================== آیکون‌های شناور ==================== -->
-    <div id="icons">
-        <a href="https://t.me/ukmechanics" target="_blank">
-            <img src="{% static 'assets/icons/15.png' %}">
-        </a>
-        <a href="https://instagram.com/ukmechanics?igshid=14gmuy96orpnd" target="_blank">
-            <img src="{% static 'assets/icons/2.png' %}">
-        </a>
-    </div>
 
     <!-- ==================== اسکریپت ==================== -->
     <script src="{% static 'js/register.js' %}"></script>

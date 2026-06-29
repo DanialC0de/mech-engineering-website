@@ -600,16 +600,3 @@ ul {
         border-radius: 10px;
     }
 }
-
-@media (min-width: 1400px) {
-    html {
-        font-size: 18px;
-    }
-    .brand-name {
-        font-size: 1.5rem;
-    }
-    .nav-list > li > a {
-        font-size: 1.05rem;
-        padding: 10px 20px;
-    }
-}
