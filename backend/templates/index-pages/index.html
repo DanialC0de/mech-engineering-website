@@ -290,6 +290,7 @@
             </div>
 
             <div class="modern-grid events-grid">
+                <!-- ===== رویدادهای عادی ===== -->
                 {% for event in events %}
                 <article class="modern-card event-card">
                     <div class="card-image">
@@ -330,6 +331,38 @@
                     <i class="fa-regular fa-calendar-xmark"></i>
                     <p>فعلاً رویداد جدیدی ثبت نشده است.</p>
                 </div>
+                {% endfor %}
+
+                <!-- ===== رویدادهای پیشنهادی تایید شده از اساتید ===== -->
+                {% for proposal in approved_proposals %}
+                <article class="modern-card event-card approved-proposal">
+                    <div class="card-image">
+                        {% if proposal.image %}
+                            <img src="{{ proposal.image.url }}" alt="{{ proposal.title }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/500x320" alt="رویداد پیشنهادی">
+                        {% endif %}
+                        <div class="card-badge">پیشنهاد استاد</div>
+                    </div>
+
+                    <div class="card-body">
+                        <span class="card-tag" style="background:#4caf50;color:#fff;">
+                            {{ proposal.event_type }}
+                        </span>
+                        <h3>{{ proposal.title }}</h3>
+
+                        <div class="card-meta">
+                            <span><i class="fa-regular fa-calendar"></i> {{ proposal.proposed_date }}</span>
+                            <span><i class="fa-regular fa-user"></i> {{ proposal.professor.get_full_name }}</span>
+                        </div>
+
+                        <p>{{ proposal.description|truncatechars:80 }}</p>
+
+                        <a href="{% url 'event_detail' proposal.id %}" class="card-link">مشاهده جزئیات ←</a>
+                    </div>
+                </article>
+                {% empty %}
+                <!-- اگر هیچ پیشنهاد تایید شده‌ای نباشه، چیزی نمایش نده -->
                 {% endfor %}
             </div>
         </section>

@@ -18,13 +18,28 @@ from news.models import News
 from events.models import Event
 from members.models import GalleryImage
 import os
-
+from professor.models import EventProposal
+from itertools import chain 
 def home(request):
     """نمایش صفحه اصلی با تمام بخش‌ها"""
+     # ✅ دریافت رویدادهای تایید شده از پیشنهادات اساتید
+    approved_proposals = EventProposal.objects.filter(
+        status='approved'
+    ).select_related('professor').order_by('-created_at')[:3]
+    
+    # ✅ دریافت رویدادهای عادی (آینده)
+    upcoming_events = Event.objects.filter(
+        status='upcoming'
+    ).order_by('-created_at')[:3]
+    
+    # ✅ ترکیب دو لیست (اختیاری)
+    # از itertools.chain استفاده کن یا هر دو رو جداگانه بفرست
     
     context = {
+        
         'news': News.objects.filter(is_published=True)[:3],
-        'events': Event.objects.filter(status='upcoming')[:3],
+        'approved_proposals': approved_proposals,
+        'events': upcoming_events,
         'resources': Resource.objects.all()[:3],
         'honors': Honor.objects.filter(is_featured=True)[:3],
         'about': AboutInfo.objects.first(),
@@ -34,23 +49,61 @@ def home(request):
     }
     return render(request, 'index-pages/index.html', context)
 
+from itertools import chain
+from django.db.models import Q
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from events.models import Event
+from professor.models import EventProposal  # ✅ اضافه کن
+
+
 def all_events(request):
     """نمایش همه رویدادها با فیلتر و جستجو"""
     show_upcoming = request.GET.get('show', 'upcoming') == 'upcoming'
     
+    # ==========================================
+    # دریافت رویدادهای عادی
+    # ==========================================
     if show_upcoming:
-        events = Event.objects.filter(status='upcoming')  # ✅ تغییر
+        events = Event.objects.filter(status='upcoming')
     else:
-        events = Event.objects.filter(status='completed')  # ✅ تغییر
+        events = Event.objects.filter(status='completed')
     
+    # ==========================================
+    # دریافت پیشنهادات تایید شده از اساتید
+    # ==========================================
+    proposals = EventProposal.objects.filter(status='approved')
+    
+    # ==========================================
+    # ترکیب دو لیست
+    # ==========================================
+    all_events = list(chain(events, proposals))
+    
+    # ==========================================
+    # جستجو (بعد از ترکیب)
+    # ==========================================
     search_query = request.GET.get('search')
     if search_query:
-        events = events.filter(
-            Q(title__icontains=search_query) | 
-            Q(short_description__icontains=search_query)
-        )
+        # فیلتر کردن لیست ترکیبی
+        filtered_events = []
+        for item in all_events:
+            title_match = search_query.lower() in item.title.lower()
+            desc_match = hasattr(item, 'description') and search_query.lower() in item.description.lower()
+            short_desc_match = hasattr(item, 'short_description') and search_query.lower() in item.short_description.lower()
+            
+            if title_match or desc_match or short_desc_match:
+                filtered_events.append(item)
+        all_events = filtered_events
     
-    paginator = Paginator(events, 6)
+    # ==========================================
+    # مرتب‌سازی بر اساس تاریخ (جدیدترین اول)
+    # ==========================================
+    all_events.sort(key=lambda x: x.created_at, reverse=True)
+    
+    # ==========================================
+    # صفحه‌بندی
+    # ==========================================
+    paginator = Paginator(all_events, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
