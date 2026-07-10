@@ -347,38 +347,77 @@
         <!-- ========================================================= -->
         <!-- ========== رویدادهای پیشنهاد شده (داده فیک) ============= -->
         <!-- ========================================================= -->
+        <!-- ========================================================= -->
+        <!-- ========== رویدادهای پیشنهاد شده ========================= -->
+        <!-- ========================================================= -->
         <div id="suggested-events" class="tab-content">
             <div class="section-card">
-                <div style="background:#fff3cd; border-right:4px solid #ffc107; padding:12px 20px; border-radius:8px; margin-bottom:20px; color:#856404;">
-                    <i class="fas fa-flask" style="margin-left:8px;"></i>
-                    <strong>توجه:</strong> این بخش صرفاً جهت نمایش اولیه و با داده‌های آزمایشی پر شده است و هنوز به backend متصل نشده.
-                </div>
                 <div class="section-title">📅 رویدادهای پیشنهاد شده توسط اساتید</div>
+                
+                <!-- نمایش تعداد پیشنهادات در انتظار -->
+                {% if pending_proposals %}
+                <div style="background:#fff3cd; border-right:4px solid #ffc107; padding:12px 20px; border-radius:8px; margin-bottom:20px; color:#856404;">
+                    <i class="fas fa-clock" style="margin-left:8px;"></i>
+                    <strong>{{ pending_proposals|length }}</strong> پیشنهاد در انتظار بررسی وجود دارد.
+                </div>
+                {% endif %}
+                
                 <table>
                     <thead>
                         <tr>
                             <th>استاد پیشنهاددهنده</th>
                             <th>عنوان رویداد</th>
                             <th>توضیحات</th>
-                            <th>تاریخ</th>
+                            <th>تاریخ پیشنهادی</th>
+                            <th>نوع رویداد</th>
+                            <th>وضعیت</th>
                             <th>عملیات</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for event in suggested_events %}
-                            <tr>
-                                <td>{{ event.professor.get_full_name }}</td>
-                                <td>{{ event.title }}</td>
-                                <td>{{ event.description }}</td>
-                                <td>{{ event.proposed_date }}</td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="4">
-                                    هیچ رویدادی پیشنهاد نشده است.
-                                </td>
-                            </tr>
-                            {% endfor %}
+                        {% for event in all_proposals|slice:":20" %}
+                        <tr>
+                            <td>{{ event.professor.get_full_name }}</td>
+                            <td>{{ event.title }}</td>
+                            <td>{{ event.description|truncatechars:50 }}</td>
+                            <td>{{ event.proposed_date }}</td>
+                            <td>{{ event.event_type }}</td>
+                            <td>
+                                {% if event.status == "pending" %}
+                                    <span style="background:#ff9800;color:#fff;padding:4px 10px;border-radius:8px;">در انتظار</span>
+                                {% elif event.status == "approved" %}
+                                    <span style="background:#4caf50;color:#fff;padding:4px 10px;border-radius:8px;">تایید شده</span>
+                                {% elif event.status == "rejected" %}
+                                    <span style="background:#f44336;color:#fff;padding:4px 10px;border-radius:8px;">رد شده</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if event.status == "pending" %}
+                                <form method="POST" action="{% url 'members:approve_proposal' event.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-approve" onclick="return confirm('آیا از تأیید این پیشنهاد مطمئن هستید؟')">
+                                        ✅ تایید
+                                    </button>
+                                </form>
+                                <form method="POST" action="{% url 'members:reject_proposal' event.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-reject" onclick="return confirm('آیا از رد این پیشنهاد مطمئن هستید؟')">
+                                        ❌ رد
+                                    </button>
+                                </form>
+                                {% else %}
+                                <span style="color:#999;">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" style="text-align:center; color:#999; padding:30px;">
+                                <i class="fas fa-calendar-plus" style="font-size:2rem; display:block; margin-bottom:10px; color:#ccc;"></i>
+                                هیچ رویدادی پیشنهاد نشده است.
+                            </td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -497,7 +536,7 @@
                         <tr>
                             <td>{{ invite.event.title }}</td>
 
-                            <>
+                            <td>
                                 {{ invite.professor.get_full_name }}
                             </td>
 

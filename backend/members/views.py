@@ -16,6 +16,22 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model 
 User = get_user_model()
 from professor.models import ProfessorProfile
+
+
+# ✅ لیست نقش‌های مجاز برای مدیریت
+ALLOWED_ROLES = ['head', 'vice', 'secretary', 'committee_head', 'member']
+
+
+def check_member_access(request):
+    """بررسی دسترسی کاربر (همه نقش‌ها مجاز هستن)"""
+    try:
+        member = Member.objects.get(user=request.user)
+        return member
+    except Member.DoesNotExist:
+        messages.error(request, "شما عضو انجمن نیستید.")
+        return None
+
+
 @login_required
 def member_dashboard(request):
     """پنل عضو انجمن"""
@@ -57,7 +73,7 @@ def member_dashboard(request):
     ).order_by('-created_at')
     
     # ==========================================
-    # درخواست‌های عضویت (فقط برای مدیران)
+    # درخواست‌های عضویت (همه نقش‌ها میتونن ببینن)
     # ==========================================
     pending_requests = MemberRequest.objects.filter(status='pending')
     
@@ -117,7 +133,7 @@ def member_dashboard(request):
     # لیست اساتید برای دعوت (فقط کاربرانی که پروفایل استاد دارند)
     # ==========================================
     professors = User.objects.filter(
-        role='professor'  # اگر فیلد role در مدل User دارید
+        professor_profile__isnull=False
     ).order_by('first_name', 'last_name')
     
     # ==========================================
@@ -155,23 +171,17 @@ def member_dashboard(request):
     }
     
     return render(request, 'member.html', context)
+
+
 @login_required
 def reject_request(request, pk):
     """رد درخواست عضویت"""
-
     if request.method != 'POST':
         messages.error(request, 'درخواست نامعتبر است.')
         return redirect('members:dashboard')
 
-    try:
-        current_member = Member.objects.get(user=request.user)
-    except Member.DoesNotExist:
-        messages.error(request, 'شما عضو انجمن نیستید.')
-        return redirect('members:dashboard')
-
-    # فقط رئیس و نائب رئیس
-    if current_member.role not in ['head', 'vice']:
-        messages.error(request, 'شما مجوز رد درخواست را ندارید.')
+    member = check_member_access(request)
+    if not member:
         return redirect('members:dashboard')
 
     member_request = get_object_or_404(
@@ -183,23 +193,62 @@ def reject_request(request, pk):
     member_request.status = 'rejected'
     member_request.save(update_fields=['status'])
 
-    messages.success(
-        request,
-        'درخواست عضویت با موفقیت رد شد.'
-    )
-    if member_request.user == request.user:
-        messages.error(request,"نمی‌توانید درخواست خودتان را رد کنید.")
+    messages.success(request, 'درخواست عضویت با موفقیت رد شد.')
     return redirect('members:dashboard')
 
 
+@login_required
+def approve_request(request, pk):
+    """تأیید درخواست عضویت"""
+    if request.method != 'POST':
+        messages.error(request, 'درخواست نامعتبر است.')
+        return redirect('members:dashboard')
+
+    member = check_member_access(request)
+    if not member:
+        return redirect('members:dashboard')
+
+    member_request = get_object_or_404(MemberRequest, pk=pk, status='pending')
+
+    if Member.objects.filter(user=member_request.user).exists():
+        messages.warning(request, 'این کاربر قبلاً عضو انجمن شده است.')
+        member_request.status = 'rejected'
+        member_request.save(update_fields=['status'])
+        return redirect('members:dashboard')
+    
+    if Member.objects.filter(student_id=member_request.student_id).exists():
+        messages.error(request, f'شماره دانشجویی "{member_request.student_id}" قبلاً ثبت شده است.')
+        member_request.status = 'rejected'
+        member_request.save(update_fields=['status'])
+        return redirect('members:dashboard')
+
+    try:
+        Member.objects.create(
+            user=member_request.user,
+            committee=member_request.committee,
+            student_id=member_request.student_id,
+            role='member',
+            is_active=True,
+        )
+        
+        member_request.status = 'approved'
+        member_request.save(update_fields=['status'])
+        
+        messages.success(request, 'درخواست عضویت با موفقیت تأیید شد.')
+
+    except Exception as e:
+        messages.error(request, f'خطا در تأیید درخواست: {str(e)}')
+        member_request.status = 'rejected'
+        member_request.save(update_fields=['status'])
+    
+    return redirect('members:dashboard')
 
 
 @login_required
 def create_event(request):
-    try:
-        member = Member.objects.get(user=request.user)
-    except Member.DoesNotExist:
-        messages.error(request, 'شما عضو انجمن نیستید. امکان ایجاد رویداد وجود ندارد.')
+    """ایجاد رویداد جدید"""
+    member = check_member_access(request)
+    if not member:
         return redirect('members:dashboard')
     
     if request.method == 'POST':
@@ -235,11 +284,14 @@ def create_event(request):
     return redirect('members:dashboard')
 
 
-
 @login_required
 def delete_event(request, pk):
-
+    """حذف رویداد"""
     if request.method != 'POST':
+        return redirect('members:dashboard')
+
+    member = check_member_access(request)
+    if not member:
         return redirect('members:dashboard')
 
     event = get_object_or_404(Event, pk=pk)
@@ -249,19 +301,15 @@ def delete_event(request, pk):
         return redirect('members:dashboard')
 
     event.delete()
-
     messages.success(request, 'رویداد با موفقیت حذف شد.')
-
     return redirect('members:dashboard')
+
 
 @login_required
 def upload_gallery(request):
-    """بارگذاری تصویر در گالری (فقط برای اعضای انجمن)"""
-    # چک کردن اینکه کاربر عضو هست
-    try:
-        member = Member.objects.get(user=request.user)
-    except Member.DoesNotExist:
-        messages.error(request, 'شما عضو انجمن نیستید. امکان بارگذاری تصویر وجود ندارد.')
+    """بارگذاری تصویر در گالری"""
+    member = check_member_access(request)
+    if not member:
         return redirect('members:dashboard')
     
     if request.method == 'POST':
@@ -272,7 +320,6 @@ def upload_gallery(request):
             messages.error(request, 'لطفاً یک تصویر انتخاب کنید.')
             return redirect('members:dashboard')
         
-        from website.models import GalleryItem
         GalleryImage.objects.create(
             title=caption or "بدون عنوان",
             image=image,
@@ -288,12 +335,9 @@ def upload_gallery(request):
 
 @login_required
 def upload_resource(request):
-    """بارگذاری منبع داخلی (فقط برای اعضای انجمن)"""
-    # چک کردن اینکه کاربر عضو هست
-    try:
-        member = Member.objects.get(user=request.user)
-    except Member.DoesNotExist:
-        messages.error(request, 'شما عضو انجمن نیستید. امکان بارگذاری منبع وجود ندارد.')
+    """بارگذاری منبع داخلی"""
+    member = check_member_access(request)
+    if not member:
         return redirect('members:dashboard')
     
     if request.method == 'POST':
@@ -320,38 +364,32 @@ def upload_resource(request):
 
 @login_required
 def delete_resource(request, pk):
+    """حذف منبع داخلی"""
     if request.method != "POST":
+        return redirect("members:dashboard")
+
+    member = check_member_access(request)
+    if not member:
         return redirect("members:dashboard")
 
     resource = get_object_or_404(InternalResource, pk=pk)
 
-    try:
-        Member.objects.get(user=request.user)
-    except Member.DoesNotExist:
-        messages.error(request,"شما عضو انجمن نیستید.")
-        return redirect("members:dashboard")
-
     if resource.uploaded_by != request.user:
-        messages.error(request,"شما مجوز حذف این منبع را ندارید.")
+        messages.error(request, "شما مجوز حذف این منبع را ندارید.")
         return redirect("members:dashboard")
 
     resource.delete()
-
-    messages.success(request,"منبع حذف شد.")
-
+    messages.success(request, "منبع حذف شد.")
     return redirect("members:dashboard")
 
 
 @login_required
 def member_request_view(request):
     """ثبت درخواست عضویت"""
-    
-    # بررسی اینکه کاربر قبلاً عضو هست یا نه
     if Member.objects.filter(user=request.user).exists():
         messages.warning(request, 'شما قبلاً عضو انجمن هستید.')
         return redirect('members:dashboard')
     
-    # بررسی اینکه کاربر قبلاً درخواست داده یا نه
     if MemberRequest.objects.filter(user=request.user, status='pending').exists():
         messages.warning(request, 'شما قبلاً درخواست عضویت ثبت کرده‌اید.')
         return redirect('members:dashboard')
@@ -375,61 +413,21 @@ def member_request_view(request):
             status='pending'
         )
         
-        messages.success(request, 'درخواست عضویت شما با موفقیت ثبت شد. منتظر تأیید مدیر باشید.')
+        messages.success(request, 'درخواست عضویت شما با موفقیت ثبت شد.')
         return redirect('members:dashboard')
     
     committees = Committee.objects.all()
-    return render(request, 'member_request.html', {'committees': committees})  # ← مسیر درسته
-
-
-@login_required
-def approve_request(request, pk):
-    """تأیید درخواست عضویت"""
-    if request.method != 'POST':
-        messages.error(request, 'درخواست نامعتبر است.')
-        return redirect('members:dashboard')
-
-    try:
-        current_member = Member.objects.get(user=request.user)
-    except Member.DoesNotExist:
-        messages.error(request, 'شما عضو انجمن نیستید.')
-        return redirect('members:dashboard')
-
-    member_request = get_object_or_404(MemberRequest, pk=pk, status='pending')
-
-    if Member.objects.filter(user=member_request.user).exists():
-        messages.warning(request, 'این کاربر قبلاً عضو انجمن شده است.')
-        member_request.status = 'rejected'
-        member_request.save(update_fields=['status'])
-        return redirect('members:dashboard')
-    
-    if Member.objects.filter(student_id=member_request.student_id).exists():
-        messages.error(request, f'شماره دانشجویی "{member_request.student_id}" قبلاً ثبت شده است.')
-        member_request.status = 'rejected'
-        member_request.save(update_fields=['status'])
-        return redirect('members:dashboard')
-
-    try:
-        member_request.status = "approved"
-        member_request.save()
-        
-        member_request.status = 'approved'
-        member_request.save(update_fields=['status'])
-        
-        messages.success(request, 'درخواست عضویت با موفقیت تأیید شد.')
-
-    except Exception as e:
-        messages.error(request, f'خطا در تأیید درخواست: {str(e)}')
-        member_request.status = 'rejected'
-        member_request.save(update_fields=['status'])
-    
-    return redirect('members:dashboard')
+    return render(request, 'member_request.html', {'committees': committees})
 
 
 @login_required
 def gallery_delete(request, pk):
     """حذف تصویر از گالری"""
     if request.method != 'POST':
+        return redirect('members:dashboard')
+
+    member = check_member_access(request)
+    if not member:
         return redirect('members:dashboard')
 
     image = get_object_or_404(GalleryImage, pk=pk)
@@ -446,49 +444,130 @@ def gallery_delete(request, pk):
     return redirect('members:dashboard')
 
 
-
 @login_required
 def invite_professor(request):
-    try:
-        member = Member.objects.get(user=request.user)
-    except Member.DoesNotExist:
-        messages.error(request, "شما عضو انجمن نیستید.")
-        return redirect("members:dashboard")
-
-    if member.role not in ["head", "vice"]:
-        messages.error(request, "دسترسی ندارید.")
+    """دعوت از استاد (همه اعضا میتونن)"""
+    member = check_member_access(request)
+    if not member:
         return redirect("members:dashboard")
 
     if request.method == "POST":
         event_id = request.POST.get("event")
-        professor_id = request.POST.get("professor")  # این ID کاربر است
+        professor_id = request.POST.get("professor")
         message = request.POST.get("message", "")
 
+        if not event_id or not professor_id:
+            messages.error(request, "لطفاً رویداد و استاد را انتخاب کنید.")
+            return redirect("members:dashboard")
+
         event = get_object_or_404(Event, id=event_id)
-        
-        # ✅ استفاده از مدل User چون در اپ professor اینگونه تعریف شده
         professor = get_object_or_404(User, id=professor_id)
 
-        # بررسی اینکه کاربر واقعاً استاد است
         if not hasattr(professor, 'professor_profile'):
             messages.error(request, "کاربر انتخاب شده استاد نیست.")
             return redirect("members:dashboard")
 
-        # جلوگیری از تکراری
         if EventInvitation.objects.filter(event=event, professor=professor).exists():
             messages.warning(request, "این استاد قبلاً دعوت شده.")
             return redirect("members:dashboard")
 
-        # ✅ ایجاد با مدل اپ professor
         EventInvitation.objects.create(
             event=event,
-            professor=professor,  # ارسال مستقیم مدل User
-            role='instructor',  # مقدار پیش‌فرض
+            professor=professor,
+            role='instructor',
             message=message,
-            created_at=timezone.now()  # یا auto_now_add=True در مدل
+            created_by=request.user,
         )
 
-        messages.success(request, "دعوت با موفقیت ارسال شد.")
+        messages.success(request, f"دعوت‌نامه برای استاد {professor.get_full_name()} ارسال شد.")
         return redirect("members:dashboard")
 
     return redirect("members:dashboard")
+
+
+# ==========================================
+# ✅ ویوهای مدیریت مقالات (همه اعضا)
+# ==========================================
+
+@login_required
+def approve_article(request, pk):
+    """تأیید مقاله پیشنهادی"""
+    if request.method != 'POST':
+        return redirect('members:dashboard')
+    
+    member = check_member_access(request)
+    if not member:
+        return redirect('members:dashboard')
+    
+    article = get_object_or_404(ProfessorArticle, pk=pk, status='submitted')
+    
+    article.status = 'approved'
+    article.admin_feedback = request.POST.get('feedback', 'تأیید شد')
+    article.save()
+    
+    messages.success(request, f'مقاله "{article.title}" با موفقیت تأیید شد.')
+    return redirect('members:dashboard')
+
+
+@login_required
+def reject_article(request, pk):
+    """رد مقاله پیشنهادی"""
+    if request.method != 'POST':
+        return redirect('members:dashboard')
+    
+    member = check_member_access(request)
+    if not member:
+        return redirect('members:dashboard')
+    
+    article = get_object_or_404(ProfessorArticle, pk=pk, status='submitted')
+    
+    article.status = 'rejected'
+    article.admin_feedback = request.POST.get('feedback', 'رد شد')
+    article.save()
+    
+    messages.success(request, f'مقاله "{article.title}" رد شد.')
+    return redirect('members:dashboard')
+
+
+# ==========================================
+# ✅ ویوهای مدیریت پیشنهادات رویداد (همه اعضا)
+# ==========================================
+
+@login_required
+def approve_event_proposal(request, pk):
+    """تأیید پیشنهاد رویداد"""
+    if request.method != 'POST':
+        return redirect('members:dashboard')
+    
+    member = check_member_access(request)
+    if not member:
+        return redirect('members:dashboard')
+    
+    proposal = get_object_or_404(EventProposal, pk=pk, status='pending')
+    
+    proposal.status = 'approved'
+    proposal.admin_feedback = request.POST.get('feedback', 'تأیید شد')
+    proposal.save()
+    
+    messages.success(request, f'پیشنهاد رویداد "{proposal.title}" با موفقیت تأیید شد.')
+    return redirect('members:dashboard')
+
+
+@login_required
+def reject_event_proposal(request, pk):
+    """رد پیشنهاد رویداد"""
+    if request.method != 'POST':
+        return redirect('members:dashboard')
+    
+    member = check_member_access(request)
+    if not member:
+        return redirect('members:dashboard')
+    
+    proposal = get_object_or_404(EventProposal, pk=pk, status='pending')
+    
+    proposal.status = 'rejected'
+    proposal.admin_feedback = request.POST.get('feedback', 'رد شد')
+    proposal.save()
+    
+    messages.success(request, f'پیشنهاد رویداد "{proposal.title}" رد شد.')
+    return redirect('members:dashboard')
