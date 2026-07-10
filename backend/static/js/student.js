@@ -737,3 +737,113 @@ document.addEventListener('DOMContentLoaded', function () {
     loadTickets();
     loadProfile();
 });
+
+// ===== کنترل منوی موبایل با جاوااسکریپت (پشتیبان) =====
+(function() {
+    'use strict';
+
+    // صبر می‌کنیم تا DOM کامل بارگذاری بشه
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMobileMenu);
+    } else {
+        initMobileMenu();
+    }
+
+    function initMobileMenu() {
+        const toggleBtn = document.getElementById('mobileMenuToggle');
+        const overlay = document.getElementById('menuOverlay');
+        const sidebar = document.querySelector('.sidebar');
+
+        // اگر دکمه وجود نداشت، کاری نمی‌کنیم
+        if (!toggleBtn || !overlay || !sidebar) return;
+
+        let isOpen = false;
+
+        // تابع باز کردن منو
+        window.openMobileMenu = function() {
+            document.body.classList.add('sidebar-open');
+            overlay.classList.add('active');
+            toggleBtn.classList.add('active');
+            isOpen = true;
+            document.body.style.overflow = 'hidden';
+        };
+
+        // تابع بستن منو
+        window.closeMobileMenu = function() {
+            document.body.classList.remove('sidebar-open');
+            overlay.classList.remove('active');
+            toggleBtn.classList.remove('active');
+            isOpen = false;
+            document.body.style.overflow = '';
+        };
+
+        // تابع toggle
+        window.toggleMobileMenu = function() {
+            if (isOpen) {
+                window.closeMobileMenu();
+            } else {
+                window.openMobileMenu();
+            }
+        };
+
+        // رویداد کلیک روی دکمه
+        toggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            window.toggleMobileMenu();
+        });
+
+        // رویداد کلیک روی اورلی
+        overlay.addEventListener('click', window.closeMobileMenu);
+
+        // رویداد کلیک روی آیتم‌های منو
+        document.querySelectorAll('.sidebar .menu li a').forEach(function(item) {
+            item.addEventListener('click', function() {
+                if (window.innerWidth <= 900 && isOpen) {
+                    setTimeout(window.closeMobileMenu, 350);
+                }
+            });
+        });
+
+        // بستن با ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isOpen) {
+                window.closeMobileMenu();
+            }
+        });
+
+        // مدیریت تغییر سایز
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                if (window.innerWidth > 900 && isOpen) {
+                    window.closeMobileMenu();
+                }
+                // نمایش/مخفی کردن دکمه
+                const isMobile = window.innerWidth <= 900;
+                toggleBtn.style.display = isMobile ? 'flex' : 'none';
+                if (!isMobile && isOpen) {
+                    window.closeMobileMenu();
+                }
+            }, 200);
+        });
+
+        // تنظیم اولیه نمایش دکمه
+        const isMobile = window.innerWidth <= 900;
+        toggleBtn.style.display = isMobile ? 'flex' : 'none';
+
+        console.log('✅ منوی موبایل با موفقیت راه‌اندازی شد!');
+    }
+})();
+// ===== کنترل دکمه همبرگری =====
+document.addEventListener('DOMContentLoaded', function() {
+    var toggleBtn = document.getElementById('mobileMenuToggle');
+    var sidebar = document.querySelector('.sidebar');
+    
+    if (toggleBtn && sidebar) {
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('show');
+            toggleBtn.classList.toggle('active');
+        });
+    }
+});
