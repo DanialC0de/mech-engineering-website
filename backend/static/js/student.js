@@ -1,3 +1,4 @@
+// ==================== توابع کمکی ====================
 function toPersianDigits(value) {
     return String(value ?? '').replace(/\d/g, digit => '۰۱۲۳۴۵۶۷۸۹'[digit]);
 }
@@ -9,6 +10,20 @@ function escapeHtml(value) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
+}
+
+function setLoadingContainer(containerId, message) {
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.innerHTML = `<div class="empty-state">${message || 'در حال بارگذاری...'}</div>`;
+    }
+}
+
+function setEmptyContainer(containerId, message) {
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.innerHTML = `<div class="empty-state">${message}</div>`;
+    }
 }
 
 function setLoading(elementId, colspan) {
@@ -35,6 +50,7 @@ function getTicketTitle(ticketId) {
 
 let currentProfileData = {};
 
+// ==================== مدیریت تب‌ها ====================
 function switchTab(tabId) {
     document.querySelectorAll('.menu li').forEach(item => item.classList.remove('active'));
     document.querySelector(`.menu li[data-tab="${tabId}"]`)?.classList.add('active');
@@ -44,8 +60,7 @@ function switchTab(tabId) {
 
     const titles = {
         dashboard: 'داشبورد دانشجو',
-        events: 'اخبار و رویدادها',
-        registrations: 'ثبت‌نام‌های من',
+        events: 'رویدادها',
         resources: 'منابع و دانلودها',
         tickets: 'تیکت‌ها',
         profile: 'پروفایل من'
@@ -54,8 +69,10 @@ function switchTab(tabId) {
 
     const loaders = {
         dashboard: loadDashboard,
-        events: loadAllEvents,
-        registrations: loadDashboard,
+        events: function() {
+            loadAllEvents();
+            renderMyRegistrationsFromApi();
+        },
         resources: loadResources,
         tickets: loadTickets,
         profile: loadProfile
@@ -67,26 +84,131 @@ function switchTab(tabId) {
     }
 }
 
-function loadDashboard() {
-    fetch('/panel/student/api/dashboard/')
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) throw new Error(data.error);
+// ==================== ساخت کارت رویداد (نسخه نهایی با لینک مشاهده و تصویر) ====================
+function createEventCard(event, type) {
+    const isRegistered = event.is_registered;
+    const isFull = event.is_full;
+    const statusClass = event.status_class || 'upcoming';
+    const statusLabel = event.status || 'در حال ثبت‌نام';
 
-            document.getElementById('myRegistrations').innerText = toPersianDigits(data.stats.myRegistrations);
-            document.getElementById('newResources').innerText = toPersianDigits(data.stats.newResources);
-            document.getElementById('myTickets').innerText = toPersianDigits(getTickets().length);
-            document.getElementById('eventCount').innerText = toPersianDigits(data.stats.myRegistrations);
+    // پشتیبانی از هر دو فیلد image و image_url
+    let imageSrc = event.image_url || event.image || '';
+    const imageHtml = imageSrc 
+        ? `<img src="${imageSrc}" alt="${escapeHtml(event.title)}">` 
+        : `<i class="fa-solid fa-calendar-days"></i>`;
 
-            renderAnnouncements(data.announcements || []);
-            renderAvailableEvents(data.availableEvents || []);
-            renderMyRegistrations(data.myEvents || []);
-        })
-        .catch(error => {
-            console.error('Error loading dashboard:', error);
-            renderAnnouncements([]);
-            setEmpty('availableEventsBody', 4, 'خطا در دریافت اطلاعات داشبورد');
-        });
+    let actionButtons = '';
+    const viewLink = `<a href="/events/${event.id}/" class="view-btn btn"><i class="fa-solid fa-eye"></i> مشاهده</a>`;
+
+    if (type === 'available') {
+        actionButtons = `
+            ${viewLink}
+            <button class="register-btn btn" onclick="registerEvent(${event.id}, '${escapeHtml(event.title)}')"><i class="fa-solid fa-check"></i> ثبت‌نام</button>
+        `;
+    } else if (type === 'all') {
+        if (!isRegistered && !isFull && statusClass === 'upcoming') {
+            actionButtons = `
+                ${viewLink}
+                <button class="register-btn btn" onclick="registerEvent(${event.id}, '${escapeHtml(event.title)}')"><i class="fa-solid fa-check"></i> ثبت‌نام</button>
+            `;
+        } else if (isRegistered) {
+            actionButtons = `
+                ${viewLink}
+                <button class="cancel-btn btn" onclick="cancelRegistration(${event.registration_id}, '${escapeHtml(event.title)}')"><i class="fa-solid fa-xmark"></i> لغو</button>
+            `;
+        } else {
+            actionButtons = `
+                ${viewLink}
+                <span class="status-rejected" style="padding:6px 14px;">غیرقابل ثبت‌نام</span>
+            `;
+        }
+    } else if (type === 'my') {
+        const eventId = event.event_id || event.id;
+        actionButtons = `
+            <a href="/events/${eventId}/" class="view-btn btn"><i class="fa-solid fa-eye"></i> مشاهده</a>
+            <button class="cancel-btn btn" onclick="cancelRegistration(${event.id}, '${escapeHtml(event.title)}')"><i class="fa-solid fa-xmark"></i> لغو</button>
+        `;
+    }
+
+    const regCount = event.registrations || event.registrations_count || 0;
+    const capacity = event.capacity || 'نامحدود';
+    const remaining = event.remaining !== undefined ? event.remaining : (capacity === 'نامحدود' ? '∞' : capacity - regCount);
+
+    return `
+        <div class="event-card" data-event-id="${event.id}" data-event-title="${escapeHtml(event.title)}">
+            <div class="event-card-image">
+                ${imageHtml}
+                <span class="event-status-badge status-${statusClass}">${statusLabel}</span>
+            </div>
+            <div class="event-card-body">
+                <div class="event-card-title">${escapeHtml(event.title)}</div>
+                <div class="event-card-meta">
+                    <span><i class="fa-solid fa-calendar"></i> ${escapeHtml(event.date)}</span>
+                    ${event.time ? `<span><i class="fa-solid fa-clock"></i> ${escapeHtml(event.time)}</span>` : ''}
+                    <span><i class="fa-solid fa-users"></i> ${toPersianDigits(regCount)} / ${capacity === 'نامحدود' ? '∞' : toPersianDigits(capacity)}</span>
+                    ${remaining !== undefined && remaining !== '∞' ? `<span><i class="fa-solid fa-circle"></i> ${toPersianDigits(remaining)} باقیمانده</span>` : ''}
+                </div>
+                ${event.description ? `<p style="font-size:0.85rem;color:var(--muted);margin:4px 0 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(event.description)}</p>` : ''}
+                <div class="event-card-actions">
+                    ${actionButtons}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// ==================== داشبورد (اصلاح‌شده) ====================
+async function loadDashboard() {
+    try {
+        const dashboardRes = await fetch('/panel/student/api/dashboard/');
+        const dashboardData = await dashboardRes.json();
+        if (dashboardData.error) throw new Error(dashboardData.error);
+
+        document.getElementById('myRegistrations').innerText = toPersianDigits(dashboardData.stats.myRegistrations);
+        document.getElementById('newResources').innerText = toPersianDigits(dashboardData.stats.newResources);
+        document.getElementById('myTickets').innerText = toPersianDigits(getTickets().length);
+
+        renderAnnouncements(dashboardData.announcements || []);
+
+        // دریافت رویدادهای قابل ثبت‌نام از API رویدادها (مشابه منوی رویدادها)
+        await loadAvailableEventsForDashboard();
+
+        // دریافت ثبت‌نام‌های من
+        if (dashboardData.myEvents) {
+            renderMyRegistrations(dashboardData.myEvents);
+        } else {
+            await loadMyRegistrationsForDashboard();
+        }
+    } catch (error) {
+        console.error('Error loading dashboard:', error);
+        renderAnnouncements([]);
+        setEmptyContainer('availableEventsContainer', 'خطا در دریافت اطلاعات داشبورد');
+        setEmptyContainer('myRegistrationsContainer', 'خطا در دریافت ثبت‌نام‌ها');
+    }
+}
+
+async function loadAvailableEventsForDashboard() {
+    try {
+        const res = await fetch('/panel/student/api/events/?status=upcoming');
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        renderAvailableEvents(data.events || []);
+    } catch (error) {
+        console.error('Error loading available events:', error);
+        setEmptyContainer('availableEventsContainer', 'خطا در دریافت رویدادها');
+    }
+}
+
+async function loadMyRegistrationsForDashboard() {
+    try {
+        const res = await fetch('/panel/student/api/registrations/');
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        renderMyRegistrations(data.registrations || []);
+    } catch (error) {
+        console.error('Error loading my registrations:', error);
+        setEmptyContainer('myRegistrationsContainer', 'خطا در دریافت ثبت‌نام‌ها');
+    }
 }
 
 function renderAnnouncements(announcements) {
@@ -107,95 +229,110 @@ function renderAnnouncements(announcements) {
 }
 
 function renderAvailableEvents(events) {
-    const tableBody = document.getElementById('availableEventsBody');
-    if (!tableBody) return;
+    const container = document.getElementById('availableEventsContainer');
+    if (!container) return;
 
     if (!events.length) {
-        setEmpty('availableEventsBody', 4, 'هیچ رویداد قابل ثبت‌نامی وجود ندارد');
+        setEmptyContainer('availableEventsContainer', 'هیچ رویداد قابل ثبت‌نامی وجود ندارد');
         return;
     }
 
-    tableBody.innerHTML = events.map(event => `
-        <tr data-event-id="${event.id}" data-event-title="${escapeHtml(event.title)}">
-            <td><strong>${escapeHtml(event.title)}</strong></td>
-            <td>${escapeHtml(event.date)} ${event.time ? `- ${escapeHtml(event.time)}` : ''}</td>
-            <td>${toPersianDigits(event.remaining)}</td>
-            <td>
-                <button class="register-btn" onclick="registerEvent(${event.id}, getEventTitle(${event.id}))">
-                    <i class="fa-solid fa-check"></i> ثبت‌نام
-                </button>
-            </td>
-        </tr>
-    `).join('');
+    container.innerHTML = events.map(event => createEventCard(event, 'available')).join('');
 }
 
+// ==================== بارگذاری همه رویدادها (تب رویدادها) ====================
 function loadAllEvents() {
     const status = document.getElementById('eventStatusFilter')?.value || 'all';
-    setLoading('allEventsBody', 5);
+    setLoadingContainer('allEventsContainer', 'در حال بارگذاری رویدادها...');
 
     fetch(`/panel/student/api/events/?status=${encodeURIComponent(status)}`)
         .then(response => response.json())
         .then(data => {
             if (data.error) throw new Error(data.error);
 
-            const tableBody = document.getElementById('allEventsBody');
-            if (!tableBody) return;
+            const container = document.getElementById('allEventsContainer');
+            if (!container) return;
 
             if (!data.events.length) {
-                setEmpty('allEventsBody', 5, 'هیچ رویدادی وجود ندارد');
+                setEmptyContainer('allEventsContainer', 'هیچ رویدادی با این وضعیت وجود ندارد');
                 return;
             }
 
-            tableBody.innerHTML = data.events.map(event => {
-                const action = !event.is_registered && !event.is_full && event.status_code === 'upcoming'
-                    ? `<button class="register-btn" onclick="registerEvent(${event.id}, getEventTitle(${event.id}))">ثبت‌نام</button>`
-                    : event.is_registered
-                        ? `<button class="cancel-btn" onclick="cancelRegistration(${event.registration_id}, getEventTitle(${event.id}))">لغو</button>`
-                        : '<span class="status-rejected">غیرقابل ثبت‌نام</span>';
-
-                const statusLabel = event.is_registered ? 'ثبت‌نام شده' : event.is_full ? 'تکمیل شده' : 'قابل ثبت‌نام';
-                const statusClass = event.is_registered ? 'status-accepted' : event.is_full ? 'status-rejected' : 'status-pending';
-
-                return `
-                    <tr data-event-id="${event.id}" data-event-title="${escapeHtml(event.title)}">
-                        <td><strong>${escapeHtml(event.title)}</strong></td>
-                        <td>${escapeHtml(event.date)} - ${escapeHtml(event.time)}</td>
-                        <td><span class="status-${escapeHtml(event.status_class)}">${escapeHtml(event.status)}</span></td>
-                        <td><span class="${statusClass}">${statusLabel}</span></td>
-                        <td>${action}</td>
-                    </tr>
-                `;
-            }).join('');
+            container.innerHTML = data.events.map(event => createEventCard(event, 'all')).join('');
         })
         .catch(error => {
             console.error('Error loading events:', error);
-            setEmpty('allEventsBody', 5, 'خطا در دریافت رویدادها');
+            setEmptyContainer('allEventsContainer', 'خطا در دریافت رویدادها');
         });
 }
 
+// ==================== ثبت‌نام‌های من ====================
 function renderMyRegistrations(events) {
-    const tableBody = document.getElementById('myRegistrationsBody');
-    if (!tableBody) return;
+    const container = document.getElementById('myRegistrationsContainer');
+    if (!container) return;
 
     if (!events.length) {
-        setEmpty('myRegistrationsBody', 4, 'هیچ ثبت‌نامی ندارید');
+        setEmptyContainer('myRegistrationsContainer', 'هیچ ثبت‌نامی ندارید');
         return;
     }
 
-    tableBody.innerHTML = events.map(registration => `
-        <tr data-event-id="${registration.event_id}" data-event-title="${escapeHtml(registration.title)}">
-            <td><strong>${escapeHtml(registration.title)}</strong></td>
-            <td>${escapeHtml(registration.date)}</td>
-            <td><span class="status-accepted">${escapeHtml(registration.status)}</span></td>
-            <td>
-                <button class="cancel-btn" onclick="cancelRegistration(${registration.id}, getEventTitle(${registration.event_id}))">
-                    لغو ثبت‌نام
-                </button>
-            </td>
-        </tr>
-    `).join('');
+    container.innerHTML = events.map(reg => createEventCard({
+        ...reg,
+        id: reg.event_id,
+        registration_id: reg.id,
+        is_registered: true,
+        status: reg.status,
+        date: reg.date,
+        time: reg.time || ''
+    }, 'my')).join('');
 }
 
+function renderMyRegistrationsFromApi() {
+    fetch('/panel/student/api/dashboard/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) throw new Error(data.error);
+            renderMyRegistrations(data.myEvents || []);
+        })
+        .catch(error => {
+            console.error('Error loading registrations:', error);
+            setEmptyContainer('myRegistrationsContainer', 'خطا در دریافت ثبت‌نام‌ها');
+        });
+}
+
+// ==================== جزئیات رویداد (مودال - در صورت نیاز) ====================
+function viewEventDetail(eventId) {
+    fetch(`/panel/student/api/events/${eventId}/detail/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) throw new Error(data.error);
+
+            document.getElementById('eventDetailTitle').innerHTML = `<i class="fa-solid fa-calendar-days"></i> ${escapeHtml(data.title)}`;
+            document.getElementById('eventDetailBody').innerHTML = `
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;">
+                    ${data.image_url ? `<img src="${escapeHtml(data.image_url)}" style="width:100%;border-radius:12px;grid-column:1/-1;max-height:300px;object-fit:cover;">` : ''}
+                    <p><strong>تاریخ:</strong> ${escapeHtml(data.date)}</p>
+                    ${data.time ? `<p><strong>ساعت:</strong> ${escapeHtml(data.time)}</p>` : ''}
+                    <p><strong>وضعیت:</strong> <span class="status-${data.status_class}">${escapeHtml(data.status)}</span></p>
+                    <p><strong>ظرفیت:</strong> ${data.capacity ? toPersianDigits(data.capacity) : 'نامحدود'}</p>
+                    <p><strong>تعداد ثبت‌نام‌ها:</strong> ${toPersianDigits(data.registrations || 0)}</p>
+                    ${data.location ? `<p><strong>مکان:</strong> ${escapeHtml(data.location)}</p>` : ''}
+                    <p style="grid-column:1/-1;"><strong>توضیحات:</strong> ${escapeHtml(data.description || 'توضیحی وارد نشده است.')}</p>
+                </div>
+            `;
+            document.getElementById('eventDetailModal').style.display = 'flex';
+        })
+        .catch(error => {
+            console.error('Error loading event detail:', error);
+            alert('خطا در دریافت جزئیات رویداد');
+        });
+}
+
+function closeEventDetail() {
+    document.getElementById('eventDetailModal').style.display = 'none';
+}
+
+// ==================== منابع ====================
 function loadResources() {
     const category = document.getElementById('resourceFilter')?.value || 'all';
     setLoading('resourcesBody', 4);
@@ -233,6 +370,7 @@ function loadResources() {
         });
 }
 
+// ==================== تیکت‌ها ====================
 function getTickets() {
     try {
         return JSON.parse(localStorage.getItem('studentTickets') || '[]');
@@ -271,6 +409,7 @@ function loadTickets() {
     `).join('');
 }
 
+// ==================== پروفایل ====================
 function loadProfile() {
     fetch('/panel/student/api/profile/')
         .then(response => response.json())
@@ -383,9 +522,11 @@ function saveProfile(event) {
         });
 }
 
+// ==================== عملیات رویدادها ====================
 function refreshConnectedSections() {
     loadDashboard();
     loadAllEvents();
+    renderMyRegistrationsFromApi();
     loadTickets();
 }
 
@@ -439,6 +580,7 @@ function cancelRegistration(registrationId, title) {
         });
 }
 
+// ==================== سایر توابع ====================
 function downloadResource(resourceId) {
     window.open(`/panel/student/api/resources/${resourceId}/download/`, '_blank');
     setTimeout(() => {
@@ -566,6 +708,7 @@ function viewTicket(id) {
     alert(`موضوع: ${ticket.subject}\nاولویت: ${ticket.priority}\nوضعیت: ${ticket.status}\n\n${ticket.message}`);
 }
 
+// ==================== رویدادهای DOM ====================
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('toggleSidebar')?.addEventListener('click', () => {
         if (window.innerWidth <= 900) {
@@ -581,9 +724,126 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    document.getElementById('eventDetailModal')?.addEventListener('click', event => {
+        if (event.target.id === 'eventDetailModal') {
+            closeEventDetail();
+        }
+    });
+
+    // بارگذاری اولیه
     loadDashboard();
     loadAllEvents();
     loadResources();
     loadTickets();
     loadProfile();
+});
+
+// ===== کنترل منوی موبایل با جاوااسکریپت (پشتیبان) =====
+(function() {
+    'use strict';
+
+    // صبر می‌کنیم تا DOM کامل بارگذاری بشه
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMobileMenu);
+    } else {
+        initMobileMenu();
+    }
+
+    function initMobileMenu() {
+        const toggleBtn = document.getElementById('mobileMenuToggle');
+        const overlay = document.getElementById('menuOverlay');
+        const sidebar = document.querySelector('.sidebar');
+
+        // اگر دکمه وجود نداشت، کاری نمی‌کنیم
+        if (!toggleBtn || !overlay || !sidebar) return;
+
+        let isOpen = false;
+
+        // تابع باز کردن منو
+        window.openMobileMenu = function() {
+            document.body.classList.add('sidebar-open');
+            overlay.classList.add('active');
+            toggleBtn.classList.add('active');
+            isOpen = true;
+            document.body.style.overflow = 'hidden';
+        };
+
+        // تابع بستن منو
+        window.closeMobileMenu = function() {
+            document.body.classList.remove('sidebar-open');
+            overlay.classList.remove('active');
+            toggleBtn.classList.remove('active');
+            isOpen = false;
+            document.body.style.overflow = '';
+        };
+
+        // تابع toggle
+        window.toggleMobileMenu = function() {
+            if (isOpen) {
+                window.closeMobileMenu();
+            } else {
+                window.openMobileMenu();
+            }
+        };
+
+        // رویداد کلیک روی دکمه
+        toggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            window.toggleMobileMenu();
+        });
+
+        // رویداد کلیک روی اورلی
+        overlay.addEventListener('click', window.closeMobileMenu);
+
+        // رویداد کلیک روی آیتم‌های منو
+        document.querySelectorAll('.sidebar .menu li a').forEach(function(item) {
+            item.addEventListener('click', function() {
+                if (window.innerWidth <= 900 && isOpen) {
+                    setTimeout(window.closeMobileMenu, 350);
+                }
+            });
+        });
+
+        // بستن با ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isOpen) {
+                window.closeMobileMenu();
+            }
+        });
+
+        // مدیریت تغییر سایز
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                if (window.innerWidth > 900 && isOpen) {
+                    window.closeMobileMenu();
+                }
+                // نمایش/مخفی کردن دکمه
+                const isMobile = window.innerWidth <= 900;
+                toggleBtn.style.display = isMobile ? 'flex' : 'none';
+                if (!isMobile && isOpen) {
+                    window.closeMobileMenu();
+                }
+            }, 200);
+        });
+
+        // تنظیم اولیه نمایش دکمه
+        const isMobile = window.innerWidth <= 900;
+        toggleBtn.style.display = isMobile ? 'flex' : 'none';
+
+        console.log('✅ منوی موبایل با موفقیت راه‌اندازی شد!');
+    }
+})();
+// ===== کنترل دکمه همبرگری =====
+document.addEventListener('DOMContentLoaded', function() {
+    var toggleBtn = document.getElementById('mobileMenuToggle');
+    var sidebar = document.querySelector('.sidebar');
+    
+    if (toggleBtn && sidebar) {
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('show');
+            toggleBtn.classList.toggle('active');
+        });
+    }
 });
