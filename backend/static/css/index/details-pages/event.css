@@ -231,7 +231,12 @@ ul {
     height: 320px;
     overflow: hidden;
 }
-
+.event-banner::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 32, 81, 0.86), rgba(0, 32, 81, 0.08));
+}
 .event-banner img {
     width: 100%;
     height: 100%;
@@ -254,12 +259,14 @@ ul {
     font-weight: 900;
     margin-bottom: 8px;
     text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    z-index: 100;
 }
 
 .banner-overlay p {
     font-size: 1.1rem;
     opacity: 0.9;
     max-width: 700px;
+    z-index: 100;
 }
 
 /* اطلاعات پایه */
