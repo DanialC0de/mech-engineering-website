@@ -106,16 +106,16 @@
                         {% if user.is_authenticated %}
                             {% if resource.file %}
                                 <a href="{% url 'download_resource' resource.id %}" class="card-button">
-                                    <i class="fa-regular fa-download"></i> دانلود
+                                    <i class="fa-solid fa-download"></i> دانلود
                                 </a>
                             {% else %}
                                 <button class="card-button disabled" disabled>
-                                    <i class="fa-regular fa-circle-xmark"></i> فایل موجود نیست
+                                    <i class="fa-solid fa-circle-xmark"></i> فایل موجود نیست
                                 </button>
                             {% endif %}
                         {% else %}
                             <button class="card-button" onclick="alert('برای دانلود ابتدا وارد حساب کاربری شوید')">
-                                <i class="fa-regular fa-key"></i> دانلود
+                                <i class="fa-solid fa-key"></i> دانلود
                             </button>
                         {% endif %}
                     </div>
@@ -123,7 +123,7 @@
             </article>
             {% empty %}
             <div class="empty-state">
-                <i class="fa-regular fa-book"></i>
+                <i class="fa-solid fa-book"></i>
                 <p>هیچ منبعی یافت نشد.</p>
             </div>
             {% endfor %}

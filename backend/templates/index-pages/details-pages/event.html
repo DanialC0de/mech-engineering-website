@@ -90,14 +90,14 @@
                 <!-- اطلاعات پایه -->
                 <div class="event-info-grid">
                     <div class="info-item">
-                        <div class="info-icon"><i class="fa-regular fa-calendar"></i></div>
+                        <div class="info-icon"><i class="fa-solid fa-calendar"></i></div>
                         <div class="info-text">
                             <span class="info-label">تاریخ برگزاری</span>
                             <span class="info-value">{{ event.jalali_date }}</span>
                         </div>
                     </div>
                     <div class="info-item">
-                        <div class="info-icon"><i class="fa-regular fa-clock"></i></div>
+                        <div class="info-icon"><i class="fa-solid fa-clock"></i></div>
                         <div class="info-text">
                             <span class="info-label">ساعت</span>
                             <span class="info-value">{{ event.time }}</span>
@@ -124,7 +124,7 @@
                         </div>
                     </div>
                     <div class="info-item">
-                        <div class="info-icon"><i class="fa-regular fa-flag"></i></div>
+                        <div class="info-icon"><i class="fa-solid fa-flag"></i></div>
                         <div class="info-text">
                             <span class="info-label">وضعیت</span>
                             <span class="info-value status-badge 
@@ -166,13 +166,13 @@
                 <!-- مدرس -->
                 {% if event.instructor_name %}
                 <div class="event-section instructor-section">
-                    <h3><i class="fa-regular fa-user"></i> مدرس دوره</h3>
+                    <h3><i class="fa-solid fa-user"></i> مدرس دوره</h3>
                     <div class="instructor-card">
                         <div class="instructor-avatar">
                             {% if event.instructor_image %}
                             <img src="{{ event.instructor_image.url }}" alt="{{ event.instructor_name }}">
                             {% else %}
-                            <span class="avatar-placeholder"><i class="fa-regular fa-user"></i></span>
+                            <span class="avatar-placeholder"><i class="fa-solid fa-user"></i></span>
                             {% endif %}
                         </div>
                         <div class="instructor-details">
@@ -201,24 +201,24 @@
                         {% if user.is_authenticated %}
                         {% if is_registered %}
                         <button class="register-btn registered" disabled>
-                            <i class="fa-regular fa-circle-check"></i> قبلاً ثبت‌نام کرده‌اید
+                            <i class="fa-solid fa-circle-check"></i> قبلاً ثبت‌نام کرده‌اید
                         </button>
                         {% if event.status == 'upcoming' %}
                         <a href="{% url 'cancel_registration' event.id %}" class="cancel-btn"
                             onclick="return confirm('آیا از لغو ثبت‌نام خود مطمئن هستید؟')">
-                            <i class="fa-regular fa-circle-xmark"></i> لغو ثبت‌نام
+                            <i class="fa-solid fa-circle-xmark"></i> لغو ثبت‌نام
                         </a>
                         {% endif %}
                         {% elif event.can_register %}
                         <a href="{% url 'register_event' event.id %}" class="register-btn">
-                            <i class="fa-regular fa-pen-to-square"></i> ثبت‌نام در رویداد
+                            <i class="fa-solid fa-pen-to-square"></i> ثبت‌نام در رویداد
                         </a>
                         {% else %}
                         <button class="register-btn disabled" disabled>
                             {% if event.is_full %}
-                            <i class="fa-regular fa-clock"></i> ظرفیت تکمیل شده
+                            <i class="fa-solid fa-clock"></i> ظرفیت تکمیل شده
                             {% elif event.status == 'completed' %}
-                            <i class="fa-regular fa-circle-xmark"></i> رویداد به پایان رسیده
+                            <i class="fa-solid fa-circle-xmark"></i> رویداد به پایان رسیده
                             {% else %}
                             غیرفعال
                             {% endif %}
@@ -226,7 +226,7 @@
                         {% endif %}
                         {% else %}
                         <a href="{% url 'login' %}" class="register-btn login-required">
-                            <i class="fa-regular fa-key"></i> برای ثبت‌نام وارد شوید
+                            <i class="fa-solid fa-key"></i> برای ثبت‌نام وارد شوید
                         </a>
                         {% endif %}
                     </div>

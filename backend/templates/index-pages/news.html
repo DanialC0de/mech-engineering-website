@@ -113,13 +113,13 @@
                     <h3>{{ news.title }}</h3>
                     <p>{{ news.summary|truncatechars:80 }}</p>
                     <a href="{% url 'news_detail' news.id %}" class="card-link">
-                        مطالعه بیشتر <i class="fa-regular fa-arrow-left"></i>
+                        مطالعه بیشتر <i class="fa-solid fa-arrow-left"></i>
                     </a>
                 </div>
             </article>
             {% empty %}
             <div class="empty-state">
-                <i class="fa-regular fa-newspaper"></i>
+                <i class="fa-solid fa-newspaper"></i>
                 <p>هیچ خبری یافت نشد.</p>
             </div>
             {% endfor %}
