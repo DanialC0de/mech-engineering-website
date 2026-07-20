@@ -211,38 +211,31 @@ def approve_request(request, pk):
     member_request = get_object_or_404(MemberRequest, pk=pk, status='pending')
 
     if Member.objects.filter(user=member_request.user).exists():
-        messages.warning(request, 'این کاربر قبلاً عضو انجمن شده است.')
-        member_request.status = 'rejected'
+        # کاربر از قبل Member داره (مثلاً به خاطر یک تلاش ناقص قبلی)
+        # پس فقط وضعیت درخواست و نقش کاربر رو هماهنگ می‌کنیم، رد نمی‌کنیم
+        member_request.status = 'approved'
         member_request.save(update_fields=['status'])
+        member_request.user.role = 'member'
+        member_request.user.save(update_fields=['role'])
+        messages.success(request, 'عضویت این کاربر تکمیل و تأیید شد.')
         return redirect('members:dashboard')
-    
+
     if Member.objects.filter(student_id=member_request.student_id).exists():
         messages.error(request, f'شماره دانشجویی "{member_request.student_id}" قبلاً ثبت شده است.')
         member_request.status = 'rejected'
         member_request.save(update_fields=['status'])
         return redirect('members:dashboard')
 
-    try:
-        Member.objects.create(
-            user=member_request.user,
-            committee=member_request.committee,
-            student_id=member_request.student_id,
-            role='member',
-            is_active=True,
-        )
-        
-        member_request.status = 'approved'
-        member_request.save(update_fields=['status'])
-        
-        messages.success(request, 'درخواست عضویت با موفقیت تأیید شد.')
+    # ✅ فقط status رو عوض کن — ساخت Member رو خود متد save() مدل انجام می‌ده
+    member_request.status = 'approved'
+    member_request.save(update_fields=['status'])
 
-    except Exception as e:
-        messages.error(request, f'خطا در تأیید درخواست: {str(e)}')
-        member_request.status = 'rejected'
-        member_request.save(update_fields=['status'])
-    
+    # ✅ هماهنگ‌سازی نقش کاربر
+    member_request.user.role = 'member'
+    member_request.user.save(update_fields=['role'])
+
+    messages.success(request, 'درخواست عضویت با موفقیت تأیید شد.')
     return redirect('members:dashboard')
-
 
 @login_required
 def create_event(request):

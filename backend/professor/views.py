@@ -8,27 +8,14 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from website.models import Resource
 
+from accounts.decorators import role_required
 from accounts.models import CustomUser
 from events.models import Event
 from .models import ProfessorProfile, EventInvitation, ProfessorArticle, EventProposal
 
 
-def professor_or_superuser_required(view_func):
-    def wrapper(request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, 'لطفاً ابتدا وارد شوید')
-            return redirect('accounts:login')
-        if request.user.role == 'professor' or request.user.is_superuser:
-            return view_func(request, *args, **kwargs)
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({'error': 'دسترسی غیرمجاز'}, status=403)
-        messages.error(request, 'شما دسترسی به این بخش ندارید')
-        return redirect('home')
-    return wrapper
-
-
 @login_required
-@professor_or_superuser_required
+@role_required(['professor'])
 def professor_panel(request):
     try:
         professor = request.user.professor_profile
@@ -41,7 +28,7 @@ def professor_panel(request):
 
 
 @login_required
-@professor_or_superuser_required
+@role_required(['professor'])
 def get_dashboard_data(request):
     upcoming_events = Event.objects.filter(
         instructor_name__icontains=request.user.get_full_name(),
@@ -60,7 +47,7 @@ def get_dashboard_data(request):
 
 
 @login_required
-@professor_or_superuser_required
+@role_required(['professor'])
 def get_invitations_list(request):
     invitations = EventInvitation.objects.filter(
         professor=request.user
@@ -89,7 +76,7 @@ def get_invitations_list(request):
 
 
 @login_required
-@professor_or_superuser_required
+@role_required(['professor'])
 @require_http_methods(["POST"])
 def respond_to_invitation(request, invitation_id):
     invitation = get_object_or_404(EventInvitation, id=invitation_id, professor=request.user)
@@ -113,7 +100,7 @@ def respond_to_invitation(request, invitation_id):
 
 
 @login_required
-@professor_or_superuser_required
+@role_required(['professor'])
 def get_events_list(request):
 
     events = Event.objects.all().order_by('-created_at')
@@ -155,7 +142,7 @@ def get_events_list(request):
         'events': events_data
     })
 @login_required
-@professor_or_superuser_required
+@role_required(['professor'])
 @require_http_methods(["POST"])
 def propose_event(request):
     try:
@@ -188,7 +175,7 @@ def propose_event(request):
 
 
 @login_required
-@professor_or_superuser_required
+@role_required(['professor'])
 def get_articles_list(request):
     articles = ProfessorArticle.objects.filter(professor=request.user).order_by('-created_at')
     data = {
@@ -215,7 +202,7 @@ def get_articles_list(request):
 
 @csrf_exempt
 @login_required
-@professor_or_superuser_required
+@role_required(['professor'])
 @require_http_methods(["POST"])
 def create_article(request):
     title = request.POST.get('title', '').strip()
@@ -245,7 +232,7 @@ def create_article(request):
 
 
 @login_required
-@professor_or_superuser_required
+@role_required(['professor'])
 @require_http_methods(["POST"])
 def delete_article(request, article_id):
     article = get_object_or_404(ProfessorArticle, id=article_id, professor=request.user)
@@ -257,7 +244,7 @@ def delete_article(request, article_id):
 
 
 @login_required
-@professor_or_superuser_required
+@role_required(['professor'])
 def get_profile_data(request):
     user = request.user
     try:
@@ -285,7 +272,7 @@ def get_profile_data(request):
 
 
 @login_required
-@professor_or_superuser_required
+@role_required(['professor'])
 @require_http_methods(["POST"])
 def update_profile_data(request):
     try:
@@ -323,7 +310,7 @@ def update_profile_data(request):
 
 
 @login_required
-@professor_or_superuser_required
+@role_required(['professor'])
 @require_http_methods(["POST"])
 def change_password(request):
     try:
@@ -348,7 +335,7 @@ def change_password(request):
     return JsonResponse({'success': True, 'message': 'رمز عبور با موفقیت تغییر کرد'})
 
 @login_required
-@professor_or_superuser_required
+@role_required(['professor'])
 def get_resources_list(request):
 
     resources = Resource.objects.all().order_by('-created_at')

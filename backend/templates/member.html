@@ -41,7 +41,10 @@
     <div class="main-content">
         <div class="top-bar">
             <div class="page-title" id="pageTitle">داشبورد عضو انجمن</div>
-            <a href="{% url 'logout' %}" class="logout-btn">خروج</a>
+            <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">خروج</button>
+            </form>
         </div>
 
         <!-- نمایش پیام‌ها -->

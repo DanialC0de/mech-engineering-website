@@ -52,7 +52,10 @@
             </div>
             <div class="top-actions">
                 <a class="site-link" href="/"><i class="fa-solid fa-globe"></i> مشاهده سایت</a>
-                <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
+                <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
+                </form>
             </div>
         </div>
 

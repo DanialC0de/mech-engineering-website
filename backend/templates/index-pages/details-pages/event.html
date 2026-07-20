@@ -231,6 +231,18 @@
                         {% endif %}
                     </div>
 
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="message-box {% if message.tags == 'success' %}success{% else %}error{% endif %}" role="status">
+                                {% if message.tags == 'success' %}
+                                    <i class="fa-solid fa-circle-check"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                {% endif %}
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                     <div id="message" class="message-box"></div>
                 </div>
 

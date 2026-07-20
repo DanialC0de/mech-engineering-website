@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 import jdatetime
-# از django.utils.text import slugify حذف شد چون نیازی نیست
 
 
 class News(models.Model):
@@ -48,3 +47,9 @@ class News(models.Model):
     def save(self, *args, **kwargs):
         # فقط ذخیره‌سازی ساده، بدون تولید slug
         super().save(*args, **kwargs)
+
+    # =============== خط زیر را اضافه کنید ===============
+    def get_category_display(self):
+        """Override متد پیش‌فرض برای نمایش فارسی دسته‌بندی"""
+        return dict(self.CATEGORY_CHOICES).get(self.category, 'سایر')
+    # ===================================================

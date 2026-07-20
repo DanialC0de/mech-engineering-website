@@ -287,6 +287,17 @@
         </div>
     </div>
 
+    <div id="eventSuccessPopup" class="event-success-popup" role="status" aria-live="polite">
+        <div class="event-success-popup__icon"><i class="fa-solid fa-circle-check"></i></div>
+        <div>
+            <strong>ثبت‌نام موفق بود</strong>
+            <p id="eventSuccessPopupMessage"></p>
+        </div>
+        <button type="button" class="event-success-popup__close" onclick="hideEventSuccessPopup()" aria-label="بستن پیام">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
     <!-- مودال تیکت جدید -->
     <div id="newTicketModal" class="modal">
         <div class="modal-content">

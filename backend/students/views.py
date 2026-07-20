@@ -9,18 +9,16 @@ from django.db.models import Q
 import json
 
 from accounts.models import CustomUser
+from accounts.decorators import role_required
 from events.models import Event, Registration
 from news.models import News
 from .models import StudentProfile  # ✅ اینجا درست است
 
 
 @login_required
+@role_required(['student'])
 def student_panel(request):
     """نمایش پنل دانشجو"""
-    if request.user.role != 'student':
-        messages.error(request, 'شما دسترسی به این بخش ندارید')
-        return redirect('home')
-    
     # گرفتن پروفایل دانشجو
     try:
         student = request.user.student_profile

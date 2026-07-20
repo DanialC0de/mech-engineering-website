@@ -16,7 +16,7 @@ from .models import (
 from events.models import Registration
 from news.models import News
 from events.models import Event
-from members.models import GalleryImage
+from members.models import GalleryImage, Committee, Member, MemberRequest
 import os
 from professor.models import EventProposal
 from itertools import chain 
@@ -357,5 +357,54 @@ def user_dashboard(request):
 #------membership
 from django.shortcuts import render
 
+#------membership
+
+@login_required
 def membership_page(request):
-    return render(request, 'membership.html')
+    """صفحه عضویت در انجمن"""
+
+    if Member.objects.filter(user=request.user).exists():
+        messages.info(request, 'شما همین الان عضو انجمن هستید.')
+        return redirect('home')
+
+    if MemberRequest.objects.filter(user=request.user, status='pending').exists():
+        messages.warning(request, 'درخواست عضویت شما در حال بررسی است.')
+        return redirect('home')
+
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        committee_id = request.POST.get('committee')
+        message_text = request.POST.get('message', '')
+        rules_agreed = request.POST.get('rules_agreed')
+
+        if not rules_agreed:
+            messages.error(request, 'برای ثبت درخواست باید قوانین را بپذیرید.')
+            return redirect('membership_page')
+
+        if not student_id or not committee_id:
+            messages.error(request, 'لطفاً شماره دانشجویی و کمیته را وارد کنید.')
+            return redirect('membership_page')
+
+        committee = Committee.objects.filter(id=committee_id).first()
+        if not committee:
+            messages.error(request, 'کمیته انتخاب‌شده معتبر نیست.')
+            return redirect('membership_page')
+
+        if Member.objects.filter(student_id=student_id).exists() or \
+           MemberRequest.objects.filter(student_id=student_id, status='pending').exists():
+            messages.error(request, 'این شماره دانشجویی قبلاً ثبت شده است.')
+            return redirect('membership_page')
+
+        MemberRequest.objects.create(
+            user=request.user,
+            committee=committee,
+            student_id=student_id,
+            message=message_text,
+            status='pending'
+        )
+
+        messages.success(request, 'درخواست عضویت شما با موفقیت ثبت شد.')
+        return redirect('home')
+
+    committees = Committee.objects.all()
+    return render(request, 'membership.html', {'committees': committees})
