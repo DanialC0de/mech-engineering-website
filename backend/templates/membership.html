@@ -43,8 +43,16 @@
                 <a href="https://uk.ac.ir/" target="_blank" class="university-link">
                     <i class="fa-solid fa-graduation-cap"></i> دانشگاه
                 </a>
-                <span class="user-greeting">خوش آمدی مهمان</span>
-                <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
+                {% if user.is_authenticated %}
+                    <span class="user-greeting">خوش آمدی {{ user.first_name|default:user.username }}</span>
+                    <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="login-btn" style="border:none; cursor:pointer; font:inherit;">خروج</button>
+                    </form>
+                {% else %}
+                    <span class="user-greeting">خوش آمدی مهمان</span>
+                    <a href="{% url 'login' %}" class="login-btn">ورود / ثبت‌نام</a>
+                {% endif %}
             </div>
             <button class="menu-toggle" id="menuToggle" aria-label="منو">
                 <i class="fa-solid fa-bars"></i>
@@ -61,57 +69,71 @@
                 <p>لطفاً اطلاعات خود را بررسی کرده و قوانین را مطالعه کنید، سپس درخواست خود را ثبت نمایید.</p>
             </div>
 
+            <!-- نمایش پیام‌ها -->
+            {% if messages %}
+                <div class="messages" style="margin-bottom:20px;">
+                    {% for message in messages %}
+                        <div style="padding:12px 16px; border-radius:12px; margin-bottom:10px; font-weight:600;
+                            {% if message.tags == 'success' %} background:#d4edda; color:#155724;
+                            {% elif message.tags == 'error' %} background:#f8d7da; color:#721c24;
+                            {% else %} background:#fff3cd; color:#856404; {% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <!-- فرم عضویت -->
-            <form id="membershipForm" method="post" action="#">
+            <form id="membershipForm" method="post" action="{% url 'membership_page' %}">
                 {% csrf_token %}
 
-                <!-- کارت اطلاعات شخصی با داده‌های فیک -->
+                <!-- کارت اطلاعات شخصی -->
                 <div class="info-card">
                     <h2><i class="fa-solid fa-user"></i> اطلاعات شخصی</h2>
                     <div class="info-grid">
                         <div class="info-item">
                             <span class="label">نام:</span>
-                            <span class="value">مهدی</span>
+                            <span class="value">{{ user.first_name|default:"ثبت نشده" }}</span>
                         </div>
                         <div class="info-item">
                             <span class="label">نام خانوادگی:</span>
-                            <span class="value">اسلامی‌خواه</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label">شماره دانشجویی:</span>
-                            <span class="value">۴۰۳۴۰۵۰۰۵</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label">شماره تماس:</span>
-                            <span class="value">۰۹۳۸۶۲۸۹۸۳۲</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label">رشته تحصیلی:</span>
-                            <span class="value">مهندسی مکانیک</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label">ترم تحصیلی:</span>
-                            <span class="value">ترم ۶</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label">مقطع تحصیلی:</span>
-                            <span class="value">کارشناسی</span>
+                            <span class="value">{{ user.last_name|default:"ثبت نشده" }}</span>
                         </div>
                         <div class="info-item">
                             <span class="label">ایمیل:</span>
-                            <span class="value">m.eslami@uk.ac.ir</span>
+                            <span class="value">{{ user.email|default:"ثبت نشده" }}</span>
                         </div>
                         <div class="info-item">
-                            <span class="label">سال ورود:</span>
-                            <span class="value">۱۴۰۰</span>
+                            <span class="label">نام کاربری:</span>
+                            <span class="value">{{ user.username }}</span>
                         </div>
+
+                        <!-- شماره دانشجویی (ورودی واقعی) -->
                         <div class="info-item">
-                            <span class="label">کمیته مورد نظر:</span>
-                            <span class="value">آموزش</span>
+                            <label class="label" for="student_id">شماره دانشجویی:</label>
+                            <input type="text" id="student_id" name="student_id" required
+                                placeholder="مثال: ۹۸۱۲۳۴۵۶"
+                                style="width:100%; padding:10px; border:2px solid #ddd; border-radius:10px; font-size:15px;">
                         </div>
+
+                        <!-- کمیته مورد نظر (ورودی واقعی) -->
+                        <div class="info-item">
+                            <label class="label" for="committee">کمیته مورد نظر:</label>
+                            <select id="committee" name="committee" required
+                                style="width:100%; padding:10px; border:2px solid #ddd; border-radius:10px; font-size:15px;">
+                                <option value="">انتخاب کنید...</option>
+                                {% for committee in committees %}
+                                    <option value="{{ committee.id }}">{{ committee.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- پیام / درباره من (ورودی واقعی) -->
                         <div class="info-item full-width">
-                            <span class="label">درباره من:</span>
-                            <span class="value">دانشجوی مهندسی مکانیک، علاقه‌مند به حوزه‌های طراحی و ساخت.</span>
+                            <label class="label" for="message">پیام / درباره من (اختیاری):</label>
+                            <textarea id="message" name="message" rows="3"
+                                placeholder="مثلاً: علاقه‌مندی‌ها یا توضیحات اضافه..."
+                                style="width:100%; padding:10px; border:2px solid #ddd; border-radius:10px; font-size:15px; resize:vertical;"></textarea>
                         </div>
                     </div>
                 </div>
@@ -137,22 +159,14 @@
                     </div>
                 </div>
 
-                <!-- دکمه ثبت‌نام (غیرفعال موقت) -->
+                <!-- دکمه ثبت‌نام (فعال) -->
                 <div class="form-actions">
-                    <button type="button" class="submit-btn" id="tempBtn" style="background:#9ca3af; cursor:not-allowed;">
-                        <i class="fa-solid fa-clock"></i> عضویت غیرفعال (در حال توسعه)
+                    <button type="submit" class="submit-btn">
+                        <i class="fa-solid fa-paper-plane"></i> ثبت درخواست عضویت
                     </button>
                 </div>
 
             </form>
-
-            <!-- پیام جایگزین -->
-            <div style="text-align:center; margin-top:20px; padding:16px; background:#fef3c7; border-radius:14px; border:1px solid #fcd34d;">
-                <p style="color:#92400e; font-weight:600; font-size:0.95rem;">
-                    <i class="fa-solid fa-info-circle"></i> 
-                    این صفحه فعلاً با داده‌های نمونه نمایش داده می‌شود. پس از راه‌اندازی کامل، اطلاعات شما از حساب کاربری نمایش داده خواهد شد.
-                </p>
-            </div>
 
         </div>
     </main>
