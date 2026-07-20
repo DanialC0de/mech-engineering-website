@@ -731,7 +731,7 @@ ul {
         display: none;
         width: 100%;
         order: 3;
-        background: #012e71;
+        background: linear-gradient(315deg, #0a2a44 55%, #420303 80%);
         padding: 15px 0;
         border-top: 1px solid rgba(255,255,255,0.1);
     }
