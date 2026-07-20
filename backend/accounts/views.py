@@ -4,10 +4,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
-from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
+from django.db import IntegrityError, transaction
+from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 from .models import OTP
 from .sms_service import send_otp_sms
@@ -29,6 +30,15 @@ def normalize_phone(phone):
     return phone
 
 
+def normalize_digits(value):
+    """تبدیل اعداد فارسی و عربی به انگلیسی"""
+    translation = str.maketrans(
+        "۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩",
+        "01234567890123456789"
+    )
+    return (value or "").translate(translation)
+
+
 # ============================================
 # صفحات HTML
 # ============================================
@@ -39,8 +49,13 @@ def login_page(request):
 
 
 def register_page(request):
-    """صفحه ثبت‌نام"""
-    return render(request, "register.html")
+    """صفحه تکمیل ثبت‌نام دانشجو پس از تأیید شماره موبایل"""
+    phone = request.session.get("register_phone")
+    if not phone:
+        return redirect("login_page")
+
+    masked_phone = f"{phone[:4]}***{phone[-4:]}" if len(phone) == 11 else phone
+    return render(request, "register.html", {"masked_phone": masked_phone})
 
 
 def verify_page(request):
@@ -52,113 +67,113 @@ def verify_page(request):
 # ثبت‌نام کاربر (با OTP)
 # ============================================
 
-@csrf_exempt
+@require_POST
 def register_view(request):
     """
-    ثبت‌نام کاربر جدید با شماره موبایل و OTP
-    بعد از ثبت‌نام، StudentProfile هم ساخته میشه
+    ثبت‌نام دانشجو با شماره موبایلی که قبلاً با OTP تأیید شده است.
     """
-    if request.method != "POST":
-        return JsonResponse({"status": "error", "message": "متد اشتباه"}, status=405)
-
-    # دریافت اطلاعات از فرم
-    phone = request.POST.get("phone")
-    username = request.POST.get("username")
-    first_name = request.POST.get("first_name")
-    last_name = request.POST.get("last_name")
-    
-    # اطلاعات StudentProfile
-    student_id = request.POST.get("student_id")
-    major = request.POST.get("major")
-    level = request.POST.get("level") or request.POST.get("degree")
-    entry_year = request.POST.get("entry_year")
-    term = request.POST.get("term")
-    committee = request.POST.get("committee", "")
-    interest = request.POST.get("interest", "")
-    bio = request.POST.get("bio", "")
-
-    # اعتبارسنجی اولیه
-    if not phone or not username:
+    phone = request.session.get("register_phone")
+    if not phone:
         return JsonResponse({
             "status": "error",
-            "message": "شماره موبایل و نام کاربری الزامی است"
+            "message": "شماره موبایل تأیید نشده است. لطفاً دوباره وارد شوید.",
+            "redirect": reverse("login_page"),
+        }, status=403)
+
+    first_name = request.POST.get("first_name", "").strip()
+    last_name = request.POST.get("last_name", "").strip()
+    student_id = normalize_digits(request.POST.get("student_id", "").strip())
+    major = request.POST.get("major", "").strip()
+    level = request.POST.get("level", "").strip()
+    entry_year = normalize_digits(request.POST.get("entry_year", "").strip())
+    term = request.POST.get("term", "").strip()
+    interest = request.POST.get("interest", "").strip()
+    bio = request.POST.get("bio", "").strip()
+
+    required_fields = {
+        "نام": first_name,
+        "نام خانوادگی": last_name,
+        "شماره دانشجویی": student_id,
+        "رشته تحصیلی": major,
+        "مقطع تحصیلی": level,
+        "سال ورود": entry_year,
+    }
+    missing_fields = [label for label, value in required_fields.items() if not value]
+    if missing_fields:
+        return JsonResponse({
+            "status": "error",
+            "message": f"فیلدهای الزامی را کامل کنید: {('، ').join(missing_fields)}"
         }, status=400)
 
-    # بررسی تکراری نبودن شماره موبایل
-    if User.objects.filter(phone_number=phone).exists():
+    if not student_id.isdigit() or len(student_id) != 8:
         return JsonResponse({
             "status": "error",
-            "message": "این شماره موبایل قبلاً ثبت شده است"
-        }, status=400)
-
-    # بررسی تکراری نبودن نام کاربری
-    if User.objects.filter(username=username).exists():
-        return JsonResponse({
-            "status": "error",
-            "message": "این نام کاربری قبلاً ثبت شده است"
+            "message": "شماره دانشجویی باید ۸ رقمی باشد"
         }, status=400)
 
     try:
-        # ============================================
-        # 1. ساخت کاربر جدید
-        # ============================================
-        user = User.objects.create(
-            phone_number=phone,
-            username=username,
-            first_name=first_name,
-            last_name=last_name,
-            role="student"  # نقش پیش‌فرض: دانشجو
-        )
-        user.set_unusable_password()  # چون با OTP وارد میشه
-        user.save()
-        
-        print(f"✅ کاربر {username} ساخته شد")
-
-        # ============================================
-        # 2. ساخت پروفایل دانشجو
-        # ============================================
-        student_profile = StudentProfile.objects.create(
-            user=user,
-            student_id=student_id,
-            major=major,
-            level=level,
-            entry_year=int(entry_year) if entry_year else None,
-            term=term,
-            committee=committee,
-            interest=interest,
-            bio=bio
-        )
-        
-        print(f"✅ پروفایل دانشجو برای {username} ساخته شد")
-        print(f"   شماره دانشجویی: {student_profile.student_id}")
-        print(f"   رشته: {student_profile.major}")
-
-        # ============================================
-        # 3. ورود خودکار کاربر
-        # ============================================
-        login(request, user)
-
-        # ============================================
-        # 4. پاسخ موفق
-        # ============================================
-        return JsonResponse({
-            "status": "ok",
-            "redirect": "/panel/student/",
-            "message": "ثبت‌نام با موفقیت انجام شد"
-        })
-
-    except Exception as e:
-        # اگر خطایی رخ داد، کاربر رو پاک کن (Rollback)
-        print(f"❌ خطا در ثبت‌نام: {e}")
-        
-        # اگر کاربر ساخته شده بود، حذفش کن
-        if 'user' in locals():
-            user.delete()
-            print(f"🗑️ کاربر {username} به دلیل خطا حذف شد")
-        
+        parsed_entry_year = int(entry_year)
+    except ValueError:
         return JsonResponse({
             "status": "error",
-            "message": f"خطا در ثبت‌نام: {str(e)}"
+            "message": "سال ورود باید عدد باشد"
+        }, status=400)
+
+    if parsed_entry_year < 1390 or parsed_entry_year > 1410:
+        return JsonResponse({
+            "status": "error",
+            "message": "سال ورود باید بین ۱۳۹۰ تا ۱۴۱۰ باشد"
+        }, status=400)
+
+    if User.objects.filter(phone_number=phone).exists():
+        return JsonResponse({
+            "status": "error",
+            "message": "این شماره موبایل قبلاً ثبت شده است",
+            "redirect": reverse("login_page"),
+        }, status=400)
+
+    if StudentProfile.objects.filter(student_id=student_id).exists():
+        return JsonResponse({
+            "status": "error",
+            "message": "این شماره دانشجویی قبلاً ثبت شده است"
+        }, status=400)
+
+    try:
+        with transaction.atomic():
+            user = User(
+                phone_number=phone,
+                username=student_id,
+                first_name=first_name,
+                last_name=last_name,
+                role="student"
+            )
+            user.set_unusable_password()
+            user.save()
+
+            StudentProfile.objects.create(
+                user=user,
+                student_id=student_id,
+                major=major,
+                level=level,
+                entry_year=parsed_entry_year,
+                term=term,
+                interest=interest,
+                bio=bio
+            )
+
+        login(request, user)
+        request.session.pop("register_phone", None)
+
+        return JsonResponse({
+            "status": "ok",
+            "redirect": reverse("students:panel"),
+            "message": "ثبت‌نام دانشجو با موفقیت انجام شد"
+        })
+
+    except IntegrityError:
+        return JsonResponse({
+            "status": "error",
+            "message": "اطلاعات واردشده قبلاً ثبت شده است"
         }, status=400)
 
 

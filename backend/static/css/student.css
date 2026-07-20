@@ -766,6 +766,60 @@ tbody tr:last-child td {
     backdrop-filter: blur(6px);
 }
 
+.event-success-popup {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 1100;
+    width: min(420px, calc(100vw - 32px));
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: #ffffff;
+    border: 1px solid #bbf7d0;
+    border-radius: 16px;
+    box-shadow: 0 16px 38px rgba(15, 23, 42, 0.2);
+    color: #14532d;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(16px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.event-success-popup.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.event-success-popup__icon {
+    color: #16a34a;
+    font-size: 2rem;
+}
+
+.event-success-popup strong,
+.event-success-popup p {
+    display: block;
+    margin: 0;
+}
+
+.event-success-popup p {
+    margin-top: 4px;
+    color: #475569;
+    font-size: 0.9rem;
+}
+
+.event-success-popup__close {
+    margin-right: auto;
+    padding: 4px;
+    border: 0;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
 .modal-content {
     width: min(540px, 100%);
     padding: 30px;

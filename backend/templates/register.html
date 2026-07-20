@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/register.css' %}">
-    <title>تکمیل ثبت‌نام | انجمن علمی مکانیک</title>
+    <title>ثبت‌نام دانشجو | انجمن علمی مکانیک</title>
 </head>
 <body>
 
@@ -73,7 +73,7 @@
                 <div class="logo-text">
                     <span class="logo-icon">⚙️</span>
                     <span id="h2">انجمن <span>مکانیک</span></span>
-                    <p>عضویت در انجمن علمی مهندسی مکانیک</p>
+                    <p>سامانه دانشجویان مهندسی مکانیک</p>
                 </div>
             </div>
 
@@ -81,8 +81,8 @@
 
                 <div class="register-body">
                     <div class="register-title">
-                        <h1>تکمیل ثبت‌نام</h1>
-                        <p>لطفاً اطلاعات خود را کامل کنید تا عضویت شما در انجمن ثبت شود</p>
+                        <h1>ثبت‌نام دانشجو</h1>
+                        <p>لطفاً اطلاعات دانشجویی خود را کامل کنید تا حساب شما ساخته شود</p>
                     </div>
 
                     <div class="error-message" id="errorMsg"></div>
@@ -91,35 +91,36 @@
                     <!-- اطلاعات صفحه قبل -->
                     <div class="info-card">
                         <span class="info-label"><i class="fa-solid fa-phone"></i> شماره موبایل : </span>
-                        <span class="info-value" id="infoValue">09123456789</span>
+                        <span class="info-value" id="infoValue">{{ masked_phone }}</span>
                         <a href="/accounts/login/" class="edit-link">
                             ویرایش <i class="fa-solid fa-arrow-left"></i>
                         </a>
                     </div>
 
-                    <form id="registerForm">
+                    <form id="registerForm" method="post" action="{% url 'register_user' %}">
+                        {% csrf_token %}
 
                         <div class="form-row">
                             <div class="input-group">
                                 <label for="firstName">نام *</label>
-                                <input type="text" id="firstName" required>
+                                <input type="text" id="firstName" name="first_name" required>
                             </div>
 
                             <div class="input-group">
                                 <label for="lastName">نام خانوادگی *</label>
-                                <input type="text" id="lastName" required>
+                                <input type="text" id="lastName" name="last_name" required>
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="input-group">
                                 <label for="studentId">شماره دانشجویی *</label>
-                                <input type="text" id="studentId" required>
+                                <input type="text" id="studentId" name="student_id" inputmode="numeric" maxlength="8" required>
                             </div>
 
                             <div class="input-group">
                                 <label for="degree">مقطع تحصیلی *</label>
-                                <select id="degree" required>
+                                <select id="degree" name="level" required>
                                     <option value="">انتخاب کنید</option>
                                     <option>کارشناسی</option>
                                     <option>کارشناسی ارشد</option>
@@ -131,12 +132,12 @@
                         <div class="form-row">
                             <div class="input-group">
                                 <label for="major">رشته تحصیلی *</label>
-                                <input type="text" id="major" required>
+                                <input type="text" id="major" name="major" required>
                             </div>
 
                             <div class="input-group">
                                 <label for="term">ترم تحصیلی</label>
-                                <select id="term">
+                                <select id="term" name="term">
                                     <option value="">انتخاب کنید</option>
                                     <option>ترم 1</option>
                                     <option>ترم 2</option>
@@ -153,31 +154,23 @@
 
                         <div class="form-row">
                             <div class="input-group">
-                                <label for="committee">کمیته مورد نظر</label>
-                                <select id="committee">
-                                    <option value="">انتخاب کنید</option>
-                                    <option>آموزش</option>
-                                    <option>پژوهشی</option>
-                                    <option>صنعتی</option>
-                                    <option>اجرایی</option>
-                                    <option>فناوری و نوآوری</option>
-                                    <option>بین‌الملل</option>
-                                </select>
+                                <label for="entryYear">سال ورود *</label>
+                                <input type="text" id="entryYear" name="entry_year" inputmode="numeric" maxlength="4" placeholder="مثال: ۱۴۰۲" required>
                             </div>
 
                             <div class="input-group">
                                 <label for="interest">تخصص/علاقه‌مندی</label>
-                                <input type="text" id="interest">
+                                <input type="text" id="interest" name="interest">
                             </div>
                         </div>
 
                         <div class="input-group full-width">
                             <label for="bio">درباره خود</label>
-                            <textarea id="bio" rows="3" style="resize:none;"></textarea>
+                            <textarea id="bio" name="bio" rows="3" style="resize:none;"></textarea>
                         </div>
 
                         <button type="submit" class="register-btn">
-                            <i class="fa-regular fa-circle-check"></i> ثبت‌نام و عضویت در انجمن
+                            <i class="fa-regular fa-circle-check"></i> ثبت‌نام دانشجو
                         </button>
 
                     </form>
@@ -194,7 +187,7 @@
     </main>
 
     <!-- ==================== اسکریپت ==================== -->
-    <script src="{% static 'js/register.js' %}"></script>
+    <script src="{% static 'js/register.js' %}?v=2"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 

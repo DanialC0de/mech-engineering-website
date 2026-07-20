@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const errorDiv = document.getElementById("errorMsg");
     const successDiv = document.getElementById("successMsg");
+    const defaultButtonHtml = registerBtn ? registerBtn.innerHTML : "";
 
     if (!registerForm) {
         console.error("registerForm پیدا نشد");
@@ -22,13 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const infoValue = document.getElementById("infoValue");
         const phone = localStorage.getItem("tempPhone");
 
-        if (!phone) {
-            // اگر شماره موبایل نبود، به صفحه ورود برگرد
-            window.location.href = "/accounts/login/";
-            return;
-        }
-
-        if (infoValue) {
+        if (infoValue && phone) {
             infoValue.textContent = maskPhone(phone);
         }
     }
@@ -52,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const studentId = document.getElementById("studentId").value.trim();
         const degree = document.getElementById("degree").value;
         const major = document.getElementById("major").value.trim();
+        const entryYear = toEnglishDigits(document.getElementById("entryYear").value.trim());
 
         // پاک کردن پیام‌های قبلی
         hideError();
@@ -75,8 +71,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return false;
         }
 
-        if (studentId.length < 6) {
-            showError("شماره دانشجویی باید حداقل ۶ رقم باشد");
+        if (!/^\d{8}$/.test(toEnglishDigits(studentId))) {
+            showError("شماره دانشجویی باید ۸ رقمی باشد");
             document.getElementById("studentId").focus();
             return false;
         }
@@ -93,6 +89,12 @@ document.addEventListener("DOMContentLoaded", function () {
             return false;
         }
 
+        if (!entryYear || Number(entryYear) < 1390 || Number(entryYear) > 1410) {
+            showError("سال ورود باید بین ۱۳۹۰ تا ۱۴۱۰ باشد");
+            document.getElementById("entryYear").focus();
+            return false;
+        }
+
         return true;
     }
 
@@ -104,24 +106,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!validateForm()) return;
 
-        const phone = localStorage.getItem("tempPhone");
-
-        if (!phone) {
-            showError("شماره موبایل یافت نشد. لطفاً دوباره وارد شوید.");
-            setTimeout(() => {
-                window.location.href = "/accounts/login/";
-            }, 1500);
-            return;
-        }
-
         // دریافت اطلاعات از فرم
         const firstName = document.getElementById("firstName").value.trim();
         const lastName = document.getElementById("lastName").value.trim();
-        const studentId = document.getElementById("studentId").value.trim();
+        const studentId = toEnglishDigits(document.getElementById("studentId").value.trim());
         const degree = document.getElementById("degree").value;
         const major = document.getElementById("major").value.trim();
         const term = document.getElementById("term").value;
-        const committee = document.getElementById("committee").value;
+        const entryYear = toEnglishDigits(document.getElementById("entryYear").value.trim());
         const interest = document.getElementById("interest").value.trim();
         const bio = document.getElementById("bio").value.trim();
 
@@ -134,28 +126,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await fetch("/accounts/register-user/", {
+            const response = await fetch(registerForm.action, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "X-CSRFToken": getCookie("csrftoken")
+                    "X-CSRFToken": getCookie("csrftoken"),
+                    "Accept": "application/json"
                 },
-                body: new URLSearchParams({
-                    phone: phone,
-                    username: studentId,
-                    first_name: firstName,
-                    last_name: lastName,
-                    student_id: studentId,
-                    degree: degree,
-                    major: major,
-                    term: term,
-                    committee: committee,
-                    interest: interest,
-                    bio: bio
-                })
+                body: new FormData(registerForm)
             });
 
-            const data = await response.json();
+            const data = await response.json().catch(() => ({
+                status: "error",
+                message: "پاسخ نامعتبر از سرور دریافت شد."
+            }));
 
             if (data.status === "ok") {
                 // پاک کردن اطلاعات موقت
@@ -170,13 +153,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             } else {
                 showError(data.message || "خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
-                // فعال کردن مجدد دکمه
-                if (registerBtn) {
-                    registerBtn.disabled = false;
-                    registerBtn.textContent = "✓ ثبت‌نام و عضویت در انجمن";
-                    registerBtn.style.opacity = "1";
-                    registerBtn.style.cursor = "pointer";
+                if (data.redirect) {
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 1500);
                 }
+                // فعال کردن مجدد دکمه
+                resetRegisterButton();
             }
 
         } catch (error) {
@@ -184,12 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
             showError("خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.");
             
             // فعال کردن مجدد دکمه
-            if (registerBtn) {
-                registerBtn.disabled = false;
-                registerBtn.textContent = "✓ ثبت‌نام و عضویت در انجمن";
-                registerBtn.style.opacity = "1";
-                registerBtn.style.cursor = "pointer";
-            }
+            resetRegisterButton();
         }
     });
 
@@ -200,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (studentIdInput) {
         studentIdInput.addEventListener("input", function () {
-            this.value = this.value.replace(/[^0-9]/g, "");
+            this.value = toEnglishDigits(this.value).replace(/[^0-9]/g, "").slice(0, 8);
             
             // حذف خطا هنگام تایپ
             if (errorDiv && errorDiv.style.display !== "none") {
@@ -302,6 +280,21 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         return cookieValue;
+    }
+
+    function toEnglishDigits(value) {
+        return value
+            .replace(/[۰-۹]/g, digit => "۰۱۲۳۴۵۶۷۸۹".indexOf(digit))
+            .replace(/[٠-٩]/g, digit => "٠١٢٣٤٥٦٧٨٩".indexOf(digit));
+    }
+
+    function resetRegisterButton() {
+        if (!registerBtn) return;
+
+        registerBtn.disabled = false;
+        registerBtn.innerHTML = defaultButtonHtml;
+        registerBtn.style.opacity = "1";
+        registerBtn.style.cursor = "pointer";
     }
 
     // ============================================================

@@ -530,6 +530,25 @@ function refreshConnectedSections() {
     loadTickets();
 }
 
+let eventSuccessPopupTimer;
+
+function showEventSuccessPopup(message) {
+    const popup = document.getElementById('eventSuccessPopup');
+    const popupMessage = document.getElementById('eventSuccessPopupMessage');
+    if (!popup || !popupMessage) return;
+
+    popupMessage.textContent = message || 'ثبت‌نام شما در رویداد با موفقیت انجام شد.';
+    popup.classList.add('show');
+
+    clearTimeout(eventSuccessPopupTimer);
+    eventSuccessPopupTimer = setTimeout(hideEventSuccessPopup, 4500);
+}
+
+function hideEventSuccessPopup() {
+    const popup = document.getElementById('eventSuccessPopup');
+    if (popup) popup.classList.remove('show');
+}
+
 function registerEvent(eventId, title) {
     if (!confirm(`آیا مطمئن هستید که می‌خواهید در "${title}" ثبت‌نام کنید؟`)) return;
 
@@ -543,7 +562,7 @@ function registerEvent(eventId, title) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(data.message);
+                showEventSuccessPopup(data.message);
                 refreshConnectedSections();
             } else {
                 alert(`خطا: ${data.error}`);

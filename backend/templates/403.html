@@ -1,113 +1,65 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دسترسی غیرمجاز | انجمن علمی مکانیک</title>
+    <title>دسترسی ندارید</title>
     <style>
-        @font-face {
-            font-family: "Arad";
-            src: url("{% static 'assets/fonts/arad/AradVF.woff2' %}") format("woff2");
-            font-display: swap;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
         body {
-            min-height: 100vh;
             margin: 0;
-            padding: 24px;
-            display: grid;
-            place-items: center;
-            color: #233142;
-            font-family: "Arad", Tahoma, sans-serif;
-            background:
-                radial-gradient(circle at top left, rgba(255, 170, 0, 0.18), transparent 32%),
-                linear-gradient(145deg, #f7f6fb 0%, #edecf3 100%);
-        }
-
-        .error-card {
-            width: min(100%, 620px);
-            padding: clamp(32px, 7vw, 64px);
-            text-align: center;
-            background: rgba(255, 255, 255, 0.96);
-            border: 1px solid rgba(1, 46, 113, 0.08);
-            border-radius: 32px;
-            box-shadow: 0 24px 70px rgba(10, 42, 68, 0.14);
-        }
-
-        .error-code {
-            margin: 0;
-            color: #012e71;
-            font-size: clamp(5rem, 20vw, 9rem);
-            font-weight: 900;
-            line-height: 0.9;
-            letter-spacing: -6px;
-        }
-
-        .error-card h1 {
-            margin: 24px 0 12px;
-            color: #0a2a44;
-            font-size: clamp(1.6rem, 5vw, 2.3rem);
-        }
-
-        .error-card p {
-            max-width: 440px;
-            margin: 0 auto 30px;
-            color: #667381;
-            font-size: 1.05rem;
-            line-height: 1.9;
-        }
-
-        .actions {
+            font-family: Tahoma, sans-serif;
+            background: #f8f8fb;
+            color: #333;
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 12px;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        .button {
-            min-width: 150px;
-            padding: 13px 22px;
-            color: #fff;
+        .box {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            border-top: 6px solid #ff6b6b;
+        }
+
+        h1 {
+            margin: 0 0 15px;
+            font-size: 28px;
+            color: #d63031;
+        }
+
+        p {
+            margin: 0 0 25px;
+            font-size: 16px;
+            line-height: 1.9;
+            color: #555;
+        }
+
+        a {
+            display: inline-block;
             text-decoration: none;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #012e71, #0a2a44);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background: #6c5ce7;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 10px;
+            transition: 0.2s;
         }
 
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 24px rgba(1, 46, 113, 0.2);
-        }
-
-        .button.secondary {
-            color: #5f2c21;
-            background: #fff4dc;
+        a:hover {
+            background: #5a4bd6;
         }
     </style>
 </head>
 <body>
-    <main class="error-card">
-        <div class="error-code">403</div>
-        <h1>اجازه ورود به این بخش را ندارید</h1>
-        <p>
-            این صفحه مخصوص نقش کاربری دیگری است. برای ادامه، به صفحه اصلی
-            یا پنل مربوط به حساب خودتان برگردید.
-        </p>
-        <div class="actions">
-            <a class="button" href="{% url 'home' %}">بازگشت به صفحه اصلی</a>
-            {% if request.user.role == 'student' %}
-                <a class="button secondary" href="{% url 'students:panel' %}">پنل دانشجو</a>
-            {% elif request.user.role == 'professor' %}
-                <a class="button secondary" href="{% url 'professor:panel' %}">پنل استاد</a>
-            {% elif request.user.role == 'member' %}
-                <a class="button secondary" href="/members/">پنل اعضا</a>
-            {% endif %}
-        </div>
-    </main>
+    <div class="box">
+        <h1>شما به این بخش دسترسی ندارید</h1>
+        <p>اگر فکر می‌کنید این پیام اشتباه است، با مدیر سایت تماس بگیرید یا به صفحه اصلی برگردید.</p>
+        <a href="/">بازگشت به صفحه اصلی</a>
+    </div>
 </body>
 </html>
