@@ -359,3 +359,4 @@ from django.shortcuts import render
 
 def membership_page(request):
     return render(request, 'membership.html')
+

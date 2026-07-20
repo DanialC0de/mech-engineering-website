@@ -260,7 +260,9 @@
                     </div>
 
                     <div class="card-body">
-                        <span class="card-tag">{{ item.category }}</span>
+                        <!-- ===== این خط اصلاح شده ===== -->
+                        <span class="card-tag">{{ item.get_category_display }}</span>
+                        <!-- ============================ -->
                         <h3>{{ item.title }}</h3>
                         <p>{{ item.summary|default:item.title|truncatechars:95 }}</p>
                         <a href="{% url 'news_detail' item.id %}" class="card-link">مشاهده جزئیات ←</a>

@@ -1,15 +1,18 @@
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from django.conf import settings
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 
 from .models import OTP
 from .sms_service import send_otp_sms
-from students.models import StudentProfile  # ✅ اضافه شد
+from students.models import StudentProfile
+from .decorators import role_required  # 🔥 دکوریتوری که ساختی
 
 User = get_user_model()
 
@@ -301,10 +304,12 @@ def verify_otp_view(request):
         # کاربر وجود دارد → ورود
         login(request, user)
         
-        # تعیین مسیر هدایت بر اساس نقش
-        redirect_url = "/panel/student/"
+        # 🔥 تعیین مسیر هدایت بر اساس نقش
+        redirect_url = "/panel/student/"  # پیش‌فرض: دانشجو
         if user.role == "professor":
             redirect_url = "/panel/professor/"
+        elif user.role == "member":  # 🔥 عضو انجمن
+            redirect_url = "/members/"
         
         return JsonResponse({
             "status": "success",
@@ -326,3 +331,73 @@ def verify_otp_view(request):
 def login_view(request):
     """صفحه ورود"""
     return render(request, "login.html")
+
+
+# ============================================
+# خروج از حساب کاربری
+# ============================================
+
+def logout_view(request):
+    """خروج کاربر از سیستم"""
+    logout(request)
+    return redirect('login_page')
+
+
+# ============================================
+# 🔥 پنل‌های کاربری با محدودیت دسترسی
+# ============================================
+
+@login_required
+@role_required(['student'])  # فقط دانشجوها و سوپرادمین
+def student_panel(request):
+    """
+    پنل دانشجو
+    آدرس: /panel/student/
+    """
+    # دریافت پروفایل دانشجو
+    try:
+        profile = request.user.student_profile
+    except:
+        profile = None
+    
+    context = {
+        'user': request.user,
+        'profile': profile,
+    }
+    
+    return render(request, 'panel/student_dashboard.html', context)
+
+
+@login_required
+@role_required(['professor'])  # فقط استادها و سوپرادمین
+def professor_panel(request):
+    """
+    پنل استاد
+    آدرس: /panel/professor/
+    """
+    # دریافت پروفایل استاد
+    try:
+        professor = request.user.professor_profile
+    except:
+        professor = None
+    
+    context = {
+        'user': request.user,
+        'professor': professor,
+    }
+    
+    return render(request, 'professor.html', context)
+
+
+@login_required
+@role_required(['member'])  # فقط اعضای انجمن و سوپرادمین
+def member_panel(request):
+    """
+    پنل عضو انجمن
+    آدرس: /members/
+    """
+    context = {
+        'user': request.user,
+    }
+    
+    return render(request, 'members_dashboard.html', context)

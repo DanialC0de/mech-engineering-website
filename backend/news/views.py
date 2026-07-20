@@ -23,11 +23,18 @@ def all_news(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
+    # =============== تغییر این بخش ===============
+    # ساخت دیکشنری از دسته‌بندی‌ها با مقدار انگلیسی به عنوان کلید و فارسی به عنوان مقدار
+    categories_dict = dict(News.CATEGORY_CHOICES)
+    # ایجاد لیستی از تاپل‌ها برای استفاده در تمپلیت
+    categories_list = [(key, value) for key, value in categories_dict.items()]
+    # =============================================
+    
     context = {
         'page_obj': page_obj,
         'category': category,
         'search_query': search_query,
-        'categories': News.CATEGORY_CHOICES,
+        'categories': categories_list,  # این خط تغییر کرده
     }
     return render(request, 'index-pages/news.html', context)
 
